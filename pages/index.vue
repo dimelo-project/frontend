@@ -23,16 +23,14 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/scss/variables";
+// @import "~/assets/scss/variables";
 
 .root {
   display: flex;
 }
 
 .test {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include center;
   width: 20vh;
   height: 20vh;
   &:hover {
