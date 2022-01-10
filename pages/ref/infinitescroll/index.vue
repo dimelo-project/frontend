@@ -45,7 +45,7 @@
     <RefInfinitescrollObserver
       v-else
       @intersect="intersected"
-      :options="{ threshold: 1.0 }"
+      :options="{ threshold: 0.0 }"
     />
   </div>
 </template>
@@ -58,7 +58,7 @@ export default {
       limit=10: 초기 데이터가 별로없어서 모든 컨텐츠가 viewport 안에 있는 경우
     */
     const res = await fetch(
-      `https://jsonplaceholder.typicode.com/comments?_page=1&_limit=30`
+      `https://jsonplaceholder.typicode.com/comments?_page=1&_limit=40`
     );
     const items = await res.json();
     return { items };
