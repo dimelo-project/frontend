@@ -3,15 +3,12 @@ module.exports = {
   purge: ["./pages/*.vue"],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    fontSize: {
-      sub: ".875rem",
-      base: "1rem",
-      mid: "1.25rem",
-      heading3: "1.75rem",
-      heading2: "2.375rem",
-      heading1: "2.8125rem",
+    extend: {
+      colors: {
+        orange1: "#F38C2B",
+        orange2: "#F3732B",
+      },
     },
-    extend: {},
   },
   variants: {
     extend: {},
