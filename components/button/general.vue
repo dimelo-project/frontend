@@ -2,7 +2,8 @@
   <button
     v-on="$listeners"
     type="button"
-    class="form-button"
+    class="button txt-mid"
+    :class="{ 'txt-base': small }"
     :style="sizeObject"
   >
     {{ btnText }}
@@ -24,6 +25,10 @@ export default {
       type: String,
       required: true,
     },
+    small: {
+      type: Boolean,
+      default: () => false,
+    },
   },
   data() {
     return {
@@ -37,8 +42,8 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-.form-button {
-  @apply px-4 py-2 text-center text-white 
+.button {
+  @apply text-center text-white 
   transition duration-200 ease-in rounded-md
   bg-orange1 hover:bg-orange2;
 }
