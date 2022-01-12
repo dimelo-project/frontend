@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center mt-24 mb-24">
+  <div class="flex justify-center mt-32 md:mb-24">
     <div class="relative flex flex-col items-center test" style="width: 380px">
       <h3 class="txt-heading3">로그인</h3>
 
