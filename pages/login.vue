@@ -31,7 +31,7 @@
       </div>
 
       <!-- button -->
-      <ButtonGeneral btnText="로그인" />
+      <ButtonGeneral btnText="로그인" :large="true" :height="56" />
 
       <!-- sub link -->
       <div class="relative flex w-full mt-7 test" style="height: 24px">

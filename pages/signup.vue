@@ -57,7 +57,7 @@
       </div>
 
       <!-- button -->
-      <ButtonGeneral btnText="회원가입" />
+      <ButtonGeneral btnText="회원가입" :large="true" :height="56" />
 
       <!-- divider -->
       <div class="w-full border mt-9"></div>
