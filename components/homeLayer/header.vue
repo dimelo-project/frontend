@@ -41,15 +41,6 @@
 
       <!-- contents--right -->
       <div class="absolute right-0">
-        <div v-if="!loggedIn">
-          <ButtonFormBtn
-            width="72"
-            height="32"
-            btnText="로그인"
-            :small="true"
-          />
-        </div>
-
         <div class="flex test" v-if="loggedIn">
           <div>
             <svgHeartOutline />
@@ -60,6 +51,11 @@
           <!-- profile--image -->
           <div class="w-6 h-6 ml-6 bg-gray-500 rounded-full"></div>
         </div>
+
+        <div v-else>
+          <ButtonGeneral btnText="로그인" :small="true" :dark="true" />
+          <ButtonGeneral btnText="회원가입" :small="true" />
+        </div>
       </div>
     </div>
   </nav>
@@ -69,8 +65,8 @@
 export default {
   data() {
     return {
-      loggedIn: true,
-      // loggedIn: false,
+      // loggedIn: true,
+      loggedIn: false,
     };
   },
 };
