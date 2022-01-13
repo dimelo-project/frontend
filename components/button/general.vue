@@ -51,9 +51,9 @@ export default {
 .button {
   @apply px-3 py-1 text-center text-white 
   transition duration-200 ease-in rounded-md
-  bg-orange1 hover:bg-orange2;
+  border border-orange1 hover:border-orange2  bg-orange1 hover:bg-orange2;
 }
 .dark {
-  @apply text-orange2 bg-white border border-orange2 hover:text-white;
+  @apply text-orange2 bg-white border  hover:text-white;
 }
 </style>
