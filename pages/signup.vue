@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center mt-32 md:mb-24 lg:mb-0">
+  <div class="flex justify-center mt-32 md:mb-24">
     <div class="relative flex flex-col test" style="width: 380px">
       <h3 class="text-center txt-heading3">회원가입</h3>
 
