@@ -5,20 +5,22 @@
 
       <!-- ID (EMAIL) -->
       <input
-        v-model="userId"
+        v-model="login.userId"
         type="text"
         class="w-full px-3 py-4 mt-8 border-2 rounded-md outline-none test"
-        :class="{ 'border-black': userId.length > 0 }"
+        :class="{ 'border-black': login.userId.length > 0 }"
         placeholder="아이디(이메일)"
         style="height: 56px"
       />
 
       <!-- PASSWORD -->
       <input
-        v-model="userPassword"
+        v-model="login.userPassword"
         type="password"
         class="w-full px-3 py-4 border-2 rounded-md outline-none mt-7 test"
-        :class="{ 'password-dot-bigger border-black': userPassword.length > 0 }"
+        :class="{
+          'password-dot-bigger border-black': login.userPassword.length > 0,
+        }"
         placeholder="비밀번호"
         style="height: 56px"
       />
@@ -30,8 +32,13 @@
         </p>
       </div>
 
-      <!-- button -->
-      <ButtonGeneral btnText="로그인" :large="true" :height="56" />
+      <!-- submit button -->
+      <ButtonGeneral
+        @click="userLogin"
+        btnText="로그인"
+        :large="true"
+        :height="56"
+      />
 
       <!-- sub link -->
       <div class="relative flex w-full mt-7 test" style="height: 24px">
@@ -66,19 +73,31 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({
+<script>
+export default {
   layout: "home",
   data() {
     return {
-      userId: "",
-      userPassword: "",
+      login: {
+        userId: "",
+        userPassword: "",
+      },
       formError: true,
     };
   },
-});
+  methods: {
+    async userLogin() {
+      try {
+        let response = await this.$auth.loginWith("local", {
+          data: this.login,
+        });
+        console.log(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+  },
+};
 </script>
 
 <style lang="postcss" scoped>
