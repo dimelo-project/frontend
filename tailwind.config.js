@@ -12,6 +12,12 @@ module.exports = {
         green1: "#49BC93",
         gray1: "#868E96",
       },
+      spacing: {
+        30: "120px",
+      },
+      borderRadius: {
+        base: "4px",
+      },
     },
   },
   variants: {
