@@ -1,6 +1,8 @@
 <template>
   <div>
     <HomeLayerHeader />
-    <Nuxt />
+    <div style="padding-top: 82px">
+      <Nuxt />
+    </div>
   </div>
 </template>
