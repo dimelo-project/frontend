@@ -4,23 +4,19 @@
       <h3 class="txt-heading3">로그인</h3>
 
       <!-- ID (EMAIL) -->
-      <input
-        v-model="userId"
-        type="text"
-        class="w-full px-3 py-4 mt-8 border-2 rounded-md outline-none test"
-        :class="{ 'border-black': userId.length > 0 }"
-        placeholder="아이디(이메일)"
-        style="height: 56px"
+      <InputGeneral
+        v-model="login.userId"
+        :type="`text`"
+        :placeholder="`아이디(이메일)`"
+        :height="56"
       />
 
       <!-- PASSWORD -->
-      <input
-        v-model="userPassword"
-        type="password"
-        class="w-full px-3 py-4 border-2 rounded-md outline-none mt-7 test"
-        :class="{ 'password-dot-bigger border-black': userPassword.length > 0 }"
-        placeholder="비밀번호"
-        style="height: 56px"
+      <InputGeneral
+        v-model="login.userPassword"
+        :type="`password`"
+        :placeholder="`비밀번호`"
+        :height="56"
       />
 
       <!-- error Msg box -->
@@ -30,8 +26,13 @@
         </p>
       </div>
 
-      <!-- button -->
-      <ButtonGeneral btnText="로그인" :large="true" :height="56" />
+      <!-- submit button -->
+      <ButtonGeneral
+        @click="userLogin"
+        btnText="로그인"
+        :large="true"
+        :height="56"
+      />
 
       <!-- sub link -->
       <div class="relative flex w-full mt-7 test" style="height: 24px">
@@ -66,28 +67,41 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({
+<script>
+export default {
+  middleware: "auth",
   layout: "home",
   data() {
     return {
-      userId: "",
-      userPassword: "",
-      formError: true,
+      login: {
+        userId: "",
+        userPassword: "",
+      },
+      formError: false,
     };
   },
-});
+  methods: {
+    async userLogin() {
+      try {
+        let response = await this.$auth.loginWith("local", {
+          data: {
+            email: this.login.userId,
+            password: this.login.userPassword,
+          },
+        });
+        // console.log(response.data);
+        // console.log(this.$auth);
+      } catch (err) {
+        console.error(err);
+        this.formError = true;
+      }
+    },
+  },
+};
 </script>
 
 <style lang="postcss" scoped>
 .test {
   /* @apply border-2 border-orange1; */
-}
-
-.password-dot-bigger {
-  font-family: Verdana;
-  letter-spacing: 0.125rem;
 }
 </style>

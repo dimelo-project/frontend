@@ -5,7 +5,9 @@
       <div class="absolute left-0 h-full test">
         <div class="flex items-center h-full mr-6">
           <!-- logo -->
-          <span class="p-2 border-2 border-black">Logo Image</span>
+          <NuxtLink to="/">
+            <span class="p-2 border-2 border-black">Logo Image</span>
+          </NuxtLink>
 
           <!-- menus -->
           <div
@@ -126,7 +128,7 @@
       <!-- contents--right -->
       <div class="absolute right-0">
         <!-- after logIn -->
-        <div class="flex test" v-if="loggedIn" style="height: 80px">
+        <div class="flex test" v-if="$auth.loggedIn" style="height: 80px">
           <div class="flex items-center h-full">
             <NuxtLink to="/">
               <svgHeartOutline />
@@ -160,7 +162,9 @@
                     <!-- user nickname -->
                     <div class="">
                       <NuxtLink to="/">
-                        <p class="font-bold">user nickname</p>
+                        <p class="font-bold">
+                          {{ $auth.user.nickname || "이름을 설정해주세요!" }}
+                        </p>
                       </NuxtLink>
                     </div>
                     <!-- divider -->
@@ -203,11 +207,11 @@
                         </NuxtLink>
                       </div>
                       <div class="mt-4">
-                        <NuxtLink to="/">
+                        <div @click="onLogout" class="cursor-pointer">
                           <p class="hover:font-bold hover:underline">
                             로그아웃
                           </p>
-                        </NuxtLink>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -266,26 +270,26 @@
 
         <!-- before logIn -->
         <div v-else class="flex">
-          <div>
-            <ButtonGeneral btnText="로그인" :small="true" :dark="true" />
-          </div>
-          <div class="ml-3">
-            <ButtonGeneral btnText="회원가입" :small="true" />
-          </div>
+          <NuxtLink to="/login">
+            <div>
+              <ButtonGeneral btnText="로그인" :small="true" :dark="true" />
+            </div>
+          </NuxtLink>
+          <NuxtLink to="/signup">
+            <div class="ml-3">
+              <ButtonGeneral btnText="회원가입" :small="true" />
+            </div>
+          </NuxtLink>
         </div>
       </div>
     </div>
   </nav>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({
+<script>
+export default {
   data() {
     return {
-      loggedIn: true,
-      // loggedIn: false,
       isLocationClassPage: false,
       isReviewMenuOpened: false,
       isCommunityMenuOpened: false,
@@ -293,7 +297,12 @@ export default Vue.extend({
       isProfileBtnOpened: false,
     };
   },
-});
+  methods: {
+    async onLogout() {
+      await this.$auth.logout();
+    },
+  },
+};
 </script>
 
 <style lang="postcss" scoped>
