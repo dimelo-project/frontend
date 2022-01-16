@@ -5,6 +5,7 @@
 
       <!-- ID (EMAIL) -->
       <InputGeneral
+        ref="emailInput"
         v-model="login.userId"
         :type="`text`"
         :placeholder="`아이디(이메일)`"
@@ -79,6 +80,17 @@ export default {
       },
       formError: false,
     };
+  },
+  mounted() {
+    this.$refs.emailInput.$el.focus();
+  },
+  watch: {
+    login: {
+      handler() {
+        this.formError = "";
+      },
+      deep: true,
+    },
   },
   methods: {
     async userLogin() {
