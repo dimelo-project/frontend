@@ -4,25 +4,19 @@
       <h3 class="txt-heading3">로그인</h3>
 
       <!-- ID (EMAIL) -->
-      <input
+      <InputGeneral
         v-model="login.userId"
-        type="text"
-        class="w-full px-3 py-4 mt-8 border-2 rounded-md outline-none test"
-        :class="{ 'border-black': login.userId.length > 0 }"
-        placeholder="아이디(이메일)"
-        style="height: 56px"
+        :type="`text`"
+        :placeholder="`아이디(이메일)`"
+        :height="56"
       />
 
       <!-- PASSWORD -->
-      <input
+      <InputGeneral
         v-model="login.userPassword"
-        type="password"
-        class="w-full px-3 py-4 border-2 rounded-md outline-none mt-7 test"
-        :class="{
-          'password-dot-bigger border-black': login.userPassword.length > 0,
-        }"
-        placeholder="비밀번호"
-        style="height: 56px"
+        :type="`password`"
+        :placeholder="`비밀번호`"
+        :height="56"
       />
 
       <!-- error Msg box -->
@@ -75,6 +69,7 @@
 
 <script>
 export default {
+  middleware: "auth",
   layout: "home",
   data() {
     return {
@@ -82,18 +77,23 @@ export default {
         userId: "",
         userPassword: "",
       },
-      formError: true,
+      formError: false,
     };
   },
   methods: {
     async userLogin() {
       try {
         let response = await this.$auth.loginWith("local", {
-          data: this.login,
+          data: {
+            email: this.login.userId,
+            password: this.login.userPassword,
+          },
         });
-        console.log(response.data);
+        // console.log(response.data);
+        // console.log(this.$auth);
       } catch (err) {
         console.error(err);
+        this.formError = true;
       }
     },
   },
@@ -103,10 +103,5 @@ export default {
 <style lang="postcss" scoped>
 .test {
   /* @apply border-2 border-orange1; */
-}
-
-.password-dot-bigger {
-  font-family: Verdana;
-  letter-spacing: 0.125rem;
 }
 </style>
