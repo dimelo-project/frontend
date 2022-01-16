@@ -2,9 +2,13 @@
   <input
     :value="value"
     @input="handleInput"
-    type="text"
+    :type="type"
+    :placeholder="placeholder"
     class="w-full px-3 py-4 mt-8 border-2 rounded-base focus:outline-none"
-    :class="{ 'border-black': value.length > 0 }"
+    :class="{
+      'border-black': value.length > 0,
+      'password-dot-bigger': type === `password` && value.length > 0,
+    }"
     :style="`${height}px`"
   />
 </template>
@@ -18,15 +22,19 @@ export default Vue.extend({
       type: String,
       required: true,
     },
+    placeholder: {
+      type: String,
+    },
+    type: {
+      type: String,
+      required: true,
+    },
     width: {
       type: Number,
     },
     height: {
       type: Number,
       default: () => 56,
-    },
-    placeholder: {
-      type: String,
     },
   },
   methods: {
@@ -37,3 +45,10 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style lang="postcss" scoped>
+.password-dot-bigger {
+  font-family: Verdana;
+  letter-spacing: 0.125rem;
+}
+</style>
