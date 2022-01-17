@@ -2,6 +2,7 @@
   <input
     :value="value"
     @input="handleInput"
+    v-on="listeners"
     :type="type"
     :placeholder="placeholder"
     class="w-full px-3 py-4 mt-8 border-2 rounded-base focus:outline-none"
@@ -35,6 +36,12 @@ export default Vue.extend({
     height: {
       type: Number,
       default: () => 56,
+    },
+  },
+  computed: {
+    listeners() {
+      const { input, ...listeners } = this.$listeners;
+      return listeners;
     },
   },
   methods: {
