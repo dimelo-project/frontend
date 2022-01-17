@@ -5,12 +5,13 @@
 
       <!-- ID (EMAIL) -->
       <p class="mt-8 input-title">이메일</p>
-      <input
-        v-model="userId"
-        type="text"
-        class="w-full px-3 py-4 mt-2 border-2 rounded-md outline-none test"
-        :class="{ 'border-black': userId.length > 0 }"
-        style="height: 56px"
+
+      <InputGeneral
+        :value="signup.userId"
+        @input="handleUserId"
+        class="mt-2"
+        :type="`test`"
+        :height="56"
       />
 
       <!-- email Msg Box -->
@@ -22,12 +23,15 @@
 
       <!-- PASSWORD -->
       <p class="input-title">비밀번호 입력</p>
-      <input
-        v-model="userPassword"
-        type="password"
-        class="w-full px-3 py-4 mt-2 border-2 rounded-md outline-none test"
-        :class="{ 'password-dot-bigger border-black': userPassword.length > 0 }"
-        style="height: 56px"
+
+      <InputGeneral
+        class="mt-2"
+        :value="signup.userPassword"
+        @input="handleUserPassword"
+        @focus="focusUserPassword"
+        @focusout="focusOutUserPassword"
+        :type="`password`"
+        :height="56"
       />
 
       <!-- password Msg Box -->
@@ -39,25 +43,29 @@
 
       <!-- PASSWORD CONFIRM -->
       <p class="input-title">비밀번호 확인</p>
-      <input
-        v-model="userPasswordConfirm"
-        type="password"
-        class="w-full px-3 py-4 mt-2 border-2 rounded-md outline-none test"
-        :class="{
-          'password-dot-bigger border-black': userPasswordConfirm.length > 0,
-        }"
-        style="height: 56px"
+
+      <InputGeneral
+        class="mt-2"
+        :value="signup.userPasswordConfirm"
+        @input="handleUserPasswordConfirm"
+        :type="`password`"
+        :height="56"
       />
 
       <!-- password confirm Msg Box -->
       <div class="h-8">
-        <p :class="{ 'text-red1': isPasswordConfirmMsgError }">
+        <p class="text-red1">
           {{ passwordconfirmMsg }}
         </p>
       </div>
 
       <!-- button -->
-      <ButtonGeneral btnText="회원가입" :large="true" :height="56" />
+      <ButtonGeneral
+        @click="userSignUp"
+        btnText="회원가입"
+        :large="true"
+        :height="56"
+      />
 
       <!-- divider -->
       <div class="w-full border mt-9"></div>
@@ -80,25 +88,100 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({
+<script>
+export default {
   layout: "home",
   data() {
     return {
-      userId: "",
-      userPassword: "",
-      userPasswordConfirm: "",
-      emailMsg: "이메일 형식이 올바르지 않습니다.",
-      passwordMsg: "영문, 숫자를 포함해 12자 이상으로 만들어주세요.",
-      passwordconfirmMsg: "비밀번호가 일치하지 않습니다.",
+      signup: {
+        userId: "",
+        userPassword: "",
+        userPasswordConfirm: "",
+      },
+      timeout: null,
+      emailMsg: "",
+      passwordMsg: "",
+      passwordconfirmMsg: "",
       isEmailMsgError: true,
       isPasswordMsgError: false,
-      isPasswordConfirmMsgError: false,
     };
   },
-});
+  methods: {
+    handleUserId(value) {
+      this.signup.userId = value;
+
+      // debounce input event
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
+
+      this.timeout = setTimeout(async () => {
+        try {
+          let response = await this.$axios.$post("/api/auth/check/email", {
+            email: this.signup.userId,
+          });
+          this.isEmailMsgError = false;
+          this.emailMsg = "사용 가능한 이메일입니다.";
+        } catch (err) {
+          this.isEmailMsgError = true;
+          if (err.response.data.code == 409) {
+            this.emailMsg = "이미 가입했거나 탈퇴한 이메일입니다.";
+          } else if (err.response.data.code == 400) {
+            this.emailMsg = "이메일 형식이 올바르지 않습니다.";
+          }
+        }
+      }, 500);
+    },
+    handleUserPassword(value) {
+      this.signup.userPassword = value;
+
+      const regExp = new RegExp("(?=.*[0-9])(?=.*[a-z])");
+      // console.log(regExp.test(value));
+      if (regExp.test(value) === false) {
+        this.passwordMsg = "영문, 숫자를 포함해 12자 이상으로 만들어주세요.";
+        this.isPasswordMsgError = true;
+      } else if (regExp.test(value) === true) {
+        this.passwordMsg = "";
+        this.isPasswordMsgError = false;
+      }
+    },
+    focusUserPassword() {
+      if (
+        this.signup.userPassword.length === 0 &&
+        this.signup.userPassword.length >= 12
+      ) {
+        this.passwordMsg = "영문, 숫자를 포함해 12자 이상으로 만들어주세요.";
+        this.isPasswordMsgError = false;
+      }
+    },
+    focusOutUserPassword() {
+      if (this.signup.userPassword.length === 0) {
+        this.passwordMsg = "";
+      }
+    },
+    handleUserPasswordConfirm(value) {
+      this.signup.userPasswordConfirm = value;
+
+      if (this.signup.userPassword !== this.signup.userPasswordConfirm) {
+        this.passwordconfirmMsg = "비밀번호가 일치하지 않습니다.";
+      } else {
+        this.passwordconfirmMsg = "";
+      }
+    },
+    async userSignUp() {
+      try {
+        const response = await this.$axios.$post("/api/auth/signup", {
+          email: this.signup.userId,
+          password: this.signup.userPassword,
+        });
+        console.log(response);
+      } catch (err) {
+        console.error(err);
+        // 에러 상태에 따른 로직
+      }
+    },
+  },
+};
 </script>
 
 <style lang="postcss" scoped>
@@ -108,10 +191,5 @@ export default Vue.extend({
 
 .input-title {
   @apply font-bold text-gray1;
-}
-
-.password-dot-bigger {
-  font-family: Verdana;
-  letter-spacing: 0.125rem;
 }
 </style>
