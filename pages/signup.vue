@@ -15,7 +15,7 @@
       />
 
       <!-- email Msg Box -->
-      <div class="h-8">
+      <div class="h-8 pt-1">
         <p :class="[isEmailMsgError ? ' text-red1' : 'text-green1']">
           {{ emailMsg }}
         </p>
@@ -35,7 +35,7 @@
       />
 
       <!-- password Msg Box -->
-      <div class="h-8">
+      <div class="h-8 pt-1">
         <p :class="[isPasswordMsgError ? 'text-red1' : 'text-gray1']">
           {{ passwordMsg }}
         </p>
@@ -53,7 +53,7 @@
       />
 
       <!-- password confirm Msg Box -->
-      <div class="h-8">
+      <div class="h-8 pt-1">
         <p class="text-red1">
           {{ passwordconfirmMsg }}
         </p>
