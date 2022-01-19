@@ -53,7 +53,7 @@
               <div class="h-full">
                 <!-- current selected job -->
                 <div class="flex items-center cursor-pointer test txt-mid">
-                  <button type="button" class="border-black border-b-default">
+                  <button type="button" class="border-black border-b-1px">
                     {{ currentSelectedJob }}
                   </button>
                   <svgChevronDownOutline />
