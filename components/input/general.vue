@@ -5,12 +5,12 @@
     v-on="listeners"
     :type="type"
     :placeholder="placeholder"
-    class="w-full px-3 py-4 mt-8 border-2 rounded-base focus:outline-none"
+    class="w-full px-3 py-4 border-2 rounded-base focus:outline-none"
     :class="{
       'border-black': value.length > 0,
       'password-dot-bigger': type === `password` && value.length > 0,
     }"
-    :style="`${height}px`"
+    :style="{ height: `${height}px`, width: `${width}px` }"
   />
 </template>
 
