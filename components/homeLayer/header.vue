@@ -112,7 +112,7 @@
 
       <!-- content--middle -->
       <div
-        v-if="isLocationClassPage"
+        v-if="$store.state.isCurrentPageOnLecture"
         class="absolute block pb-1 -translate-x-1/2 border-black test left-1/2 lg:flex lg:items-center lg:justify-between"
         style="width: 420px; border-bottom: 1px solid"
       >

@@ -1,7 +1,7 @@
 <template>
   <svg
-    width="24"
-    height="24"
+    :width="width"
+    :height="height"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -21,3 +21,20 @@
     />
   </svg>
 </template>
+
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  props: {
+    width: {
+      type: Number,
+      default: () => 24,
+    },
+    height: {
+      type: Number,
+      default: () => 24,
+    },
+  },
+});
+</script>
