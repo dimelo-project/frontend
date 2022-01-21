@@ -1,10 +1,11 @@
 <template>
-  <div class="flex justify-center mt-32 md:mb-24">
+  <div class="flex justify-center mt-30">
     <div class="relative flex flex-col items-center test" style="width: 380px">
       <h3 class="txt-heading3">로그인</h3>
 
       <!-- ID (EMAIL) -->
       <InputGeneral
+        class="mt-8"
         ref="emailInput"
         v-model="login.userId"
         :type="`text`"
@@ -14,6 +15,7 @@
 
       <!-- PASSWORD -->
       <InputGeneral
+        class="mt-7"
         v-model="login.userPassword"
         :type="`password`"
         :placeholder="`비밀번호`"
@@ -21,7 +23,7 @@
       />
 
       <!-- error Msg box -->
-      <div class="flex items-center justify-start w-full h-8">
+      <div class="flex items-center justify-start w-full h-10">
         <p v-if="formError" class="text-red1 txt-sub">
           아이디 또는 비밀번호가 일치하지 않습니다.
         </p>
