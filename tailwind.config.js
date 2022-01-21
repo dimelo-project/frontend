@@ -29,7 +29,7 @@ module.exports = {
         "9px": "9px",
         "10px": "10px",
         15: "3.75rem",
-        30: "120px",
+        30: "7.5rem",
       },
       margin: {
         "1px": "1px",
