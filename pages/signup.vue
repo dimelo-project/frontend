@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center mt-32 md:mb-24">
+  <div class="flex justify-center mt-30 md:mb-24">
     <div class="relative flex flex-col test" style="width: 380px">
       <h3 class="text-center txt-heading3">회원가입</h3>
 
@@ -15,7 +15,7 @@
       />
 
       <!-- email Msg Box -->
-      <div class="h-8 pt-1">
+      <div class="h-10 pt-1 txt-sub">
         <p :class="[isEmailMsgError ? ' text-red1' : 'text-green1']">
           {{ emailMsg }}
         </p>
@@ -35,7 +35,7 @@
       />
 
       <!-- password Msg Box -->
-      <div class="h-8 pt-1">
+      <div class="h-10 pt-1 txt-sub">
         <p :class="[isPasswordMsgError ? 'text-red1' : 'text-gray1']">
           {{ passwordMsg }}
         </p>
@@ -53,7 +53,7 @@
       />
 
       <!-- password confirm Msg Box -->
-      <div class="h-8 pt-1">
+      <div class="h-10 pt-1 txt-sub">
         <p class="text-red1">
           {{ passwordconfirmMsg }}
         </p>
@@ -68,7 +68,7 @@
       />
 
       <!-- divider -->
-      <div class="w-full border mt-9"></div>
+      <div class="w-full border mt-15"></div>
 
       <!-- OAuth -->
       <p class="mt-12 text-center">간편 회원가입</p>
