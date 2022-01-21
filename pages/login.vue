@@ -23,11 +23,11 @@
       />
 
       <!-- error Msg box -->
-      <div class="flex items-center justify-start w-full h-10">
-        <p v-if="formError" class="text-red1 txt-sub">
+      <span class="flex items-start justify-start w-full h-10">
+        <span v-if="formError" class="pt-2 text-red1 txt-sub">
           아이디 또는 비밀번호가 일치하지 않습니다.
-        </p>
-      </div>
+        </span>
+      </span>
 
       <!-- submit button -->
       <ButtonGeneral
