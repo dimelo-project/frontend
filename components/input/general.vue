@@ -5,19 +5,17 @@
     v-on="listeners"
     :type="type"
     :placeholder="placeholder"
-    class="w-full px-3 py-4 border-2 rounded-4px focus:outline-none"
+    class="w-full px-3 py-4 border rounded-4px focus:outline-none"
     :class="{
       'border-black': value.length > 0,
       'password-dot-bigger': type === `password` && value.length > 0,
     }"
-    :style="{ height: `${height}px`, width: `${width}px` }"
+    :style="inputSize"
   />
 </template>
 
-<script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({
+<script>
+export default {
   props: {
     value: {
       type: String,
@@ -43,14 +41,24 @@ export default Vue.extend({
       const { input, ...listeners } = this.$listeners;
       return listeners;
     },
+    inputSize() {
+      let size = {};
+      if (this.width) {
+        size["width"] = `${this.width}px`;
+      }
+      if (this.height) {
+        size["height"] = `${this.height}px`;
+      }
+      return size;
+    },
   },
   methods: {
-    handleInput(event: InputEvent) {
-      const eventTarget = event.target as HTMLInputElement;
+    handleInput(event) {
+      const eventTarget = event.target;
       this.$emit("input", eventTarget.value);
     },
   },
-});
+};
 </script>
 
 <style lang="postcss" scoped>
