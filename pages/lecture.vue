@@ -65,39 +65,37 @@
       </div>
 
       <!-- lecture cards -->
-      <div class="mt-16 mb-8" v-for="i in 17" :key="i">
+      <div
+        class="mt-16 mb-8"
+        v-for="(lecture, index) in lectureData"
+        :key="index"
+      >
         <div class="flex">
           <!-- site logo image -->
-          <div class="flex items-center">
-            <div
-              style="width: 69px; height: 69px; font-size: 10px"
-              class="flex items-center justify-center text-white rounded-8px bg-black1"
-            >
-              <span class="mx-8px">사이트 로고 이미지</span>
-            </div>
+          <div class="" style="width: 69px; height: 69px">
+            <img
+              class="max-w-none"
+              :src="cardImageLogo(lecture['course_platform'])"
+              alt="강의사이트"
+            />
           </div>
-
           <!-- Rank -->
           <div
             style="margin-left: 24px; margin-right: 24px"
             class="txt-mid-bold text-orange2"
           >
-            <span class=""> 1 </span>
+            <span class=""> {{ index + 1 }} </span>
           </div>
 
           <!-- card body -->
           <div class="w-full h-full">
             <!-- first line -->
             <div class="flex justify-between txt-mid-bold">
-              <p class="">파이썬 끝내기 1개월</p>
+              <p class="">{{ lecture["course_title"] }}</p>
               <div class="flex items-center">
-                <SvgReviewStar />
-                <SvgReviewStar />
-                <SvgReviewStar />
-                <SvgReviewStar />
-                <SvgReviewStar />
+                <StarRate :score="lecture['course_avg']" />
 
-                <span class="ml-8px">5.0</span>
+                <span class="ml-8px">{{ lecture["course_avg"] }}</span>
               </div>
             </div>
 
@@ -105,20 +103,28 @@
             <div class="flex justify-between mt-4 text-black1">
               <div class="flex items-center">
                 <span class="mr-1 font-bold">강사</span>
-                <span class="mr-4 underline">김지원</span>
-                <span class="mr-1 text-gray1">강의사이트명</span>
-                <span class="mr-5 text-gray1">00,000원</span>
+                <span class="mr-4 underline">{{
+                  lecture["instructor_name"]
+                }}</span>
+                <span class="mr-1 text-gray1">{{
+                  lecture["course_platform"]
+                }}</span>
+                <span class="mr-5 text-gray1">{{
+                  `${Number(lecture["course_price"]).toLocaleString()}원`
+                }}</span>
                 <SvgHeartOutline />
               </div>
 
               <div class="flex items-center">
-                <span class="mr-6 font-bold leading-5 underline"
-                  >강의 보러가기</span
-                >
+                <a :href="lecture['course_siteUrl']">
+                  <span class="mr-6 font-bold leading-5 underline"
+                    >강의 보러가기</span
+                  >
+                </a>
                 <ButtonGeneral
                   :width="160"
                   :height="32"
-                  :btnText="`0개의 리뷰 보기`"
+                  :btnText="`${lecture['course_num_review']}개의 리뷰 보기`"
                   class="txt-base"
                 />
               </div>
@@ -166,6 +172,19 @@
 <script>
 export default {
   layout: "home",
+  async asyncData({ $axios }) {
+    const lectureData = await $axios.$get("/api/courses", {
+      params: {
+        categoryBig: "개발",
+        category: "웹개발",
+        perPage: 10,
+        page: 1,
+        sort: "avg",
+      },
+    });
+    // console.log(lectureData);
+    return { lectureData };
+  },
   data() {
     return {
       currentCategoryIndex: 1,
@@ -264,13 +283,36 @@ export default {
     clickPaginationBtn(selectedPageIdx) {
       this.currentPageIndex = selectedPageIdx;
     },
+    cardImageLogo(siteName) {
+      let imgName = "";
+
+      if (siteName === "탈잉") {
+        imgName = "taling";
+      } else if (siteName === "인프런") {
+        imgName = "inflearn";
+      } else if (siteName === "유데미") {
+        imgName = "udemy";
+      } else if (siteName === "클래스101") {
+        imgName = "class101";
+      } else if (siteName === "리메인") {
+        imgName = "remain";
+      } else if (siteName === "패스트캠퍼스") {
+        imgName = "fastcampus";
+      } else if (siteName === "프로그래머스") {
+        imgName = "programmers";
+      } else if (siteName === "코드잇") {
+        imgName = "codeit";
+      } else {
+        imgName = "etc";
+      }
+
+      return require(`assets/imgs/logo/lecturesite/${imgName}.png`);
+    },
   },
   mounted() {
-    console.log(this.$store);
     this.$store.commit("showHeaderSearchInput");
   },
   destroyed() {
-    console.log("destroy!");
     this.$store.commit("hideHeaderSearchInput");
   },
 };
