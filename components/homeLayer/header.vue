@@ -27,30 +27,37 @@
 
               <div
                 v-if="isReviewMenuOpened"
-                class="absolute w-56 pt-3 bg-transparent -left-1/4"
+                class="absolute pt-3 bg-transparent -left-1/4"
                 style="top: 80px"
               >
-                <div
-                  class="w-full p-6 bg-white border rounded-md border-gray1"
-                  style="width: 155px"
-                >
+                <div class="w-40 p-6 bg-white border rounded-md border-gray1">
                   <div class="py-1">
                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                     <div>
                       <NuxtLink to="/">
-                        <p class="hover:font-bold hover:underline">개발</p>
+                        <p
+                          class="whitespace-nowrap hover:font-bold hover:underline"
+                        >
+                          개발
+                        </p>
                       </NuxtLink>
                     </div>
                     <div class="mt-4">
                       <NuxtLink to="/">
-                        <p class="hover:font-bold hover:underline">
+                        <p
+                          class="whitespace-nowrap hover:font-bold hover:underline"
+                        >
                           데이터 사이언스
                         </p>
                       </NuxtLink>
                     </div>
                     <div class="mt-4">
                       <NuxtLink to="/">
-                        <p class="hover:font-bold hover:underline">디자인</p>
+                        <p
+                          class="whitespace-nowrap hover:font-bold hover:underline"
+                        >
+                          디자인
+                        </p>
                       </NuxtLink>
                     </div>
                   </div>
@@ -87,17 +94,27 @@
                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                     <div>
                       <NuxtLink to="/">
-                        <p class="hover:font-bold hover:underline">자유주제</p>
+                        <p
+                          class="whitespace-nowrap hover:font-bold hover:underline"
+                        >
+                          자유주제
+                        </p>
                       </NuxtLink>
                     </div>
                     <div class="mt-4">
                       <NuxtLink to="/">
-                        <p class="hover:font-bold hover:underline">스터디</p>
+                        <p
+                          class="whitespace-nowrap hover:font-bold hover:underline"
+                        >
+                          스터디
+                        </p>
                       </NuxtLink>
                     </div>
                     <div class="mt-4">
                       <NuxtLink to="/">
-                        <p class="hover:font-bold hover:underline">
+                        <p
+                          class="whitespace-nowrap hover:font-bold hover:underline"
+                        >
                           사이드 프로젝트
                         </p>
                       </NuxtLink>
@@ -291,7 +308,7 @@ export default {
   data() {
     return {
       isLocationClassPage: false,
-      isReviewMenuOpened: false,
+      isReviewMenuOpened: true,
       isCommunityMenuOpened: false,
       isNotiMenuOpened: false,
       isProfileBtnOpened: false,
