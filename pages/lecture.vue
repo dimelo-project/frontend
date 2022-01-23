@@ -172,17 +172,18 @@
 <script>
 export default {
   layout: "home",
-  async asyncData({ $axios }) {
+  async asyncData({ $axios, query }) {
+    const { categoryBig, category, perPage, page, sort } = query;
+
     const lectureData = await $axios.$get("/api/courses", {
       params: {
-        categoryBig: "개발",
-        category: "웹개발",
-        perPage: 10,
-        page: 1,
-        sort: "avg",
+        categoryBig: categoryBig || "개발",
+        category: category || "웹개발",
+        perPage: Number(perPage) || 10,
+        page: Number(page) || 1,
+        sort: sort || "avg",
       },
     });
-    // console.log(lectureData);
     return { lectureData };
   },
   data() {
@@ -192,6 +193,7 @@ export default {
       currentFilteringOptionIndex: 0,
       currentPageIndex: 0,
       categorySearchInput: "",
+      lectureData: [],
       categories: [
         {
           id: 0,
@@ -230,13 +232,13 @@ export default {
           majors: [
             { id: 0, name: "웹 디자인" },
             { id: 1, name: "그래픽 디자인 및 일러스트레이션" },
-            { id: 2, name: "디자인 도구" },
-            { id: 3, name: "사용자 경험 디자인" },
-            { id: 4, name: "게임 디자인" },
-            { id: 5, name: "3D 및 애니메이션" },
-            { id: 6, name: "패션 디자인" },
-            { id: 7, name: "건축 디자인" },
-            { id: 8, name: "인테리어 디자인" },
+            { id: 2, name: "브랜드 디자인" },
+            { id: 3, name: "영상 디자인" },
+            { id: 4, name: "디자인 도구" },
+            { id: 5, name: "사용자 경험 디자인" },
+            { id: 6, name: "게임 디자인" },
+            { id: 7, name: "3D 및 애니메이션" },
+            { id: 8, name: "건축 디자인" },
             { id: 9, name: "기타" },
           ],
         },
@@ -252,6 +254,22 @@ export default {
         },
       ],
     };
+  },
+  watch: {
+    async $route(to, from) {
+      console.log("route change!", to);
+      const { categoryBig, category, perPage, page, sort } = to.query;
+      const lectureData = await this.$axios.$get("/api/courses", {
+        params: {
+          categoryBig,
+          category,
+          perPage,
+          page,
+          sort,
+        },
+      });
+      this.lectureData = lectureData;
+    },
   },
   computed: {
     currentMajors() {
