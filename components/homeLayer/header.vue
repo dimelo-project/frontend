@@ -16,13 +16,26 @@
           >
             <div class="flex items-center h-full">
               <div class="txt-mid">
-                <button
-                  :class="{ 'font-bold': isReviewMenuOpened }"
-                  type="button"
-                  @mouseover="isReviewMenuOpened = true"
+                <NuxtLink
+                  :to="{
+                    path: 'lecture',
+                    query: {
+                      categoryBig: '개발',
+                      category: '웹개발',
+                      perPage: 10,
+                      page: 1,
+                      sort: 'avg',
+                    },
+                  }"
                 >
-                  강의리뷰
-                </button>
+                  <button
+                    :class="{ 'font-bold': isReviewMenuOpened }"
+                    type="button"
+                    @mouseover="isReviewMenuOpened = true"
+                  >
+                    강의리뷰
+                  </button>
+                </NuxtLink>
               </div>
 
               <div
@@ -34,7 +47,18 @@
                   <div class="py-1">
                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                     <div>
-                      <NuxtLink to="/">
+                      <NuxtLink
+                        :to="{
+                          path: 'lecture',
+                          query: {
+                            categoryBig: '개발',
+                            category: '웹개발',
+                            perPage: 10,
+                            page: 1,
+                            sort: 'avg',
+                          },
+                        }"
+                      >
                         <p
                           class="whitespace-nowrap hover:font-bold hover:underline"
                         >
@@ -43,7 +67,18 @@
                       </NuxtLink>
                     </div>
                     <div class="mt-4">
-                      <NuxtLink to="/">
+                      <NuxtLink
+                        :to="{
+                          path: 'lecture',
+                          query: {
+                            categoryBig: '데이터 사이언스',
+                            category: '데이터 분석',
+                            perPage: 10,
+                            page: 1,
+                            sort: 'avg',
+                          },
+                        }"
+                      >
                         <p
                           class="whitespace-nowrap hover:font-bold hover:underline"
                         >
@@ -52,7 +87,18 @@
                       </NuxtLink>
                     </div>
                     <div class="mt-4">
-                      <NuxtLink to="/">
+                      <NuxtLink
+                        :to="{
+                          path: 'lecture',
+                          query: {
+                            categoryBig: '디자인',
+                            category: '웹 디자인',
+                            perPage: 10,
+                            page: 1,
+                            sort: 'avg',
+                          },
+                        }"
+                      >
                         <p
                           class="whitespace-nowrap hover:font-bold hover:underline"
                         >
@@ -308,7 +354,7 @@ export default {
   data() {
     return {
       isLocationClassPage: false,
-      isReviewMenuOpened: true,
+      isReviewMenuOpened: false,
       isCommunityMenuOpened: false,
       isNotiMenuOpened: false,
       isProfileBtnOpened: false,
