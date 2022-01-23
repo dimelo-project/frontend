@@ -16,41 +16,94 @@
           >
             <div class="flex items-center h-full">
               <div class="txt-mid">
-                <button
-                  :class="{ 'font-bold': isReviewMenuOpened }"
-                  type="button"
-                  @mouseover="isReviewMenuOpened = true"
+                <NuxtLink
+                  :to="{
+                    path: 'lecture',
+                    query: {
+                      categoryBig: '개발',
+                      category: '웹개발',
+                      perPage: 10,
+                      page: 1,
+                      sort: 'avg',
+                    },
+                  }"
                 >
-                  강의리뷰
-                </button>
+                  <button
+                    :class="{ 'font-bold': isReviewMenuOpened }"
+                    type="button"
+                    @mouseover="isReviewMenuOpened = true"
+                  >
+                    강의리뷰
+                  </button>
+                </NuxtLink>
               </div>
 
               <div
                 v-if="isReviewMenuOpened"
-                class="absolute w-56 pt-3 bg-transparent -left-1/4"
+                class="absolute pt-3 bg-transparent -left-1/4"
                 style="top: 80px"
               >
-                <div
-                  class="w-full p-6 bg-white border rounded-md border-gray1"
-                  style="width: 155px"
-                >
+                <div class="w-40 p-6 bg-white border rounded-md border-gray1">
                   <div class="py-1">
                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                     <div>
-                      <NuxtLink to="/">
-                        <p class="hover:font-bold hover:underline">개발</p>
+                      <NuxtLink
+                        :to="{
+                          path: 'lecture',
+                          query: {
+                            categoryBig: '개발',
+                            category: '웹개발',
+                            perPage: 10,
+                            page: 1,
+                            sort: 'avg',
+                          },
+                        }"
+                      >
+                        <p
+                          class="whitespace-nowrap hover:font-bold hover:underline"
+                        >
+                          개발
+                        </p>
                       </NuxtLink>
                     </div>
                     <div class="mt-4">
-                      <NuxtLink to="/">
-                        <p class="hover:font-bold hover:underline">
+                      <NuxtLink
+                        :to="{
+                          path: 'lecture',
+                          query: {
+                            categoryBig: '데이터 사이언스',
+                            category: '데이터 분석',
+                            perPage: 10,
+                            page: 1,
+                            sort: 'avg',
+                          },
+                        }"
+                      >
+                        <p
+                          class="whitespace-nowrap hover:font-bold hover:underline"
+                        >
                           데이터 사이언스
                         </p>
                       </NuxtLink>
                     </div>
                     <div class="mt-4">
-                      <NuxtLink to="/">
-                        <p class="hover:font-bold hover:underline">디자인</p>
+                      <NuxtLink
+                        :to="{
+                          path: 'lecture',
+                          query: {
+                            categoryBig: '디자인',
+                            category: '웹 디자인',
+                            perPage: 10,
+                            page: 1,
+                            sort: 'avg',
+                          },
+                        }"
+                      >
+                        <p
+                          class="whitespace-nowrap hover:font-bold hover:underline"
+                        >
+                          디자인
+                        </p>
                       </NuxtLink>
                     </div>
                   </div>
@@ -87,17 +140,27 @@
                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                     <div>
                       <NuxtLink to="/">
-                        <p class="hover:font-bold hover:underline">자유주제</p>
+                        <p
+                          class="whitespace-nowrap hover:font-bold hover:underline"
+                        >
+                          자유주제
+                        </p>
                       </NuxtLink>
                     </div>
                     <div class="mt-4">
                       <NuxtLink to="/">
-                        <p class="hover:font-bold hover:underline">스터디</p>
+                        <p
+                          class="whitespace-nowrap hover:font-bold hover:underline"
+                        >
+                          스터디
+                        </p>
                       </NuxtLink>
                     </div>
                     <div class="mt-4">
                       <NuxtLink to="/">
-                        <p class="hover:font-bold hover:underline">
+                        <p
+                          class="whitespace-nowrap hover:font-bold hover:underline"
+                        >
                           사이드 프로젝트
                         </p>
                       </NuxtLink>

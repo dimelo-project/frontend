@@ -1,7 +1,11 @@
 <template>
   <div class="flex">
-    <SvgReviewStar v-for="i in filledStarNum" :key="i" />
-    <SvgReviewStar :fill="false" v-for="i in unfilledStarNum" :key="i" />
+    <SvgReviewStar v-for="i in filledStarNum" :key="`${i}-fill`" />
+    <SvgReviewStar
+      :fill="false"
+      v-for="i in unfilledStarNum"
+      :key="`${i}-unfill`"
+    />
   </div>
 </template>
 
@@ -32,9 +36,6 @@ export default {
     unfilledStarNum() {
       return 5 - this.filledStarNum;
     },
-  },
-  mounted() {
-    console.log(this.score);
   },
 };
 </script>
