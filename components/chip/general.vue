@@ -1,6 +1,19 @@
 <template>
-  <button v-on="$listeners" type="button" :class="[borderRadius]">
-    {{ chipText }}
+  <button
+    v-on="$listeners"
+    type="button"
+    class="flex items-center"
+    :class="[borderRadius]"
+  >
+    <img
+      v-if="imgName"
+      :src="require(`~/assets/imgs/logo/tech/${imgName}.png`)"
+      :class="[imgGap]"
+      style="width: 20px; height: 20px"
+    />
+    <span>
+      {{ chipText }}
+    </span>
   </button>
 </template>
 
@@ -12,6 +25,13 @@ export default {
     },
     height: {
       type: Number,
+    },
+    imgName: {
+      type: String,
+      default: () => null,
+    },
+    imgGap: {
+      type: String,
     },
     borderRadius: {
       type: String,
@@ -41,6 +61,11 @@ export default {
       },
     };
   },
+  // methods: {
+  //   imgUrl() {
+  //     return require(`~assets/imgs/logo/tech/${this.imgName}.png`);
+  //   },
+  // },
 };
 </script>
 
