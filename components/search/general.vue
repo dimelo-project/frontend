@@ -1,18 +1,31 @@
 <template>
   <div
-    class="block border rounded-4px border-gray2 txt-sub py-6px px-8px bg-gray4 lg:flex lg:items-center lg:justify-between"
+    class="block border border-gray2 txt-sub lg:flex lg:items-center lg:justify-between"
+    :class="[borderRadius, searchboxColor, placeholderColor]"
   >
+    <svgSearchOutline
+      v-if="label === 'left'"
+      :width="20"
+      :height="20"
+      :class="`mr-${labelGap}`"
+    />
     <input
       :value="value"
       @input="handleInput"
       v-on="listeners"
       type="text"
-      name="serch"
+      name="search"
       :placeholder="placeholder"
-      class="placeholder-black bg-transparent border-none outline-none placeholder-gray1"
+      class="w-full bg-transparent border-none outline-none"
+      :class="[placeholderColor]"
       :style="{ width: `${width}px` }"
     />
-    <svgSearchOutline :width="20" :height="20" />
+    <svgSearchOutline
+      v-if="label === 'right'"
+      :width="20"
+      :height="20"
+      :class="`ml-${labelGap}`"
+    />
   </div>
 </template>
 
@@ -25,11 +38,28 @@ export default Vue.extend({
       type: String,
       required: true,
     },
+    searchboxColor: {
+      type: String,
+    },
+    borderRadius: {
+      type: String,
+    },
     placeholder: {
+      type: String,
+    },
+    placeholderColor: {
       type: String,
     },
     width: {
       type: Number,
+    },
+    label: {
+      type: String,
+      default: () => "right",
+    },
+    labelGap: {
+      type: String,
+      default: () => 0,
     },
   },
   computed: {
