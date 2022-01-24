@@ -2,8 +2,8 @@
   <button
     v-on="$listeners"
     type="button"
-    class="button txt-mid"
-    :class="{ 'txt-base': small, 'w-full': large, dark: dark }"
+    class="button"
+    :class="{ 'w-full': large, dark: dark }"
     :style="sizeObject"
   >
     {{ btnText }}
@@ -22,10 +22,6 @@ export default {
     btnText: {
       type: String,
       required: true,
-    },
-    small: {
-      type: Boolean,
-      default: () => false,
     },
     large: {
       type: Boolean,
@@ -49,7 +45,7 @@ export default {
 
 <style lang="postcss" scoped>
 .button {
-  @apply px-3 py-1 text-center text-white 
+  @apply text-center text-white 
   transition duration-200 ease-in rounded-md
   border border-orange1 hover:border-orange2  bg-orange1 hover:bg-orange2;
 }
