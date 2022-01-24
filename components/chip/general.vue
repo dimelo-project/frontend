@@ -1,10 +1,5 @@
 <template>
-  <button
-    v-on="$listeners"
-    type="button"
-    class="chip txt-mid"
-    :style="[sizeObject, gapObject]"
-  >
+  <button v-on="$listeners" type="button" :class="[borderRadius]">
     {{ chipText }}
   </button>
 </template>
@@ -17,6 +12,9 @@ export default {
     },
     height: {
       type: Number,
+    },
+    borderRadius: {
+      type: String,
     },
     chipText: {
       type: String,
@@ -46,10 +44,4 @@ export default {
 };
 </script>
 
-<style lang="postcss" scoped>
-.chip {
-  @apply px-4 py-3
-    border rounded-lg border-gray2
-  hover:bg-gray3;
-}
-</style>
+<style lang="postcss" scoped></style>
