@@ -4,28 +4,21 @@
       <!-- left side navigation -->
       <div class="flex-shrink-0" style="width: 174px">
         <div class="sticky top-30 txt-mid">
-          <div class="mb-8">
-            <nuxt-link to="/community/freetopic">
-              <span class="cursor-pointer txt-mid-bold text-orange2">
-                자유주제
+          <div v-for="category in categorys" :key="category.id" class="mt-8">
+            <nuxt-link :to="category.pageLink">
+              <span
+                @click="cntCategoryIdx = category.id"
+                :class="{
+                  'txt-mid-bold text-orange2': category.id === cntCategoryIdx,
+                }"
+                class="cursor-pointer"
+              >
+                {{ category.title }}
               </span>
-            </nuxt-link>
-          </div>
-          <div class="mb-8">
-            <nuxt-link to="/community/study">
-              <span class="cursor-pointer">스터디</span>
-            </nuxt-link>
-          </div>
-          <div class="w-full mb-8">
-            <nuxt-link to="/community/sideproject">
-              <span class="cursor-pointer">사이드 프로젝트</span>
             </nuxt-link>
           </div>
         </div>
       </div>
-
-      <!-- gap -->
-      <!-- <div class="flex-grow"></div> -->
 
       <!-- right panel -->
       <div class="flex-grow">
@@ -41,6 +34,24 @@ export default {
   data() {
     return {
       value: "",
+      cntCategoryIdx: 0,
+      categorys: [
+        {
+          id: 0,
+          title: "자유주제",
+          pageLink: "/community/freetopic",
+        },
+        {
+          id: 1,
+          title: "스터디",
+          pageLink: "/community/study",
+        },
+        {
+          id: 2,
+          title: "사이드 프로젝트",
+          pageLink: "/community/sideproject",
+        },
+      ],
     };
   },
 };
