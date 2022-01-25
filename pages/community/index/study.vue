@@ -60,57 +60,63 @@
         </div>
 
         <!-- cards list -->
-        <div class="flex flex-wrap justify-between">
+        <div>
           <!-- card -->
-          <div
-            v-for="i in 10"
-            :key="i"
-            style="width: 378px; height: 363px"
-            class="p-6 mt-12 bg-white"
-          >
-            <!-- active status chip & number of people -->
-            <div class="flex">
-              <ChipGeneral
-                :height="34"
-                :borderRadius="`rounded-8px`"
-                :chipText="`모집중`"
-                class="font-bold bg-green2 text-green3 py-1.5 px-2.5"
-              />
-              <ChipGeneral
-                :height="34"
-                :borderRadius="`rounded-8px`"
-                :chipText="`4명`"
-                class="bg-gray3 text-gray1 py-1.5 px-3 ml-2"
-              />
-            </div>
-            <!-- card title -->
-            <div class="mt-5">
-              <p class="txt-mid-bold">
-                같이 스터디하실 분 구해요! 함께 해요! 초보이신 분도 환영 :)
-              </p>
-            </div>
-            <!-- tech logos -->
-            <div class="flex mt-12">
-              <img
-                v-for="i in 5"
-                :key="`${i}-i`"
-                src="~/assets/imgs/logo/tech/javascript48.png"
-                alt="스택"
-                class="mr-5"
-              />
-            </div>
-            <!-- divider -->
-            <div class="mt-16 border border-gray2"></div>
-            <!-- nickname & date & number of comments -->
-            <div class="flex justify-between mt-4">
-              <div class="text-gray6">
-                <span>내이름은 김삼순</span>
-                <span>2022.1.14</span>
+          <div class="flex flex-wrap justify-between">
+            <div
+              v-for="i in 10"
+              :key="i"
+              style="width: 378px; height: 363px"
+              class="p-6 mt-12 bg-white"
+            >
+              <!-- active status chip & number of people -->
+              <div class="flex">
+                <ChipGeneral
+                  :height="34"
+                  :borderRadius="`rounded-8px`"
+                  :chipText="`모집중`"
+                  class="font-bold bg-green2 text-green3 py-1.5 px-2.5"
+                />
+                <ChipGeneral
+                  :height="34"
+                  :borderRadius="`rounded-8px`"
+                  :chipText="`4명`"
+                  class="bg-gray3 text-gray1 py-1.5 px-3 ml-2"
+                />
               </div>
-              <div class="text-gray1">
-                <span>댓글 3</span>
+              <!-- card title -->
+              <div class="mt-5">
+                <p class="txt-mid-bold">
+                  같이 스터디하실 분 구해요! 함께 해요! 초보이신 분도 환영 :)
+                </p>
+              </div>
+              <!-- tech logos -->
+              <div class="flex mt-12">
+                <img
+                  v-for="i in 5"
+                  :key="`${i}-i`"
+                  src="~/assets/imgs/logo/tech/javascript48.png"
+                  alt="스택"
+                  class="mr-5"
+                />
+              </div>
+              <!-- divider -->
+              <div class="mt-16 border border-gray2"></div>
+              <!-- nickname & date & number of comments -->
+              <div class="flex justify-between mt-4">
+                <div class="text-gray6">
+                  <span>내이름은 김삼순</span>
+                  <span>2022.1.14</span>
+                </div>
+                <div class="text-gray1">
+                  <span>댓글 3</span>
+                </div>
               </div>
             </div>
+          </div>
+
+          <div class="flex justify-center">
+            <PaginationGeneral class="my-16" />
           </div>
         </div>
       </div>
