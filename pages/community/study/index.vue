@@ -126,6 +126,7 @@
 
 <script>
 export default {
+  layout: "community",
   data() {
     return {
       techStacks: [
