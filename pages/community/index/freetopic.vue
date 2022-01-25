@@ -17,6 +17,7 @@
             :height="44"
             :btnText="`글쓰기`"
             :small="true"
+            class="font-bold txt-base"
           />
         </div>
       </div>
@@ -63,10 +64,19 @@
           <span>댓글 3</span>
         </div>
       </div>
+
+      <!-- pagination -->
+      <div class="flex justify-center">
+        <PaginationGeneral class="my-16" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {};
+  },
+};
 </script>
