@@ -154,6 +154,7 @@
 
 <script>
 export default {
+  layout: "community",
   data() {
     return {
       positions: ["프론트엔드 개발자", "백엔드 개발자", "기획자", "디자이너"],

@@ -36,33 +36,35 @@
 
       <!-- cards list -->
       <div v-for="i in 13" :key="i" class="mt-10">
-        <div class="flex items-center">
-          <ChipGeneral
-            :width="46"
-            :height="37"
-            :borderRadius="`rounded-8px`"
-            :chipText="`개발`"
-            class="font-bold pointer-events-none py-8px px-10px txt-sub text-green3 bg-green2"
-          />
-          <p class="txt-mid-bold ml-6px">파이썬 입문 강의 추천해주세요!</p>
-        </div>
+        <nuxt-link :to="`/community/freetopic/${i}`">
+          <div class="flex items-center">
+            <ChipGeneral
+              :width="46"
+              :height="37"
+              :borderRadius="`rounded-8px`"
+              :chipText="`개발`"
+              class="font-bold pointer-events-none py-8px px-10px txt-sub text-green3 bg-green2"
+            />
+            <p class="txt-mid-bold ml-6px">파이썬 입문 강의 추천해주세요!</p>
+          </div>
 
-        <div class="mt-3">
-          <span
-            >안녕하세요. 문과생이에요. 파이썬 강의 입문하려고 하는데 어떤 것이
-            좋은지 몰라서요.. 혹시 괜찮 강의 추천좀 부탁드려도 될까요?
-            비전공자라서 알아듣기 쉬운 강의였으면 좋겠어요!!!</span
-          >
-        </div>
+          <div class="mt-3">
+            <span
+              >안녕하세요. 문과생이에요. 파이썬 강의 입문하려고 하는데 어떤 것이
+              좋은지 몰라서요.. 혹시 괜찮 강의 추천좀 부탁드려도 될까요?
+              비전공자라서 알아듣기 쉬운 강의였으면 좋겠어요!!!</span
+            >
+          </div>
 
-        <div class="mt-3 text-gray6">
-          <span> 작성자</span>
-          <span class="ml-5">2021.11.23</span>
-        </div>
+          <div class="mt-3 text-gray6">
+            <span> 작성자</span>
+            <span class="ml-5">2021.11.23</span>
+          </div>
 
-        <div class="mt-2 text-gray6">
-          <span>댓글 3</span>
-        </div>
+          <div class="mt-2 text-gray6">
+            <span>댓글 3</span>
+          </div>
+        </nuxt-link>
       </div>
 
       <!-- pagination -->
@@ -75,6 +77,7 @@
 
 <script>
 export default {
+  layout: "community",
   data() {
     return {};
   },
