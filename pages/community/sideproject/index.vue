@@ -19,7 +19,7 @@
               :key="index"
               :borderRadius="`rounded-4px`"
               :chipText="position"
-              class="border border-gray2 px-3 py-2.5 mr-1 text-gray1"
+              class="border border-gray2 px-2.5 py-2.5 mr-1 text-gray1"
             />
           </div>
         </div>
@@ -39,7 +39,7 @@
           <ChipGeneral
             :borderRadius="`rounded-4px`"
             :chipText="`초기화`"
-            class="border border-gray2 px-3 py-2.5 mr-1 mb-3 bg-black1 text-white"
+            class="border border-gray2 px-2.5 py-2.5 mr-1 mb-3 bg-black1 text-white"
           />
           <!-- tech buttons -->
           <ChipGeneral
@@ -49,13 +49,13 @@
             :imgGap="`mr-1`"
             :borderRadius="`rounded-4px`"
             :chipText="stack.chipName"
-            class="border border-gray2 px-3 py-2.5 mr-1 mb-3 text-gray1"
+            class="border border-gray2 px-2.5 py-2.5 mr-1 mb-3 text-gray1"
           />
           <!-- ET CETERA button -->
           <ChipGeneral
             :borderRadius="`rounded-4px`"
             :chipText="`기타`"
-            class="border border-gray2 px-3 py-2.5 mr-1 mb-3 text-gray1"
+            class="border border-gray2 px-2.5 py-2.5 mr-1 mb-3 text-gray1"
           />
         </div>
       </div>
@@ -164,71 +164,79 @@ export default {
       positions: ["프론트엔드 개발자", "백엔드 개발자", "기획자", "디자이너"],
       techStacks: [
         {
-          chipName: "자바스크립트",
+          chipName: "JavaScript",
           techName: "javascript",
         },
         {
-          chipName: "타입스크립트",
+          chipName: "TypeScript",
           techName: "typescript",
         },
         {
-          chipName: "리액트",
+          chipName: "React",
           techName: "react",
         },
         {
-          chipName: "뷰",
+          chipName: "Vue.js",
           techName: "vue",
         },
         {
-          chipName: "자바",
+          chipName: "Java",
           techName: "java",
         },
         {
-          chipName: "스프링",
+          chipName: "Spring",
           techName: "spring",
         },
         {
-          chipName: "고",
-          techName: "go",
+          chipName: "Php",
+          techName: "php",
         },
         {
-          chipName: "노드JS",
-          techName: "nodejs",
+          chipName: "Go",
+          techName: "go",
         },
         {
           chipName: "C++",
           techName: "c++",
         },
         {
-          chipName: "코틀린",
+          chipName: "Kotlin",
           techName: "kotlin",
         },
         {
-          chipName: "장고",
+          chipName: "Python",
+          techName: "python",
+        },
+        {
+          chipName: "Django",
           techName: "django",
         },
         {
-          chipName: "플러터",
+          chipName: "Flutter",
           techName: "flutter",
         },
         {
-          chipName: "스위프트",
+          chipName: "Swift",
           techName: "swift",
         },
         {
-          chipName: "next.js",
+          chipName: "Node.js",
+          techName: "nodejs",
+        },
+        {
+          chipName: "Next.js",
           techName: "nextjs",
         },
         {
-          chipName: "nuxt.js",
+          chipName: "Nuxt.js",
           techName: "nuxtjs",
         },
         {
-          chipName: "스벨트",
+          chipName: "Svelt",
           techName: "svelt",
         },
         {
-          chipName: "nest.js",
+          chipName: "Nest.js",
           techName: "nestjs",
         },
         {
@@ -236,11 +244,11 @@ export default {
           techName: "xd",
         },
         {
-          chipName: "제플린",
+          chipName: "Zeplin",
           techName: "zeplin",
         },
         {
-          chipName: "피그마",
+          chipName: "Figma",
           techName: "figma",
         },
       ],
