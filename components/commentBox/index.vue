@@ -1,0 +1,50 @@
+<template>
+  <textarea
+    class="w-full overflow-hidden outline-none resize-none hide-scrollbar"
+    :rows="rows"
+    :placeholder="placeholder"
+    :value="value"
+    @input="onChangeComment"
+  ></textarea>
+</template>
+
+<script>
+export default {
+  props: {
+    value: {
+      type: String,
+      required: true,
+    },
+    placeholder: {
+      type: String,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      rows: 1,
+      userNewCommment: "",
+    };
+  },
+  methods: {
+    onChangeComment(event) {
+      const rows = event.target.value.split("\n").length;
+
+      this.rows = rows;
+      this.userNewCommment = event.target.value;
+      this.$emit("input", this.userNewCommment);
+    },
+  },
+};
+</script>
+
+<style lang="postcss" scoped>
+.hide-scrollbar {
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+</style>
