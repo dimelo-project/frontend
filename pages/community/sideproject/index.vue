@@ -88,58 +88,62 @@
               v-for="i in 10"
               :key="i"
               style="width: 378px; height: 471px"
-              class="p-6 mt-12 bg-white"
+              class="mt-12 bg-white"
             >
-              <!-- active status chip  -->
-              <div class="flex">
-                <ChipGeneral
-                  :height="34"
-                  :borderRadius="`rounded-8px`"
-                  :chipText="`모집중`"
-                  class="font-bold bg-green2 text-green3 py-1.5 px-2.5"
-                />
-              </div>
-              <!-- card title -->
-              <div class="mt-5">
-                <p class="txt-mid-bold">
-                  같이 프로젝트 하실 분 구해요! 함께 해요! 서비스 런칭 하실분
-                  구합니다 ~~
-                </p>
-              </div>
-              <!-- position chips -->
-              <div class="flex flex-wrap mt-8">
-                <ChipGeneral
-                  v-for="(position, index) in positions"
-                  :key="index"
-                  :height="40"
-                  :borderRadius="`rounded-8px`"
-                  :chipText="position"
-                  class="px-3 py-2 mb-4 mr-4 bg-gray3"
-                />
-              </div>
+              <NuxtLink :to="`/community/sideproject/${i}`">
+                <div class="p-6">
+                  <!-- active status chip  -->
+                  <div class="flex">
+                    <ChipGeneral
+                      :height="34"
+                      :borderRadius="`rounded-8px`"
+                      :chipText="`모집중`"
+                      class="font-bold bg-green2 text-green3 py-1.5 px-2.5"
+                    />
+                  </div>
+                  <!-- card title -->
+                  <div class="mt-5">
+                    <p class="txt-mid-bold">
+                      같이 프로젝트 하실 분 구해요! 함께 해요! 서비스 런칭
+                      하실분 구합니다 ~~
+                    </p>
+                  </div>
+                  <!-- position chips -->
+                  <div class="flex flex-wrap mt-8">
+                    <ChipGeneral
+                      v-for="(position, index) in positions"
+                      :key="index"
+                      :height="40"
+                      :borderRadius="`rounded-8px`"
+                      :chipText="position"
+                      class="px-3 py-2 mb-4 mr-4 bg-gray3"
+                    />
+                  </div>
 
-              <!-- tech logos -->
-              <div class="flex mt-12">
-                <img
-                  v-for="i in 5"
-                  :key="`${i}-i`"
-                  src="~/assets/imgs/logo/tech/javascript48.png"
-                  alt="스택"
-                  class="mr-5"
-                />
-              </div>
-              <!-- divider -->
-              <div class="mt-10 border border-gray2"></div>
-              <!-- nickname & date & number of comments -->
-              <div class="flex justify-between mt-4">
-                <div class="text-gray6">
-                  <span>내이름은 김삼순</span>
-                  <span>2022.1.14</span>
+                  <!-- tech logos -->
+                  <div class="flex mt-12">
+                    <img
+                      v-for="i in 5"
+                      :key="`${i}-i`"
+                      src="~/assets/imgs/logo/tech/javascript48.png"
+                      alt="스택"
+                      class="mr-5"
+                    />
+                  </div>
+                  <!-- divider -->
+                  <div class="mt-10 border border-gray2"></div>
+                  <!-- nickname & date & number of comments -->
+                  <div class="flex justify-between mt-4">
+                    <div class="text-gray6">
+                      <span>내이름은 김삼순</span>
+                      <span>2022.1.14</span>
+                    </div>
+                    <div class="text-gray1">
+                      <span>댓글 3</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="text-gray1">
-                  <span>댓글 3</span>
-                </div>
-              </div>
+              </NuxtLink>
             </div>
           </div>
           <!-- pagination -->
