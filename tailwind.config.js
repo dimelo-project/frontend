@@ -19,6 +19,7 @@ module.exports = {
         gray5: "#E9ECEF",
         gray6: "#ADB5BD",
         gray7: "#E5E5E5",
+        gray8: "#B1B2BA",
         black1: "#191919",
       },
       spacing: {
