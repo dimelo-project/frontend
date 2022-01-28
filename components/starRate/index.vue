@@ -1,10 +1,11 @@
 <template>
   <div class="flex">
-    <SvgReviewStar v-for="i in filledStarNum" :key="`${i}-fill`" />
-    <SvgReviewStarHalf v-if="half" />
+    <SvgReviewStar v-for="i in filledStarNum" :key="`${i}-fill`" :size="size" />
+    <SvgReviewStarHalf v-if="half" :size="size" />
     <SvgReviewStar
-      :fill="false"
       v-for="i in unfilledStarNum"
+      :size="size"
+      :fill="false"
       :key="`${i}-unfill`"
     />
   </div>
@@ -13,6 +14,10 @@
 <script>
 export default {
   props: {
+    size: {
+      type: Number,
+      default: () => 24,
+    },
     score: {
       type: String,
       required: true,

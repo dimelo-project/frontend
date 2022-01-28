@@ -1,8 +1,8 @@
 <template>
   <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
+    :width="size"
+    :height="size"
+    :viewBox="viewBox"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -26,3 +26,21 @@
     </g>
   </svg>
 </template>
+
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  props: {
+    size: {
+      type: Number,
+      default: () => 24,
+    },
+  },
+  computed: {
+    viewBox() {
+      return `0 0 ${this.size} ${this.size}`;
+    },
+  },
+});
+</script>
