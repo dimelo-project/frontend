@@ -1,13 +1,17 @@
 <template>
-  <button
+  <div
     v-on="$listeners"
     type="button"
     class="button"
-    :class="{ 'w-full': large, dark: dark }"
+    :class="[
+      center ? centerState : null,
+      outline ? outlineState : normalState,
+      large ? 'w-full' : null,
+    ]"
     :style="sizeObject"
   >
-    {{ btnText }}
-  </button>
+    <slot></slot>
+  </div>
 </template>
 
 <script>
@@ -19,17 +23,20 @@ export default {
     height: {
       type: Number,
     },
-    btnText: {
+    color: {
       type: String,
-      required: true,
     },
     large: {
       type: Boolean,
       default: () => false,
     },
-    dark: {
+    outline: {
       type: Boolean,
       default: () => false,
+    },
+    center: {
+      type: Boolean,
+      default: () => true,
     },
   },
   data() {
@@ -40,16 +47,22 @@ export default {
       },
     };
   },
+  computed: {
+    normalState() {
+      return `bg-${this.color}`;
+    },
+    outlineState() {
+      return `border border-${this.color} bg-white`;
+    },
+    centerState() {
+      return `flex justify-center item-center`;
+    },
+  },
 };
 </script>
 
 <style lang="postcss" scoped>
 .button {
-  @apply text-center text-white 
-  transition duration-200 ease-in rounded-md
-  border border-orange1 hover:border-orange2  bg-orange1 hover:bg-orange2;
-}
-.dark {
-  @apply text-orange2 bg-white border  hover:text-white;
+  @apply transition duration-200 ease-in cursor-pointer select-none;
 }
 </style>
