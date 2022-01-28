@@ -47,6 +47,7 @@ module.exports = {
         "8px": "8px",
         "9px": "9px",
         "10px": "10px",
+        13: "3.25rem",
         18: "4.5rem",
       },
       borderWidth: {
