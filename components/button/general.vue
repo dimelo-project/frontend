@@ -1,13 +1,8 @@
 <template>
   <div
     v-on="$listeners"
-    type="button"
-    class="button"
-    :class="[
-      center ? centerState : null,
-      outline ? outlineState : normalState,
-      large ? 'w-full' : null,
-    ]"
+    class="button_general"
+    :class="[buttonState, large ? 'w-full' : null]"
     :style="sizeObject"
   >
     <slot></slot>
@@ -38,6 +33,13 @@ export default {
       type: Boolean,
       default: () => true,
     },
+    disabled: {
+      type: Boolean,
+      default: () => false,
+    },
+    disabledColor: {
+      type: String,
+    },
   },
   data() {
     return {
@@ -48,11 +50,14 @@ export default {
     };
   },
   computed: {
-    normalState() {
-      return `bg-${this.color}`;
-    },
-    outlineState() {
-      return `border border-${this.color} bg-white`;
+    buttonState() {
+      if (this.disabled) {
+        return `pointer-events-none bg-${this.disabledColor}`;
+      } else if (this.outline) {
+        return `border border-${this.color} bg-white`;
+      } else {
+        return `bg-${this.color}`;
+      }
     },
     centerState() {
       return `flex justify-center item-center`;
@@ -62,7 +67,7 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-.button {
-  @apply transition duration-200 ease-in cursor-pointer select-none;
+.button_general {
+  @apply inline-block transition duration-200 ease-in cursor-pointer select-none;
 }
 </style>
