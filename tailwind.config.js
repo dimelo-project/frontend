@@ -20,6 +20,7 @@ module.exports = {
         gray6: "#ADB5BD",
         gray7: "#E5E5E5",
         gray8: "#B1B2BA",
+        gray9: "#3F3F3F",
         black1: "#191919",
       },
       spacing: {
@@ -33,6 +34,7 @@ module.exports = {
         "8px": "8px",
         "9px": "9px",
         "10px": "10px",
+        13: "3.25rem",
         15: "3.75rem",
         30: "7.5rem",
       },
@@ -47,6 +49,7 @@ module.exports = {
         "8px": "8px",
         "9px": "9px",
         "10px": "10px",
+        7.5: "1.875rem",
         13: "3.25rem",
         18: "4.5rem",
       },

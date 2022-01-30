@@ -2,7 +2,7 @@
   <div
     v-on="$listeners"
     class="button_general"
-    :class="[buttonState, large ? 'w-full' : null]"
+    :class="[large ? 'w-full' : null, centerState]"
     :style="sizeObject"
   >
     <slot></slot>
@@ -50,17 +50,17 @@ export default {
     };
   },
   computed: {
-    buttonState() {
-      if (this.disabled) {
-        return `pointer-events-none bg-${this.disabledColor}`;
-      } else if (this.outline) {
-        return `border border-${this.color} bg-white`;
-      } else {
-        return `bg-${this.color}`;
-      }
-    },
+    // buttonState() {
+    //   if (this.disabled) {
+    //     return `pointer-events-none bg-${this.disabledColor}`;
+    //   } else if (this.outline) {
+    //     return `border border-${this.color} bg-white`;
+    //   } else {
+    //     return `bg-${this.color}`;
+    //   }
+    // },
     centerState() {
-      return `flex justify-center item-center`;
+      return `flex justify-center items-center `;
     },
   },
 };
@@ -68,6 +68,6 @@ export default {
 
 <style lang="postcss" scoped>
 .button_general {
-  @apply inline-block transition duration-200 ease-in cursor-pointer select-none;
+  @apply transition duration-200 ease-in cursor-pointer select-none;
 }
 </style>
