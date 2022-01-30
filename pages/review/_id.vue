@@ -179,7 +179,7 @@
             <!-- see more button -->
             <ButtonGeneral
               :large="true"
-              class="py-4 mt-4 border-none text-gray1 rounded-8px bg-gray3 mb-14"
+              class="w-full py-4 mt-4 border-none text-gray1 rounded-8px bg-gray3 mb-14"
             >
               <span>더보기</span>
             </ButtonGeneral>
@@ -206,8 +206,7 @@
                 </div>
               </div>
               <ButtonGeneral
-                :color="`black1`"
-                class="py-2.5 px-9 txt-base-bold text-white mt-5 rounded-4px"
+                class="py-2.5 px-9 txt-base-bold bg-black1 text-white mt-5 rounded-8px"
               >
                 <span>강의 보러가기</span>
               </ButtonGeneral>
@@ -215,18 +214,15 @@
             <!-- create review button -->
             <ButtonGeneral
               :color="`orange1`"
-              :width="200"
-              class="text-white py-2.5 mt-7 txt-base-bold rounded-4px"
+              class="text-white px-9 py-2.5 mt-7 txt-base-bold rounded-4px bg-orange2"
+              @click="isModalOpened = !isModalOpened"
             >
               <span>리뷰 작성</span>
             </ButtonGeneral>
             <!-- bookmark lecture button -->
             <ButtonGeneral
-              :imgName="`imgs/icon/heart_outline.png`"
-              :outline="true"
-              :color="`gray1`"
               :width="200"
-              class="py-2.5 mt-2 text-gray1 rounded-4px"
+              class="py-2.5 mt-2 text-gray1 rounded-4px border border-gray2"
               @click="hearted = !hearted"
             >
               <span v-if="!hearted">관심강의 추가</span>
@@ -241,6 +237,12 @@
         </div>
       </div>
     </div>
+
+    <!-- Create Review Modal -->
+    <MultiSteps
+      :isModalOpened="isModalOpened"
+      @modalClose="isModalOpened = false"
+    />
   </div>
 </template>
 
@@ -250,6 +252,7 @@ export default {
   data() {
     return {
       hearted: true,
+      isModalOpened: false,
     };
   },
 };
