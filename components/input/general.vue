@@ -7,7 +7,6 @@
     :placeholder="placeholder"
     class="w-full px-3 py-4 border rounded-4px focus:outline-none"
     :class="{
-      'border-black': value.length > 0,
       'password-dot-bigger': type === `password` && value.length > 0,
     }"
     :style="inputSize"
