@@ -2,44 +2,58 @@
   <div class="flex justify-center select-none my-14">
     <div class="flex flex-col test" style="width: 888px">
       <div class="relative">
-        <h3 class="txt-heading3">프로필 설정</h3>
+        <h3 class="txt-mid-bold">프로필 설정</h3>
 
-        <div class="mt-3">
-          <p>프로필 설정을 하고 회원가입을 완료하세요!</p>
-          <p class="text-red1">*는 필수항목입니다.</p>
+        <div class="flex mt-1">
+          <p class="txt-sub">
+            프로필 설정을 하고 회원가입을 완료하세요!
+            <span class="text-red1"> *는 필수항목입니다.</span>
+          </p>
         </div>
 
         <!-- profile image  -->
-        <p class="mt-10 txt-mid-bold">프로필 사진</p>
+        <div class="flex items-center mt-8">
+          <p class="txt-base-bold">프로필 사진</p>
 
-        <div
-          class="relative mt-5 cursor-pointer test"
-          style="width: 100px; height: 100px"
-        >
-          <div>
-            <img src="~assets/imgs/profile.png" alt="프로필 사진 설정" />
-          </div>
-          <div class="absolute bottom-0 right-0 rounded-full bg-orange1">
-            <svgIconAdd :dark="true" />
+          <div
+            class="relative ml-4 cursor-pointer test"
+            style="width: 60px; height: 60px"
+          >
+            <div>
+              <img
+                src="~assets/imgs/profile.png"
+                alt="프로필 사진 설정"
+                draggable="false"
+              />
+            </div>
+            <div class="absolute bottom-0 right-0 rounded-full bg-orange1">
+              <svgIconAdd :dark="true" />
+            </div>
           </div>
         </div>
 
         <!-- profile nickname -->
-        <div class="flex items-center mt-15 test">
-          <p style="width: 112px" class="txt-mid-bold">
+        <div class="flex items-center mt-6 test">
+          <p style="width: 83px" class="txt-base-bold">
             닉네임<span class="text-red1">*</span>
           </p>
           <InputGeneral
             v-model="userNickName"
             :type="`text`"
             :width="312"
-            :height="54"
+            :height="44"
+            class="p-3 rounded-4px txt-sub"
+            :class="{ 'border-orange2': userNickName.length > 0 }"
           />
+        </div>
+        <!-- err message -->
+        <div style="margin-left: 83px">
+          <p class="text-red1 txt-mini">이미 사용중인 닉네임입니다.</p>
         </div>
 
         <!-- profile job position -->
-        <div class="flex items-start mt-10 test">
-          <p style="width: 112px" class="txt-mid-bold">
+        <div class="flex items-start mt-6 test">
+          <p style="width: 83px" class="txt-base-bold">
             직무<span class="text-red1">*</span>
           </p>
 
@@ -52,11 +66,14 @@
             >
               <div class="h-full">
                 <!-- current selected job -->
-                <div class="flex items-center cursor-pointer test txt-mid">
-                  <button type="button" class="border-black border-b-1px">
+                <div class="flex items-center cursor-pointer test txt-base">
+                  <button
+                    type="button"
+                    class="border-black border-b-1px mr-0.5"
+                  >
                     {{ currentSelectedJob }}
                   </button>
-                  <svgChevronDownOutline />
+                  <svgChevronDownOutline style="width: 11px" />
                 </div>
                 <!-- options -->
                 <div
@@ -87,56 +104,57 @@
         </div>
 
         <!-- detail job chips -->
-        <div class="mt-4" style="margin-left: 112px">
+        <div class="flex flex-wrap mt-4" style="margin-left: 83px">
           <span v-for="(major, index) in currentMajorField" :key="index">
             <ChipGeneral
               @click="setUserMajor(major)"
+              class="px-4 py-2 mb-1 mr-1 border border-gray2 rounded-4px txt-sub"
               :class="{ 'bg-gray3': major === selectedMajor }"
               :chipText="major"
-              :rightGap="4"
-              :bottomGap="6"
             />
           </span>
         </div>
 
         <!-- career period -->
-        <div class="flex mt-9">
-          <p class="txt-mid-bold" style="width: 112px">
+        <div class="flex mt-6">
+          <p class="txt-base-bold" style="width: 83px">
             직무경력<span class="text-red1">*</span>
           </p>
 
           <span v-for="(data, index) in careerPeriod" :key="index">
             <ChipGeneral
               @click="setUserPeriod(data)"
+              class="px-4 py-2 mb-1 mr-1 border border-gray2 rounded-4px txt-sub"
               :class="{ 'bg-gray3': data.period === selectedPeriod }"
               :chipText="data.period"
-              :rightGap="4"
             />
           </span>
         </div>
 
-        <div style="margin-left: 112px" class="mt-4">
-          <p class="txt-sub">
+        <div style="margin-left: 83px" class="mt-2">
+          <p class="txt-mini text-gray1">
             직무와 경력은 리뷰 게시, 커뮤니티 활동 시 별명 옆에 노출됩니다.
           </p>
         </div>
       </div>
 
       <!-- buttons -->
-      <div class="flex justify-end mt-18">
+      <div class="flex justify-end mt-13">
         <ButtonGeneral
-          :width="244"
-          :height="56"
-          :dark="true"
-          :btnText="`다음에 하기`"
-        />
+          :width="200"
+          :height="44"
+          class="transition-colors border border-orange2 text-orange2 rounded-4px hover:text-white hover:bg-orange2"
+        >
+          <span class="txt-base-bold">다음에 하기</span>
+        </ButtonGeneral>
 
         <ButtonGeneral
-          class="ml-5"
-          :width="244"
-          :height="56"
-          :btnText="`프로필 설정 완료`"
-        />
+          :width="200"
+          :height="44"
+          class="ml-3 text-white transition-colors border-orange1 bg-orange1 hover:border-orange2 hover:bg-orange2 rounded-4px"
+        >
+          <span class="txt-base-bold">프로필 설정 완료</span>
+        </ButtonGeneral>
       </div>
     </div>
   </div>
