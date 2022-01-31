@@ -333,16 +333,28 @@
 
         <!-- before logIn -->
         <div v-else class="flex">
-          <NuxtLink to="/login">
-            <div>
-              <ButtonGeneral btnText="로그인" :small="true" :dark="true" />
-            </div>
-          </NuxtLink>
-          <NuxtLink to="/signup">
-            <div class="ml-3">
-              <ButtonGeneral btnText="회원가입" :small="true" />
-            </div>
-          </NuxtLink>
+          <div>
+            <NuxtLink to="/login">
+              <ButtonGeneral
+                :width="71"
+                :height="32"
+                class="transition-colors border border-orange2 text-orange2 rounded-6px txt-base-bold hover:bg-orange2 hover:text-white"
+              >
+                <span>로그인</span>
+              </ButtonGeneral>
+            </NuxtLink>
+          </div>
+          <div class="ml-3">
+            <NuxtLink to="/signup">
+              <ButtonGeneral
+                :width="85"
+                :height="32"
+                class="text-white transition-colors txt-base-bold bg-orange1 rounded-6px hover:bg-orange2"
+              >
+                <span>회원가입</span>
+              </ButtonGeneral>
+            </NuxtLink>
+          </div>
         </div>
       </div>
     </div>

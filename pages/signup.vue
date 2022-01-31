@@ -1,60 +1,72 @@
 <template>
-  <div class="flex justify-center mt-30 md:mb-24">
-    <div class="relative flex flex-col test" style="width: 380px">
-      <h3 class="text-center txt-heading3">회원가입</h3>
+  <div class="flex justify-center select-none mt-14">
+    <div class="relative flex flex-col test" style="width: 360px">
+      <h3 class="text-center txt-mid-bold">회원가입</h3>
 
       <!-- ID (EMAIL) -->
-      <p class="mt-8 input-title">이메일</p>
+      <p class="mt-3 txt-sub">이메일</p>
 
       <InputGeneral
-        :value="signup.userId"
         @input="handleUserId"
-        class="mt-2"
+        :value="signup.userId"
         :type="`test`"
-        :height="56"
+        :width="360"
+        :height="44"
+        class="p-3 mt-2 rounded-4px txt-sub"
+        :class="{ 'border-orange2': signup.userId.length > 0 }"
       />
 
       <!-- email Msg Box -->
-      <div class="h-10 pt-1 txt-sub">
-        <p :class="[isEmailMsgError ? ' text-red1' : 'text-green1']">
+      <div class="h-8 pt-1 txt-sub">
+        <p
+          class="txt-mini"
+          :class="[isEmailMsgError ? ' text-red1' : 'text-green1']"
+        >
           {{ emailMsg }}
         </p>
       </div>
 
       <!-- PASSWORD -->
-      <p class="input-title">비밀번호 입력</p>
+      <p class="txt-sub">비밀번호 입력</p>
 
       <InputGeneral
-        class="mt-2"
-        :value="signup.userPassword"
         @input="handleUserPassword"
         @focus="focusUserPassword"
         @focusout="focusOutUserPassword"
+        :value="signup.userPassword"
         :type="`password`"
-        :height="56"
+        :width="360"
+        :height="44"
+        class="p-3 mt-2 rounded-4px txt-sub"
+        :class="{ 'border-orange2': signup.userPassword.length > 0 }"
       />
 
       <!-- password Msg Box -->
-      <div class="h-10 pt-1 txt-sub">
-        <p :class="[isPasswordMsgError ? 'text-red1' : 'text-gray1']">
+      <div class="h-8 pt-1 txt-sub">
+        <p
+          class="txt-mini"
+          :class="[isPasswordMsgError ? 'text-red1' : 'text-gray1']"
+        >
           {{ passwordMsg }}
         </p>
       </div>
 
       <!-- PASSWORD CONFIRM -->
-      <p class="input-title">비밀번호 확인</p>
+      <p class="txt-sub">비밀번호 확인</p>
 
       <InputGeneral
-        class="mt-2"
         :value="signup.userPasswordConfirm"
         @input="handleUserPasswordConfirm"
         :type="`password`"
-        :height="56"
+        :width="360"
+        :height="44"
+        class="p-3 mt-2 rounded-4px txt-sub"
+        :class="{ 'border-orange2': signup.userPasswordConfirm.length > 0 }"
       />
 
       <!-- password confirm Msg Box -->
-      <div class="h-10 pt-1 txt-sub">
-        <p class="text-red1">
+      <div class="pt-1 h-9 txt-sub">
+        <p class="text-red1 txt-mini">
           {{ passwordconfirmMsg }}
         </p>
       </div>
@@ -62,25 +74,34 @@
       <!-- button -->
       <ButtonGeneral
         @click="userSignUp"
-        btnText="회원가입"
-        :large="true"
+        :width="360"
         :height="56"
-      />
-
-      <!-- divider -->
-      <div class="w-full border mt-15"></div>
+        class="text-white bg-orange2 txt-mid-bold rounded-4px"
+      >
+        <span>회원가입</span>
+      </ButtonGeneral>
 
       <!-- OAuth -->
-      <p class="mt-12 text-center">간편 회원가입</p>
+      <p class="mt-10 text-center txt-mid-bold">간편 회원가입</p>
 
       <!-- OAuth logo link-->
-      <div class="mt-4">
+      <div class="mt-5">
         <div class="flex justify-center">
           <NuxtLink class="mr-3" to="/">
-            <img src="~assets/imgs/logo/google_logo.png" alt="구글로그인" />
+            <img
+              src="~assets/imgs/logo/google_logo.png"
+              alt="구글로그인"
+              style="width: 40px; height: 40px"
+              draggable="false"
+            />
           </NuxtLink>
           <NuxtLink class="ml-3" to="/">
-            <img src="~assets/imgs/logo/github_logo.png" alt="깃헙로그인" />
+            <img
+              src="~assets/imgs/logo/github_logo.png"
+              alt="깃헙로그인"
+              style="width: 40px; height: 40px"
+              draggable="false"
+            />
           </NuxtLink>
         </div>
       </div>
@@ -102,7 +123,7 @@ export default {
       emailMsg: "",
       passwordMsg: "",
       passwordconfirmMsg: "",
-      isEmailMsgError: true,
+      isEmailMsgError: false,
       isPasswordMsgError: false,
     };
   },
@@ -187,9 +208,5 @@ export default {
 <style lang="postcss" scoped>
 .test {
   /* @apply border-2 border-orange1; */
-}
-
-.input-title {
-  @apply font-bold text-gray1;
 }
 </style>

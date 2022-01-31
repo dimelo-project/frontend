@@ -5,7 +5,7 @@
     v-on="listeners"
     :type="type"
     :placeholder="placeholder"
-    class="w-full px-3 py-4 border rounded-4px focus:outline-none"
+    class="w-full border focus:outline-none"
     :class="{
       'password-dot-bigger': type === `password` && value.length > 0,
     }"
