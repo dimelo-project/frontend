@@ -168,7 +168,7 @@
                 >
                   이 리뷰가 도움됨 <span class="ml-1 txt-sub-bold">5</span>
                   <img
-                    src="~/assets/imgs/icon/vectorgray.png"
+                    src="~/assets/imgs/icon/check.png"
                     class="ml-2"
                     alt="확인"
                   />
