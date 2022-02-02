@@ -89,6 +89,8 @@
 <script>
 export default {
   layout: "home",
+  middleware: "auth",
+  auth: "guest",
   data() {
     return {
       login: {
