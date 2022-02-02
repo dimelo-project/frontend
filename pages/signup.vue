@@ -112,6 +112,8 @@
 <script>
 export default {
   layout: "home",
+  middleware: "auth",
+  auth: "guest",
   data() {
     return {
       signup: {
@@ -145,9 +147,9 @@ export default {
           this.emailMsg = "사용 가능한 이메일입니다.";
         } catch (err) {
           this.isEmailMsgError = true;
-          if (err.response.data.code == 409) {
+          if (err.response.data.statusCode == 409) {
             this.emailMsg = "이미 가입했거나 탈퇴한 이메일입니다.";
-          } else if (err.response.data.code == 400) {
+          } else if (err.response.data.statusCode == 400) {
             this.emailMsg = "이메일 형식이 올바르지 않습니다.";
           }
         }
@@ -191,13 +193,20 @@ export default {
     },
     async userSignUp() {
       try {
-        const response = await this.$axios.$post("/api/auth/signup", {
+        await this.$axios.$post("/api/auth/signup", {
           email: this.signup.userId,
           password: this.signup.userPassword,
+          passwordConfirm: this.signup.userPasswordConfirm,
         });
-        console.log(response);
+        await this.$auth.loginWith("local", {
+          data: {
+            email: this.signup.userId,
+            password: this.signup.userPassword,
+          },
+        });
+        this.$router.push("/profileset");
       } catch (err) {
-        console.error(err);
+        console.error(err.response.data);
         // 에러 상태에 따른 로직
       }
     },
