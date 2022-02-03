@@ -7,22 +7,44 @@
           <p class="txt-base-bold">프로필 사진</p>
 
           <div
+            @click="addProfileImage"
             class="relative ml-4 cursor-pointer test"
             style="width: 60px; height: 60px"
           >
             <div>
-              <img src="~assets/imgs/profile.png" alt="프로필 사진 설정" />
+              <img
+                v-if="preview"
+                :src="preview"
+                alt="프로필 사진 설정"
+                class="object-cover rounded-full"
+                style="width: 60px; height: 60px"
+              />
+              <img
+                v-else
+                src="~assets/imgs/profile.png"
+                alt="프로필 사진 설정"
+                class="object-cover rounded-full"
+                style="width: 60px; height: 60px"
+              />
             </div>
             <div class="absolute bottom-0 right-0 rounded-full bg-orange1">
               <svgIconAdd :dark="true" />
             </div>
           </div>
+
+          <input
+            ref="fileInputRef"
+            type="file"
+            accept="image/*"
+            class="hidden pointer-events-none"
+            @change="onChangeFileInput"
+          />
         </div>
 
         <!-- user ID -->
         <div class="flex items-center mt-6">
           <span class="txt-base-bold">아이디</span>
-          <span class="ml-9">testest@naver.com</span>
+          <span class="ml-9">{{ $auth.user.email }}</span>
           <NuxtLink to="/mypage/profileset/passwordchange">
             <ButtonGeneral
               class="border border-orange2 text-orange2 px-4 py-1.5 rounded-8px ml-5 txt-base-bold"
@@ -40,24 +62,29 @@
 
           <div>
             <InputGeneral
+              @input="handleUserNickname"
               v-model="userNickName"
               :type="`text`"
               :width="312"
               :height="44"
-              class="txt-sub"
+              :placeholder="$auth.user.nickname"
+              class="p-3 txt-sub rounded-4px"
               :class="{ 'border-orange2': userNickName.length > 0 }"
             />
           </div>
         </div>
         <!-- msg box -->
-        <div style="margin-left: 82px">
-          <span class="txt-mini text-gray1">
-            닉네임은 10자 이하로 설정해 주세요.
+        <div style="margin-left: 82px" class="h-11">
+          <span
+            class="txt-mini text-gray1"
+            :class="[isNicknameMsgError ? 'text-red1' : 'text-green1']"
+          >
+            {{ nicknameNotiMsg }}
           </span>
         </div>
 
         <!-- profile job position -->
-        <div class="flex items-start mt-6 test">
+        <div class="flex items-start test">
           <p style="width: 82px" class="txt-base-bold">
             직무<span class="text-red1">*</span>
           </p>
@@ -152,6 +179,7 @@
         </ButtonGeneral>
 
         <ButtonGeneral
+          @click="changeProfileSetting"
           :width="200"
           :height="44"
           class="ml-2 text-white bg-orange2 rounded-4px"
@@ -178,7 +206,11 @@ export default {
   layout: "mypage",
   data() {
     return {
+      preview: "",
+      imageFile: null,
       userNickName: "",
+      nicknameNotiMsg: "",
+      isNicknameMsgError: false,
       currentSelectedJob: "개발자",
       currentSelectedJobIndex: 0,
       isJobMenuOpened: false,
@@ -255,9 +287,74 @@ export default {
   },
   mounted() {
     document.addEventListener("click", this.close);
+
     this.$store.commit("changeCntCategoryIdx", 0);
+
+    this.preview = this.$auth.user.imageUrl;
+    this.userNickName = this.$auth.user.nickname;
+    this.jobPosition.forEach((elem, idx) => {
+      elem.major.forEach((major) => {
+        if (major === this.$auth.user.job) {
+          this.currentSelectedJobIndex = idx;
+          this.currentSelectedJob = this.jobPosition[idx]["position"];
+          return;
+        }
+      });
+    });
+    this.selectedMajor = this.$auth.user.job;
+    this.selectedPeriod = this.$auth.user.career;
   },
   methods: {
+    onChangeFileInput(event) {
+      const file = event.target.files[0];
+
+      if (file && file.type.substr(0, 5) === "image") {
+        this.imageFile = event.target.files[0];
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          this.preview = reader.result;
+        };
+        reader.readAsDataURL(this.imageFile);
+      } else {
+        this.preview = null;
+      }
+    },
+    addProfileImage() {
+      this.$refs.fileInputRef.click();
+    },
+    handleUserNickname(value) {
+      // console.log(value);
+      this.userNickName = value;
+      this.nicknameNotiMsg = "";
+
+      // debounce input event
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
+
+      this.timeout = setTimeout(async () => {
+        try {
+          let response = await this.$axios.$post("/api/users/check/nickname", {
+            nickname: this.userNickName,
+          });
+          if (response) {
+            this.isNicknameMsgError = false;
+            this.nicknameNotiMsg = "사용 가능한 닉네임입니다.";
+          }
+          // console.log(response);
+        } catch (err) {
+          // console.log(err.response);
+          if (err.response.data.statusCode === 400) {
+            this.isNicknameMsgError = true;
+            this.nicknameNotiMsg = "닉네임은 10자 이하로 설정해주세요.";
+          } else if (err.response.data.statusCode === 409) {
+            this.isNicknameMsgError = true;
+            this.nicknameNotiMsg = "이미 사용중인 닉네임입니다.";
+          }
+        }
+      }, 500);
+    },
     close(e) {
       // console.log(this.$refs.jobmenu, e.target);
       if (!this.$refs.jobmenu.contains(e.target) && this.isJobMenuOpened) {
@@ -265,7 +362,6 @@ export default {
       }
     },
     selectJob(selected, index) {
-      this.selectedMajor = "";
       this.currentSelectedJob = selected;
       this.currentSelectedJobIndex = index;
       this.isJobMenuOpened = false;
@@ -275,6 +371,23 @@ export default {
     },
     setUserPeriod(data) {
       this.selectedPeriod = data.period;
+    },
+    async changeProfileSetting() {
+      const fd = new FormData();
+
+      fd.append("image", this.imageFile);
+      fd.append("nickname", this.userNickName);
+      fd.append("job", this.selectedMajor);
+      fd.append("career", this.selectedPeriod);
+
+      try {
+        const response = await this.$axios.$patch("/api/users/me", fd);
+
+        this.$auth.setUser(response);
+        this.$router.push("/");
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
   computed: {
