@@ -16,20 +16,39 @@
           <p class="txt-base-bold">프로필 사진</p>
 
           <div
+            @click="addProfileImage"
             class="relative ml-4 cursor-pointer test"
             style="width: 60px; height: 60px"
           >
             <div>
               <img
+                v-if="preview"
+                :src="preview"
+                alt=""
+                class="object-cover rounded-full"
+                style="width: 60px; height: 60px"
+              />
+              <img
+                v-else
                 src="~assets/imgs/profile.png"
                 alt="프로필 사진 설정"
                 draggable="false"
+                class="object-cover rounded-full"
+                style="width: 60px; height: 60px"
               />
             </div>
             <div class="absolute bottom-0 right-0 rounded-full bg-orange1">
               <svgIconAdd :dark="true" />
             </div>
           </div>
+
+          <input
+            ref="fileInputRef"
+            type="file"
+            accept="image/*"
+            class="hidden pointer-events-none"
+            @change="onChangeFileInput"
+          />
         </div>
 
         <!-- profile nickname -->
@@ -39,6 +58,7 @@
           </p>
           <InputGeneral
             v-model="userNickName"
+            @input="handleUserNickname"
             :type="`text`"
             :width="312"
             :height="44"
@@ -47,12 +67,17 @@
           />
         </div>
         <!-- err message -->
-        <div style="margin-left: 83px">
-          <p class="text-red1 txt-mini">이미 사용중인 닉네임입니다.</p>
+        <div style="margin-left: 83px" class="h-11">
+          <p
+            class="pt-1 txt-mini"
+            :class="[isNicknameMsgError ? ' text-red1' : 'text-green1']"
+          >
+            {{ nicknameNotiMsg }}
+          </p>
         </div>
 
         <!-- profile job position -->
-        <div class="flex items-start mt-6 test">
+        <div class="flex items-start test">
           <p style="width: 83px" class="txt-base-bold">
             직무<span class="text-red1">*</span>
           </p>
@@ -140,15 +165,18 @@
 
       <!-- buttons -->
       <div class="flex justify-end mt-13">
-        <ButtonGeneral
-          :width="200"
-          :height="44"
-          class="transition-colors border border-orange2 text-orange2 rounded-4px hover:text-white hover:bg-orange2"
-        >
-          <span class="txt-base-bold">다음에 하기</span>
-        </ButtonGeneral>
+        <NuxtLink to="/">
+          <ButtonGeneral
+            :width="200"
+            :height="44"
+            class="transition-colors border border-orange2 text-orange2 rounded-4px hover:text-white hover:bg-orange2"
+          >
+            <span class="txt-base-bold">다음에 하기</span>
+          </ButtonGeneral>
+        </NuxtLink>
 
         <ButtonGeneral
+          @click="changeProfileSetting"
           :width="200"
           :height="44"
           class="ml-3 text-white transition-colors border-orange1 bg-orange1 hover:border-orange2 hover:bg-orange2 rounded-4px"
@@ -166,6 +194,11 @@ export default {
   data() {
     return {
       userNickName: "",
+      nicknameNotiMsg: "",
+      isNicknameMsgError: false,
+      imageFile: null,
+      preview: null,
+      timeout: null,
       currentSelectedJob: "개발자",
       currentSelectedJobIndex: 0,
       isJobMenuOpened: false,
@@ -244,6 +277,56 @@ export default {
     document.addEventListener("click", this.close);
   },
   methods: {
+    handleUserNickname(value) {
+      console.log(value);
+      this.userNickName = value;
+      this.nicknameNotiMsg = "";
+
+      // debounce input event
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
+
+      this.timeout = setTimeout(async () => {
+        try {
+          let response = await this.$axios.$post("/api/users/check/nickname", {
+            nickname: this.userNickName,
+          });
+          if (response) {
+            this.isNicknameMsgError = false;
+            this.nicknameNotiMsg = "사용 가능한 닉네임입니다.";
+          }
+          // console.log(response);
+        } catch (err) {
+          // console.log(err.response);
+          if (err.response.data.statusCode === 400) {
+            this.isNicknameMsgError = true;
+            this.nicknameNotiMsg = "닉네임은 10자 이하로 설정해주세요.";
+          } else if (err.response.data.statusCode === 409) {
+            this.isNicknameMsgError = true;
+            this.nicknameNotiMsg = "이미 사용중인 닉네임입니다.";
+          }
+        }
+      }, 500);
+    },
+    addProfileImage() {
+      this.$refs.fileInputRef.click();
+    },
+    onChangeFileInput(event) {
+      const file = event.target.files[0];
+
+      if (file && file.type.substr(0, 5) === "image") {
+        this.imageFile = event.target.files[0];
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          this.preview = reader.result;
+        };
+        reader.readAsDataURL(this.imageFile);
+      } else {
+        this.preview = null;
+      }
+    },
     close(e) {
       // console.log(this.$refs.jobmenu, e.target);
       if (!this.$refs.jobmenu.contains(e.target) && this.isJobMenuOpened) {
@@ -261,6 +344,21 @@ export default {
     },
     setUserPeriod(data) {
       this.selectedPeriod = data.period;
+    },
+    async changeProfileSetting() {
+      const fd = new FormData();
+
+      fd.append("image", this.imageFile);
+      fd.append("nickname", this.userNickName);
+      fd.append("job", this.selectedMajor);
+      fd.append("career", this.selectedPeriod);
+
+      try {
+        const response = await this.$axios.$patch("/api/users/profile", fd);
+        console.log(response);
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
   computed: {
