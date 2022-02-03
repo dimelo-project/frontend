@@ -255,6 +255,7 @@ export default {
   },
   mounted() {
     document.addEventListener("click", this.close);
+    this.$store.commit("changeCntCategoryIdx", 0);
   },
   methods: {
     close(e) {

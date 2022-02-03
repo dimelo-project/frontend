@@ -8,9 +8,17 @@ export const state = () => ({
   q5cons: "",
   currentStep: 0,
   progressWidth: 33,
+
+  // mypage layout
+  cntCategoryIdx: 0,
 });
 
 export const mutations = {
+  // mypage layout
+  changeCntCategoryIdx(state, value) {
+    state.cntCategoryIdx = value;
+  },
+  // multip-step
   next(state) {
     if (state.currentStep === 3) {
       state.progressWidth = state.progressWidth + 33;

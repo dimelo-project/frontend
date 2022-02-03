@@ -21,7 +21,8 @@
                 <span
                   @click="cntCategoryIdx = category.id"
                   :class="{
-                    'txt-mid-bold text-orange2': category.id === cntCategoryIdx,
+                    'txt-mid-bold text-orange2':
+                      category.id === $store.state.cntCategoryIdx,
                   }"
                   class="cursor-pointer"
                 >

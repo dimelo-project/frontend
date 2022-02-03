@@ -226,7 +226,14 @@
                     <div class="">
                       <NuxtLink to="/">
                         <p class="font-bold">
-                          {{ $auth.user.nickname || "이름을 설정해주세요!" }}
+                          <span v-if="!$auth.user.nickname">
+                            {{ $auth.user.nickname }}
+                          </span>
+                          <span v-else>
+                            <NuxtLink to="/mypage/profileset">
+                              이름을 설정해주세요!
+                            </NuxtLink>
+                          </span>
                         </p>
                       </NuxtLink>
                     </div>
@@ -235,35 +242,35 @@
                     <!-- sub menu -->
                     <div class="py-1">
                       <div class="mt-4">
-                        <NuxtLink to="/">
+                        <NuxtLink to="/mypage/profileset">
                           <p class="hover:font-bold hover:underline">
                             프로필 수정
                           </p>
                         </NuxtLink>
                       </div>
                       <div class="mt-4">
-                        <NuxtLink to="/">
+                        <NuxtLink to="/mypage/myreview">
                           <p class="hover:font-bold hover:underline">
                             작성한 리뷰
                           </p>
                         </NuxtLink>
                       </div>
                       <div class="mt-4">
-                        <NuxtLink to="/">
+                        <NuxtLink to="/mypage/myarticle">
                           <p class="hover:font-bold hover:underline">
                             작성한 게시글
                           </p>
                         </NuxtLink>
                       </div>
                       <div class="mt-4">
-                        <NuxtLink to="/">
+                        <NuxtLink to="/mypage/mycomment">
                           <p class="hover:font-bold hover:underline">
                             작성한 댓글
                           </p>
                         </NuxtLink>
                       </div>
                       <div class="mt-4">
-                        <NuxtLink to="/">
+                        <NuxtLink to="/mypage/bookmark">
                           <p class="hover:font-bold hover:underline">
                             관심 강의
                           </p>
@@ -291,7 +298,14 @@
             >
               <div class="flex items-center h-full">
                 <button type="button" @mouseover="isProfileBtnOpened = true">
-                  <div class="w-6 h-6 bg-gray-500 rounded-full"></div>
+                  <img
+                    v-if="$auth.user.imageUrl"
+                    :src="$auth.user.imageUrl"
+                    alt="프로필"
+                    class="object-cover rounded-full"
+                    style="width: 24px; height: 24px"
+                  />
+                  <div v-else class="w-6 h-6 bg-gray-500 rounded-full"></div>
                 </button>
 
                 <div

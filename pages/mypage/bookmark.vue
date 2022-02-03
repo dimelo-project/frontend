@@ -3,6 +3,9 @@
 <script>
 export default {
   layout: "mypage",
+  mounted() {
+    this.$store.commit("changeCntCategoryIdx", 4);
+  },
 };
 </script>
 

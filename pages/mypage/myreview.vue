@@ -62,6 +62,9 @@
 <script>
 export default {
   layout: "mypage",
+  mounted() {
+    this.$store.commit("changeCntCategoryIdx", 1);
+  },
 };
 </script>
 
