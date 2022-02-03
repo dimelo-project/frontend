@@ -355,7 +355,9 @@ export default {
 
       try {
         const response = await this.$axios.$patch("/api/users/profile", fd);
-        console.log(response);
+
+        this.$auth.setUser(response);
+        this.$router.push("/");
       } catch (err) {
         console.log(err);
       }
