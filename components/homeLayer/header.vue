@@ -226,7 +226,7 @@
                     <div class="">
                       <NuxtLink to="/">
                         <p class="font-bold">
-                          <span v-if="!$auth.user.nickname">
+                          <span v-if="$auth.user.nickname">
                             {{ $auth.user.nickname }}
                           </span>
                           <span v-else>
