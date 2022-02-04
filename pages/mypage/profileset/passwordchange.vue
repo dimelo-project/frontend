@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <div class="select-none">
     <p class="txt-sub">
-      프로필 수정 > <span class="txt-sub-bold">비밀번호 변경</span>
+      <NuxtLink to="/mypage/profileset"> 프로필 수정</NuxtLink> >
+      <span class="txt-sub-bold">비밀번호 변경</span>
     </p>
 
     <div class="mt-3 border-t border-gray2"></div>
@@ -20,13 +21,14 @@
         :value="currentPassword"
         :width="360"
         :height="44"
+        class="p-3 rounded-4px"
         :class="{ 'border-orange2': currentPassword.length > 0 }"
-        @input="inputCurrentPassword"
+        @input="handleCurrentPassword"
       />
     </div>
 
-    <div class="mt-0.5 mb-2.5">
-      <span class="text-red1 txt-mini">비밀번호를 확인해주세요.</span>
+    <div class="h-8">
+      <span class="text-red1 txt-mini">{{ currentPasswordNotiMsg }}</span>
     </div>
 
     <!-- 새 비밀번호 입력 -->
@@ -40,14 +42,18 @@
         :value="newPassword"
         :width="360"
         :height="44"
+        class="p-3 rounded-4px"
         :class="{ 'border-orange2': newPassword.length > 0 }"
-        @input="inputNewPassword"
+        @input="handleNewPassword"
       />
     </div>
 
-    <div class="mt-0.5 mb-2.5">
-      <span class="text-red1 txt-mini">
-        영문, 숫자를 포함해 8자 이상으로 만들어주세요.
+    <div class="h-8">
+      <span
+        class="txt-mini"
+        :class="[isNewPasswordMsgError ? 'text-red1' : 'text-green1']"
+      >
+        {{ newPasswordNotiMsg }}
       </span>
     </div>
 
@@ -62,28 +68,29 @@
         :value="newPasswordConfirm"
         :width="360"
         :height="44"
+        class="p-3 rounded-4px"
         :class="{ 'border-orange2': newPasswordConfirm.length > 0 }"
-        @input="inputNewPasswordConfirm"
+        @input="handleNewPasswordConfirm"
       />
     </div>
 
-    <div class="mt-0.5 mb-2.5">
-      <span class="text-red1 txt-mini"> 비밀번호가 일치하지 않습니다. </span>
+    <div class="h-8">
+      <span class="text-red1 txt-mini"> {{ newPasswordConfirmNotiMsg }} </span>
     </div>
 
     <!-- submit button -->
-    <NuxtLink to="/mypage/profileset/passwordchangecomplete">
-      <ButtonGeneral
-        :width="360"
-        :height="44"
-        class="text-white bg-orange2 txt-base-bold rounded-4px"
-      >
-        <span>비밀번호 변경하기</span>
-      </ButtonGeneral>
-    </NuxtLink>
+    <ButtonGeneral
+      @click="changeUserPassword"
+      :width="360"
+      :height="44"
+      class="text-white bg-orange2 txt-base-bold rounded-4px"
+    >
+      <span>비밀번호 변경하기</span>
+    </ButtonGeneral>
 
     <!-- cancel submit button -->
     <ButtonGeneral
+      @click="$router.push('/mypage/profileset')"
       :width="360"
       :height="44"
       class="mt-3 border text-orange2 border-orange2 txt-base-bold rounded-4px"
@@ -98,20 +105,84 @@ export default {
   layout: "mypage",
   data() {
     return {
+      // current password
       currentPassword: "",
+      currentPasswordNotiMsg: "",
+      timeout: null,
+      // new password
       newPassword: "",
+      newPasswordNotiMsg: "",
+      isNewPasswordMsgError: false,
+      // new password confirm
       newPasswordConfirm: "",
+      newPasswordConfirmNotiMsg: "",
     };
   },
   methods: {
-    inputCurrentPassword(value) {
+    handleCurrentPassword(value) {
       this.currentPassword = value;
+      this.currentPasswordNotiMsg = "";
+
+      // debounce input event
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
+
+      this.timeout = setTimeout(async () => {
+        try {
+          const response = await this.$axios.$post(
+            "/api/users/check/password",
+            {
+              password: this.currentPassword,
+            }
+          );
+        } catch (err) {
+          console.log(err.response);
+          this.currentPasswordNotiMsg = "비밀번호가 일치하지 않습니다.";
+        }
+      }, 500);
     },
-    inputNewPassword(value) {
+    handleNewPassword(value) {
       this.newPassword = value;
+
+      const regExp = new RegExp("(?=.*[0-9])(?=.*[a-z])");
+
+      if (regExp.test(value) === false && this.newPassword.length < 8) {
+        this.newPasswordNotiMsg =
+          "영문, 숫자를 포함해 8자 이상으로 만들어주세요.";
+        this.isNewPasswordMsgError = true;
+      } else if (regExp.test(value) === true && this.newPassword.length >= 8) {
+        this.newPasswordNotiMsg = "사용 가능한 비밀번호 입니다.";
+        this.isNewPasswordMsgError = false;
+      }
+
+      if (this.newPassword !== this.newPasswordConfirm) {
+        this.newPasswordConfirmNotiMsg = "비밀번호가 일치하지 않습니다.";
+      }
     },
-    inputNewPasswordConfirm(value) {
+    handleNewPasswordConfirm(value) {
       this.newPasswordConfirm = value;
+      this.newPasswordConfirmNotiMsg = "";
+
+      if (this.newPassword !== this.newPasswordConfirm) {
+        this.newPasswordConfirmNotiMsg = "비밀번호가 일치하지 않습니다.";
+      }
+    },
+    async changeUserPassword() {
+      try {
+        const response = await this.$axios.$patch(
+          "/api/users/change/password",
+          {
+            password: this.currentPassword,
+            newPassword: this.newPassword,
+            passwordConfirm: this.newPasswordConfirm,
+          }
+        );
+        await this.$auth.logout();
+        this.$router.push("/mypage/profileset/passwordchangecomplete");
+      } catch (err) {
+        console.log(err.response);
+      }
     },
   },
 };
