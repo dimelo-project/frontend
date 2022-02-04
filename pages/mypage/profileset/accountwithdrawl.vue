@@ -1,7 +1,8 @@
 <template>
   <div class="select-none">
     <p class="txt-sub">
-      프로필 수정 > <span class="txt-sub-bold">비밀번호 변경</span>
+      <NuxtLink to="/mypage/profileset">프로필 수정</NuxtLink> >
+      <span class="txt-sub-bold">비밀번호 변경</span>
     </p>
 
     <div class="mt-3 border-t border-gray2"></div>
@@ -35,14 +36,21 @@
       :value="userPassword"
       @input="inputUserPassword"
       :placeholder="`현재 비밀번호`"
-      class="mt-10 txt-sub"
+      :type="`password`"
+      class="p-3 mt-10 rounded-4px"
       :class="{ 'border-orange2': userPassword.length > 0 }"
     />
 
+    <div class="h-9">
+      <span class="text-red1 txt-mini">{{ userPasswordNoti }}</span>
+    </div>
+
     <ButtonGeneral
+      @click="withdrawlUserAccount"
       :width="360"
       :height="44"
-      class="text-white pointer-events-none bg-gray10 rounded-4px mt-9"
+      class="text-white rounded-4px"
+      :class="[btnActive ? 'bg-orange2' : 'bg-gray10 pointer-events-none']"
     >
       <span>회원 탈퇴하기</span>
     </ButtonGeneral>
@@ -63,11 +71,49 @@ export default {
   data() {
     return {
       userPassword: "",
+      userPasswordNoti: "",
+      timeout: null,
+      btnActive: false,
     };
   },
   methods: {
-    inputUserPassword(value) {
+    async inputUserPassword(value) {
       this.userPassword = value;
+      this.userPasswordNoti = "";
+      this.btnActive = false;
+
+      // debounce input event
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
+
+      this.timeout = setTimeout(async () => {
+        try {
+          const response = await this.$axios.$post(
+            "/api/users/check/password",
+            {
+              password: this.userPassword,
+            }
+          );
+          if (response) {
+            this.btnActive = true;
+            this.userPasswordNoti = "";
+          }
+        } catch (err) {
+          this.userPasswordNoti = "비밀번호가 일치하지 않습니다.";
+        }
+      }, 500);
+    },
+    async withdrawlUserAccount() {
+      try {
+        const response = this.$axios.$post("/api/users/delete/me", {
+          password: this.userPassword,
+        });
+        await this.$auth.logout();
+        this.$router.push("/");
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };
