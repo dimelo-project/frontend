@@ -21,8 +21,8 @@
                     path: 'lecture',
                     query: {
                       categoryBig: '개발',
-                      category: '웹개발',
-                      perPage: 10,
+                      category: '웹 개발',
+                      perPage: 17,
                       page: 1,
                       sort: 'avg',
                     },
@@ -52,8 +52,8 @@
                           path: 'lecture',
                           query: {
                             categoryBig: '개발',
-                            category: '웹개발',
-                            perPage: 10,
+                            category: '웹 개발',
+                            perPage: 17,
                             page: 1,
                             sort: 'avg',
                           },
