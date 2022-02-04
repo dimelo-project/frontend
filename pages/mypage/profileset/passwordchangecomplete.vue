@@ -28,7 +28,7 @@
         :width="240"
         :height="56"
         class="mt-8 text-white bg-orange2 rounded-4px txt-mid-bold"
-        @click="goToLogin"
+        @click="$router.push('/login')"
       >
         <span>로그인</span>
       </ButtonGeneral>
