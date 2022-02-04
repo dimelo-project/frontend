@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center select-none text-black1">
-    <div style="width: 888px" class="relative test">
+    <div style="width: 786px" class="relative test">
       <!-- category -->
       <div class="flex text-left mt-14">
         <p
@@ -22,7 +22,7 @@
         <div
           v-for="major in currentMajors"
           :key="major.id"
-          class="mr-6 cursor-pointer mb-4px hover:text-orange2 hover:font-bold"
+          class="mb-3 mr-6 cursor-pointer hover:text-orange2 hover:font-bold"
           :class="{
             'text-orange2 font-bold': major.id === currentMajorIndex,
           }"
@@ -33,20 +33,26 @@
       </div>
 
       <!-- breadcrumb navigation -->
-      <div style="margin-top: 70px">
+      <div style="margin-top: 64px">
         <p class="txt-sub">
           {{ currentCategoryName }} >
-          <span class="font-bold">{{ currentMajorName }}</span>
+          <span :class="{ 'txt-sub-bold': !currentPopularKeyword }">
+            {{ currentMajorName }}
+          </span>
+          <span class="txt-sub-bold" v-if="currentPopularKeyword">
+            > {{ currentPopularKeyword }}
+          </span>
         </p>
       </div>
 
       <!-- search & filtering buttons -->
-      <div class="flex justify-between mt-4">
+      <div class="flex items-center justify-between mt-4">
         <SearchGeneral
           :value="categorySearchInput"
           @input="handleCategorySearchInput"
           :placeholder="`카테고리 내 검색`"
           :width="276"
+          class="rounded-4px py-1.5 px-4 txt-sub bg-gray4"
         />
 
         <div>
@@ -79,54 +85,76 @@
               alt="강의사이트"
             />
           </div>
+
           <!-- Rank -->
           <div
             style="margin-left: 24px; margin-right: 24px"
-            class="txt-mid-bold text-orange2"
+            :class="{ 'text-orange2': index <= 2 && currentPageIndex === 0 }"
+            class="txt-mid"
           >
-            <span class=""> {{ index + 1 }} </span>
+            <span class=""> {{ 17 * currentPageIndex + index + 1 }} </span>
           </div>
 
           <!-- card body -->
           <div class="w-full h-full">
             <!-- first line -->
-            <div class="flex justify-between txt-mid-bold">
-              <p class="">{{ lecture["course_title"] }}</p>
+            <div class="flex justify-between">
+              <!-- course title -->
+              <div style="width: 440px">
+                <p class="txt-base-bold">{{ lecture["course_title"] }}</p>
+              </div>
+              <!-- review star & score -->
               <div class="flex items-center">
                 <StarRate :score="lecture['course_avg']" />
 
-                <span class="ml-8px">{{ lecture["course_avg"] }}</span>
+                <span class="ml-1 txt-base-bold">{{
+                  lecture["course_avg"]
+                }}</span>
+                <span class="txt-mini">({{ lecture["num_review"] }})</span>
               </div>
             </div>
 
             <!-- second line -->
             <div class="flex justify-between mt-4 text-black1">
               <div class="flex items-center">
-                <span class="mr-1 font-bold">강사</span>
-                <span class="mr-4 underline">{{
-                  lecture["instructor_name"]
-                }}</span>
-                <span class="mr-1 text-gray1">{{
+                <span
+                  class="mr-4 underline cursor-pointer txt-sub-bold text-orange2"
+                  >{{ lecture["instructor_name"] }}</span
+                >
+                <span class="mr-1 text-gray1 txt-sub">{{
                   lecture["course_platform"]
                 }}</span>
-                <span class="mr-5 text-gray1">{{
+                <span class="text-gray1 txt-sub">{{
                   `${Number(lecture["course_price"]).toLocaleString()}원`
                 }}</span>
-                <SvgHeartOutline />
+                <NuxtLink :to="lecture['course_siteUrl']">
+                  <span
+                    class="ml-1 underline cursor-pointer txt-sub text-gray1"
+                  >
+                    보러가기
+                  </span>
+                </NuxtLink>
               </div>
 
               <div class="flex items-center">
-                <a :href="lecture['course_siteUrl']">
-                  <span class="mr-6 font-bold leading-5 underline"
-                    >강의 보러가기</span
-                  >
-                </a>
+                <SvgHeartOutline class="cursor-pointer" />
+
                 <ButtonGeneral
-                  :width="160"
+                  v-if="Number(lecture['num_review']) === 0"
+                  :width="172"
                   :height="32"
-                  :btnText="`${lecture['course_num_review']}개의 리뷰 보기`"
-                  class="txt-base"
-                />
+                  class="ml-3 border text-gray6 txt-base rounded-4px border-gray2"
+                >
+                  <span>아직 리뷰가 없습니다</span>
+                </ButtonGeneral>
+                <ButtonGeneral
+                  v-else
+                  :width="172"
+                  :height="32"
+                  class="ml-3 text-white txt-base rounded-4px bg-orange1"
+                >
+                  <span>{{ lecture["num_review"] }}개의 리뷰 보기</span>
+                </ButtonGeneral>
               </div>
             </div>
           </div>
@@ -140,6 +168,7 @@
       <div class="flex justify-center my-16">
         <PaginationGeneral
           :pageIdx="currentPageIndex"
+          :pageNum="currentPageNum"
           @click="clickPaginationBtn"
         />
       </div>
@@ -150,14 +179,19 @@
       <div class="sticky" style="top: 185px">
         <div class="flex mb-6">
           <p class="txt-mid-bold">기술 키워드</p>
-          <img src="~assets/imgs/dizzy.png" />
+          <img
+            src="~assets/imgs/dizzy.png"
+            style="width: 24px; height: 24px"
+            class="ml-1"
+          />
         </div>
         <div
-          v-for="i in 10"
-          :key="i"
-          class="py-2 pl-2 mb-2 bg-gray3 rounded-4px"
+          v-for="(tech, index) in popularTechData"
+          :key="index"
+          @click="clickPopularTech(tech.skill_skill)"
+          class="py-2 pl-2 mb-2 cursor-pointer bg-gray3 rounded-4px"
         >
-          <span>인기 기술 키워드</span>
+          <span class="txt-sub">{{ tech.skill_skill }}</span>
         </div>
 
         <!-- scroll to top button -->
@@ -178,20 +212,36 @@ export default {
     const lectureData = await $axios.$get("/api/courses", {
       params: {
         categoryBig: categoryBig || "개발",
-        category: category || "웹개발",
-        perPage: Number(perPage) || 10,
+        category: category || "웹 개발",
+        perPage: Number(perPage) || 17,
         page: Number(page) || 1,
         sort: sort || "avg",
       },
     });
-    return { lectureData };
+    const popularTechData = await $axios.$get("/api/courses/category/skills", {
+      params: {
+        categoryBig: categoryBig || "개발",
+        category: category || "웹 개발",
+      },
+    });
+    const countResponse = await $axios.$get("/api/courses/count", {
+      params: {
+        categoryBig: categoryBig || "개발",
+        category: category || "웹 개발",
+      },
+    });
+    const currentPageNum = Math.ceil(Number(countResponse["num_course"]) / 17);
+
+    return { lectureData, popularTechData, currentPageNum };
   },
   data() {
     return {
-      currentCategoryIndex: 1,
+      currentCategoryIndex: 0,
       currentMajorIndex: 0,
       currentFilteringOptionIndex: 0,
+      currentPopularKeyword: null,
       currentPageIndex: 0,
+      currentPageNum: 0,
       categorySearchInput: "",
       lectureData: [],
       categories: [
@@ -217,7 +267,7 @@ export default {
         },
         {
           id: 1,
-          position: "데이터 사이언스",
+          position: "데이터 과학",
           majors: [
             { id: 0, name: "데이터 분석" },
             { id: 1, name: "인공지능" },
@@ -246,31 +296,34 @@ export default {
       filteringOptions: [
         {
           id: 0,
+          pName: "avg",
           name: "별점순",
         },
         {
           id: 1,
+          pName: "num_review",
           name: "리뷰많은순",
         },
       ],
+      popularTechData: [],
     };
   },
-  watch: {
-    async $route(to, from) {
-      console.log("route change!", to);
-      const { categoryBig, category, perPage, page, sort } = to.query;
-      const lectureData = await this.$axios.$get("/api/courses", {
-        params: {
-          categoryBig,
-          category,
-          perPage,
-          page,
-          sort,
-        },
-      });
-      this.lectureData = lectureData;
-    },
-  },
+  // watch: {
+  //   async $route(to, from) {
+  //     console.log("route change!", to);
+  //     const { categoryBig, category, perPage, page, sort } = to.query;
+  //     const lectureData = await this.$axios.$get("/api/courses", {
+  //       params: {
+  //         categoryBig,
+  //         category,
+  //         perPage,
+  //         page,
+  //         sort,
+  //       },
+  //     });
+  //     this.lectureData = lectureData;
+  //   },
+  // },
   computed: {
     currentMajors() {
       return this.categories[this.currentCategoryIndex]["majors"];
@@ -283,23 +336,34 @@ export default {
         this.currentMajorIndex
       ]["name"];
     },
+    currentFilteringOptionName() {
+      return this.filteringOptions[this.currentFilteringOptionIndex]["pName"];
+    },
   },
   methods: {
     selectCategory(categoryIdx) {
       this.currentCategoryIndex = categoryIdx;
       this.currentMajorIndex = 0;
+      this.getLectureData();
     },
     selectMajor(majorIdx) {
       this.currentMajorIndex = majorIdx;
+      this.getLectureData();
     },
     handleCategorySearchInput(value) {
       this.categorySearchInput = value;
     },
     clickFilteringOption(selectedFilteringOptionIdx) {
       this.currentFilteringOptionIndex = selectedFilteringOptionIdx;
+      this.getLectureData(true);
+    },
+    clickPopularTech(keyword) {
+      this.currentPopularKeyword = keyword;
+      this.getLectureData(true);
     },
     clickPaginationBtn(selectedPageIdx) {
       this.currentPageIndex = selectedPageIdx;
+      this.getLectureData(true, true);
     },
     cardImageLogo(siteName) {
       let imgName = "";
@@ -325,6 +389,53 @@ export default {
       }
 
       return require(`assets/imgs/logo/lecturesite/${imgName}.png`);
+    },
+    async getLectureData(
+      isPopularKeywordConsidered = false,
+      isPageIndexConsidered = false
+    ) {
+      try {
+        if (!isPopularKeywordConsidered) {
+          this.currentPopularKeyword = null;
+        }
+        if (!isPageIndexConsidered) {
+          this.currentPageIndex = 0;
+        }
+
+        this.lectureData = await this.$axios.$get("/api/courses", {
+          params: {
+            categoryBig: this.currentCategoryName,
+            category: this.currentMajorName,
+            perPage: 17,
+            page: this.currentPageIndex + 1,
+            skill: this.currentPopularKeyword,
+            sort: this.currentFilteringOptionName,
+          },
+        });
+
+        this.popularTechData = await this.$axios.$get(
+          "/api/courses/category/skills",
+          {
+            params: {
+              categoryBig: this.currentCategoryName,
+              category: this.currentMajorName,
+            },
+          }
+        );
+
+        const countResponse = await this.$axios.$get("/api/courses/count", {
+          params: {
+            categoryBig: this.currentCategoryName,
+            category: this.currentMajorName,
+            skill: this.currentPopularKeyword,
+          },
+        });
+        this.currentPageNum = Math.ceil(
+          Number(countResponse["num_course"]) / 17
+        );
+      } catch (err) {
+        console.log(err.response);
+      }
     },
   },
   mounted() {

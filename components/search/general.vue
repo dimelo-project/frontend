@@ -3,12 +3,7 @@
     class="block border border-gray2 txt-sub lg:flex lg:items-center lg:justify-between"
     :class="[borderRadius, searchboxColor, placeholderColor]"
   >
-    <svgSearchOutline
-      v-if="label === 'left'"
-      :width="20"
-      :height="20"
-      :class="`mr-${labelGap}`"
-    />
+    <svgSearchOutline v-if="label === 'left'" :width="20" :height="20" />
     <input
       :value="value"
       @input="handleInput"
@@ -20,12 +15,7 @@
       :class="[placeholderColor]"
       :style="{ width: `${width}px` }"
     />
-    <svgSearchOutline
-      v-if="label === 'right'"
-      :width="20"
-      :height="20"
-      :class="`ml-${labelGap}`"
-    />
+    <svgSearchOutline v-if="label === 'right'" :width="20" :height="20" />
   </div>
 </template>
 
@@ -56,10 +46,6 @@ export default Vue.extend({
     label: {
       type: String,
       default: () => "right",
-    },
-    labelGap: {
-      type: String,
-      default: () => 0,
     },
   },
   computed: {

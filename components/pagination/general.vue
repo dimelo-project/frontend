@@ -2,7 +2,7 @@
   <div class="flex txt-sub">
     <button class="btn" style="width: 54px">이전</button>
 
-    <button class="btn" v-for="i in 10" :key="i">
+    <button class="btn" v-for="i in pageNum" :key="i">
       <div
         v-if="i < 99"
         style="width: 36px"
@@ -33,6 +33,9 @@ export default {
     pageIdx: {
       type: Number,
       required: true,
+    },
+    pageNum: {
+      typs: Number,
     },
   },
   methods: {
