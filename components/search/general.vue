@@ -1,21 +1,6 @@
 <template>
-  <div
-    class="block border border-gray2 txt-sub lg:flex lg:items-center lg:justify-between"
-    :class="[borderRadius, searchboxColor, placeholderColor]"
-  >
-    <svgSearchOutline v-if="label === 'left'" :width="20" :height="20" />
-    <input
-      :value="value"
-      @input="handleInput"
-      v-on="listeners"
-      type="text"
-      name="search"
-      :placeholder="placeholder"
-      class="w-full bg-transparent border-none outline-none"
-      :class="[placeholderColor]"
-      :style="{ width: `${width}px` }"
-    />
-    <svgSearchOutline v-if="label === 'right'" :width="20" :height="20" />
+  <div>
+    <slot></slot>
   </div>
 </template>
 
@@ -24,29 +9,29 @@ import Vue from "vue";
 
 export default Vue.extend({
   props: {
-    value: {
-      type: String,
-      required: true,
-    },
-    searchboxColor: {
-      type: String,
-    },
-    borderRadius: {
-      type: String,
-    },
-    placeholder: {
-      type: String,
-    },
-    placeholderColor: {
-      type: String,
-    },
-    width: {
-      type: Number,
-    },
-    label: {
-      type: String,
-      default: () => "right",
-    },
+    // value: {
+    //   type: String,
+    //   required: true,
+    // },
+    // searchboxColor: {
+    //   type: String,
+    // },
+    // borderRadius: {
+    //   type: String,
+    // },
+    // placeholder: {
+    //   type: String,
+    // },
+    // placeholderColor: {
+    //   type: String,
+    // },
+    // width: {
+    //   type: Number,
+    // },
+    // label: {
+    //   type: String,
+    //   default: () => "right",
+    // },
   },
   computed: {
     listeners() {
