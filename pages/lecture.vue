@@ -51,9 +51,24 @@
           :value="categorySearchInput"
           @input="handleCategorySearchInput"
           :placeholder="`카테고리 내 검색`"
-          :width="276"
-          class="rounded-4px py-1.5 px-4 txt-sub bg-gray4"
-        />
+          class="flex items-center rounded-4px txt-sub bg-gray4 py-1.5 px-2 border-gray2 border"
+          style="width: 276px; height: 32px"
+        >
+          <InputGeneral
+            v-model="categorySearchInput"
+            :placeholder="`카테고리 내 검색`"
+            :type="`text`"
+            :height="22"
+            class="bg-transparent border-none"
+          />
+          <div @click="searchByCategoryInput">
+            <SvgSearchOutline
+              class="ml-1 cursor-pointer"
+              :width="20"
+              :height="20"
+            />
+          </div>
+        </SearchGeneral>
 
         <div>
           <span
@@ -207,7 +222,16 @@
 export default {
   layout: "home",
   async asyncData({ $axios, query }) {
-    const { categoryBig, category, perPage, page, sort } = query;
+    const {
+      categoryBig,
+      category,
+      perPage,
+      page,
+      sort,
+      skill,
+      searchAllKeyword,
+      searchCategoryKeyword,
+    } = query;
 
     let currentCategoryIndex;
 
@@ -218,28 +242,79 @@ export default {
       }
     });
 
-    const lectureData = await $axios.$get("/api/courses", {
-      params: {
-        categoryBig: categoryBig || "개발",
-        category: category || "웹 개발",
-        perPage: Number(perPage) || 17,
-        page: Number(page) || 1,
-        sort: sort || "avg",
-      },
-    });
-    const popularTechData = await $axios.$get("/api/courses/category/skills", {
-      params: {
-        categoryBig: categoryBig || "개발",
-        category: category || "웹 개발",
-      },
-    });
-    const countResponse = await $axios.$get("/api/courses/count", {
-      params: {
-        categoryBig: categoryBig || "개발",
-        category: category || "웹 개발",
-      },
-    });
-    const currentPageNum = Math.ceil(Number(countResponse["num_course"]) / 17);
+    let lectureData, popularTechData, countResponse, currentPageNum;
+
+    if (searchCategoryKeyword) {
+      // category search + category filtering
+      lectureData = await $axios.$post(
+        "/api/courses/category/search",
+        {
+          keyword: searchCategoryKeyword,
+        },
+        {
+          params: {
+            categoryBig,
+            category,
+            perPage,
+            page,
+            sort,
+            skill,
+          },
+        }
+      );
+
+      popularTechData = await $axios.$get("/api/courses/category/skills", {
+        params: {
+          categoryBig,
+          category,
+        },
+      });
+
+      countResponse = await $axios.$post(
+        "/api/courses/category/search/count",
+        {
+          keyword: searchCategoryKeyword,
+        },
+        {
+          params: {
+            categoryBig,
+            category,
+            skill,
+          },
+        }
+      );
+    } else if (searchAllKeyword) {
+      // all search + category filtering
+    } else {
+      // only category filtering
+      lectureData = await $axios.$get("/api/courses", {
+        params: {
+          categoryBig,
+          category,
+          perPage,
+          page,
+          sort,
+          skill,
+        },
+      });
+
+      popularTechData = await $axios.$get("/api/courses/category/skills", {
+        params: {
+          categoryBig,
+          category,
+        },
+      });
+
+      countResponse = await $axios.$get("/api/courses/count", {
+        params: {
+          categoryBig,
+          category,
+          skill,
+        },
+      });
+    }
+
+    currentPageNum = Math.ceil(Number(countResponse["num_course"]) / 17);
 
     return {
       lectureData,
@@ -325,61 +400,120 @@ export default {
   watch: {
     async $route(to, from) {
       console.log("route change!", to);
-      try {
-        const { categoryBig, category, perPage, page, sort, skill } = to.query;
+      const {
+        categoryBig,
+        category,
+        perPage,
+        page,
+        sort,
+        skill,
+        searchAllKeyword,
+        searchCategoryKeyword,
+      } = to.query;
 
-        ["개발", "데이터 과학", "디자인"].forEach((elem, idx) => {
-          if (elem === categoryBig) {
-            this.currentCategoryIndex = idx;
+      ["개발", "데이터 과학", "디자인"].forEach((elem, idx) => {
+        if (elem === categoryBig) {
+          this.currentCategoryIndex = idx;
+          return;
+        }
+      });
+
+      this.categories[this.currentCategoryIndex]["majors"].forEach(
+        (elem, idx) => {
+          if (elem.name === category) {
+            this.currentMajorIndex = idx;
             return;
           }
-        });
-
-        this.categories[this.currentCategoryIndex]["majors"].forEach(
-          (elem, idx) => {
-            if (elem.name === category) {
-              this.currentMajorIndex = idx;
-              return;
-            }
-          }
-        );
-
-        if (!skill) {
-          this.currentPopularKeyword = null;
         }
+      );
 
-        this.lectureData = await this.$axios.$get("/api/courses", {
-          params: {
-            categoryBig,
-            category,
-            perPage,
-            page,
-            sort,
-            skill,
-          },
-        });
-        this.popularTechData = await this.$axios.$get(
-          "/api/courses/category/skills",
-          {
+      if (!skill) {
+        this.currentPopularKeyword = null;
+      }
+
+      let countResponse;
+
+      try {
+        if (searchCategoryKeyword) {
+          // category search + category filtering
+          this.lectureData = await this.$axios.$post(
+            "/api/courses/category/search",
+            {
+              keyword: searchCategoryKeyword,
+            },
+            {
+              params: {
+                categoryBig,
+                category,
+                perPage,
+                page,
+                sort,
+                skill,
+              },
+            }
+          );
+
+          this.popularTechData = await this.$axios.$get(
+            "/api/courses/category/skills",
+            {
+              params: {
+                categoryBig,
+                category,
+              },
+            }
+          );
+
+          countResponse = await this.$axios.$post(
+            "/api/courses/category/search/count",
+            {
+              keyword: searchCategoryKeyword,
+            },
+            {
+              params: {
+                categoryBig,
+                category,
+                skill,
+              },
+            }
+          );
+        } else if (searchAllKeyword) {
+          // all search + category filtering
+        } else {
+          // only category filtering
+          this.lectureData = await this.$axios.$get("/api/courses", {
             params: {
               categoryBig,
               category,
+              perPage,
+              page,
+              sort,
+              skill,
             },
-          }
-        );
-        const countResponse = await this.$axios.$get("/api/courses/count", {
-          params: {
-            categoryBig,
-            category,
-            skill,
-          },
-        });
-        this.currentPageNum = Math.ceil(
-          Number(countResponse["num_course"]) / 17
-        );
+          });
+
+          this.popularTechData = await this.$axios.$get(
+            "/api/courses/category/skills",
+            {
+              params: {
+                categoryBig,
+                category,
+              },
+            }
+          );
+
+          countResponse = await this.$axios.$get("/api/courses/count", {
+            params: {
+              categoryBig,
+              category,
+              skill,
+            },
+          });
+        }
       } catch (err) {
-        console.log(err);
+        console.log(err.response);
       }
+
+      this.currentPageNum = Math.ceil(Number(countResponse["num_course"]) / 17);
     },
   },
   computed: {
@@ -452,8 +586,7 @@ export default {
 
       return require(`assets/imgs/logo/lecturesite/${imgName}.png`);
     },
-    async getLectureData() {
-      console.log("test!!!!");
+    searchByCategoryInput() {
       this.$router.push({
         path: "/lecture",
         query: {
@@ -463,6 +596,21 @@ export default {
           page: this.currentPageIndex + 1,
           sort: this.currentFilteringOptionName,
           skill: this.currentPopularKeyword,
+          searchCategoryKeyword: this.categorySearchInput,
+        },
+      });
+    },
+    async getLectureData() {
+      this.$router.push({
+        path: "/lecture",
+        query: {
+          categoryBig: this.currentCategoryName,
+          category: this.currentMajorName,
+          perPage: 17,
+          page: this.currentPageIndex + 1,
+          sort: this.currentFilteringOptionName,
+          skill: this.currentPopularKeyword,
+          searchCategoryKeyword: this.categorySearchInput,
         },
       });
     },
