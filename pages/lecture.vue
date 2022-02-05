@@ -209,6 +209,15 @@ export default {
   async asyncData({ $axios, query }) {
     const { categoryBig, category, perPage, page, sort } = query;
 
+    let currentCategoryIndex;
+
+    ["개발", "데이터 과학", "디자인"].forEach((elem, idx) => {
+      if (elem === categoryBig) {
+        currentCategoryIndex = idx;
+        return;
+      }
+    });
+
     const lectureData = await $axios.$get("/api/courses", {
       params: {
         categoryBig: categoryBig || "개발",
@@ -232,7 +241,12 @@ export default {
     });
     const currentPageNum = Math.ceil(Number(countResponse["num_course"]) / 17);
 
-    return { lectureData, popularTechData, currentPageNum };
+    return {
+      lectureData,
+      popularTechData,
+      currentPageNum,
+      currentCategoryIndex,
+    };
   },
   data() {
     return {
@@ -308,22 +322,66 @@ export default {
       popularTechData: [],
     };
   },
-  // watch: {
-  //   async $route(to, from) {
-  //     console.log("route change!", to);
-  //     const { categoryBig, category, perPage, page, sort } = to.query;
-  //     const lectureData = await this.$axios.$get("/api/courses", {
-  //       params: {
-  //         categoryBig,
-  //         category,
-  //         perPage,
-  //         page,
-  //         sort,
-  //       },
-  //     });
-  //     this.lectureData = lectureData;
-  //   },
-  // },
+  watch: {
+    async $route(to, from) {
+      console.log("route change!", to);
+      try {
+        const { categoryBig, category, perPage, page, sort, skill } = to.query;
+
+        ["개발", "데이터 과학", "디자인"].forEach((elem, idx) => {
+          if (elem === categoryBig) {
+            this.currentCategoryIndex = idx;
+            return;
+          }
+        });
+
+        this.categories[this.currentCategoryIndex]["majors"].forEach(
+          (elem, idx) => {
+            if (elem.name === category) {
+              this.currentMajorIndex = idx;
+              return;
+            }
+          }
+        );
+
+        if (!skill) {
+          this.currentPopularKeyword = null;
+        }
+
+        this.lectureData = await this.$axios.$get("/api/courses", {
+          params: {
+            categoryBig,
+            category,
+            perPage,
+            page,
+            sort,
+            skill,
+          },
+        });
+        this.popularTechData = await this.$axios.$get(
+          "/api/courses/category/skills",
+          {
+            params: {
+              categoryBig,
+              category,
+            },
+          }
+        );
+        const countResponse = await this.$axios.$get("/api/courses/count", {
+          params: {
+            categoryBig,
+            category,
+            skill,
+          },
+        });
+        this.currentPageNum = Math.ceil(
+          Number(countResponse["num_course"]) / 17
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
   computed: {
     currentMajors() {
       return this.categories[this.currentCategoryIndex]["majors"];
@@ -344,10 +402,13 @@ export default {
     selectCategory(categoryIdx) {
       this.currentCategoryIndex = categoryIdx;
       this.currentMajorIndex = 0;
+      this.currentPopularKeyword = null;
       this.getLectureData();
     },
     selectMajor(majorIdx) {
       this.currentMajorIndex = majorIdx;
+      this.currentPopularKeyword = null;
+      this.currentPageIndex = 0;
       this.getLectureData();
     },
     handleCategorySearchInput(value) {
@@ -355,15 +416,16 @@ export default {
     },
     clickFilteringOption(selectedFilteringOptionIdx) {
       this.currentFilteringOptionIndex = selectedFilteringOptionIdx;
-      this.getLectureData(true);
+      this.getLectureData();
     },
     clickPopularTech(keyword) {
       this.currentPopularKeyword = keyword;
-      this.getLectureData(true);
+      this.currentPageIndex = 0;
+      this.getLectureData();
     },
     clickPaginationBtn(selectedPageIdx) {
       this.currentPageIndex = selectedPageIdx;
-      this.getLectureData(true, true);
+      this.getLectureData();
     },
     cardImageLogo(siteName) {
       let imgName = "";
@@ -390,52 +452,19 @@ export default {
 
       return require(`assets/imgs/logo/lecturesite/${imgName}.png`);
     },
-    async getLectureData(
-      isPopularKeywordConsidered = false,
-      isPageIndexConsidered = false
-    ) {
-      try {
-        if (!isPopularKeywordConsidered) {
-          this.currentPopularKeyword = null;
-        }
-        if (!isPageIndexConsidered) {
-          this.currentPageIndex = 0;
-        }
-
-        this.lectureData = await this.$axios.$get("/api/courses", {
-          params: {
-            categoryBig: this.currentCategoryName,
-            category: this.currentMajorName,
-            perPage: 17,
-            page: this.currentPageIndex + 1,
-            skill: this.currentPopularKeyword,
-            sort: this.currentFilteringOptionName,
-          },
-        });
-
-        this.popularTechData = await this.$axios.$get(
-          "/api/courses/category/skills",
-          {
-            params: {
-              categoryBig: this.currentCategoryName,
-              category: this.currentMajorName,
-            },
-          }
-        );
-
-        const countResponse = await this.$axios.$get("/api/courses/count", {
-          params: {
-            categoryBig: this.currentCategoryName,
-            category: this.currentMajorName,
-            skill: this.currentPopularKeyword,
-          },
-        });
-        this.currentPageNum = Math.ceil(
-          Number(countResponse["num_course"]) / 17
-        );
-      } catch (err) {
-        console.log(err.response);
-      }
+    async getLectureData() {
+      console.log("test!!!!");
+      this.$router.push({
+        path: "/lecture",
+        query: {
+          categoryBig: this.currentCategoryName,
+          category: this.currentMajorName,
+          perPage: 17,
+          page: this.currentPageIndex + 1,
+          sort: this.currentFilteringOptionName,
+          skill: this.currentPopularKeyword,
+        },
+      });
     },
   },
   mounted() {
