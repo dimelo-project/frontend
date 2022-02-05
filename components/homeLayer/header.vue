@@ -18,7 +18,7 @@
               <div class="txt-mid">
                 <NuxtLink
                   :to="{
-                    path: 'lecture',
+                    path: '/lecture',
                     query: {
                       categoryBig: '개발',
                       category: '웹 개발',
@@ -49,7 +49,7 @@
                     <div>
                       <NuxtLink
                         :to="{
-                          path: 'lecture',
+                          path: '/lecture',
                           query: {
                             categoryBig: '개발',
                             category: '웹 개발',
@@ -69,11 +69,11 @@
                     <div class="mt-4">
                       <NuxtLink
                         :to="{
-                          path: 'lecture',
+                          path: '/lecture',
                           query: {
-                            categoryBig: '데이터 사이언스',
+                            categoryBig: '데이터 과학',
                             category: '데이터 분석',
-                            perPage: 10,
+                            perPage: 17,
                             page: 1,
                             sort: 'avg',
                           },
@@ -89,11 +89,11 @@
                     <div class="mt-4">
                       <NuxtLink
                         :to="{
-                          path: 'lecture',
+                          path: '/lecture',
                           query: {
                             categoryBig: '디자인',
                             category: '웹 디자인',
-                            perPage: 10,
+                            perPage: 17,
                             page: 1,
                             sort: 'avg',
                           },
