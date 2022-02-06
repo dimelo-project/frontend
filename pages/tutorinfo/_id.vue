@@ -12,36 +12,40 @@
             <span class="txt-sub">강사</span>
           </div>
           <div class="mt-1">
-            <span class="txt-heading3">Hwang Tae-hyun</span>
+            <span class="txt-heading3">{{
+              tutorInfoData["instructor_name"]
+            }}</span>
           </div>
           <div class="flex items-center mt-6">
-            <StarRate class="mr-1" :score="3.6" />
-            <span class="txt-mid-bold"
-              >3.6<span class="txt-mini">(4)</span></span
-            >
+            <StarRate class="mr-1" :score="tutorInfoData['avg']" />
+            <span class="txt-mid-bold">
+              {{ tutorInfoData["avg"] }}
+              <span class="txt-mini">
+                ({{ totalNumOfTutorLecture["num_review"] }})
+              </span>
+            </span>
           </div>
         </div>
         <!-- right side box -->
         <div class="flex items-center" style="width: 365px">
           <div>
             <div
-              v-for="i in 4"
-              :key="i"
+              v-for="(item, idx) in questionList"
+              :key="idx"
               class="flex items-center"
-              :class="{ 'mb-2': i !== 4 }"
+              :class="{ 'mb-2': idx !== 3 }"
             >
               <img
                 src="~/assets/imgs/icon/ellipse.png"
                 style="width: 6px; height: 6px"
                 draggable="false"
               />
-              <span class="ml-2 txt-sub">강의소개와 일치</span>
-              <div
-                class="ml-3 rounded-8px bg-yellow1"
-                style="width: 170px; height: 6px"
-              ></div>
-              <SvgReviewStar class="ml-1" />
-              <span class="ml-1 txt-sub-bold">5.0</span>
+              <span class="ml-2 txt-sub" style="width: 96px">
+                {{ item.question }}
+              </span>
+              <PlainProgressBar class="ml-3" :score="Number(item.score)" />
+              <SvgReviewStar class="ml-2" />
+              <span class="ml-1 txt-sub-bold">{{ item.score }}</span>
             </div>
           </div>
         </div>
@@ -68,7 +72,7 @@
             >
               <span class="txt-base-bold">강의명</span>
               <div class="flex items-center">
-                <StarRate :score="3.6" />
+                <StarRate :score="`3.6`" />
                 <span class="ml-1 txt-base-bold">3.6</span>
                 <span class="txt-mini">(4)</span>
               </div>
@@ -147,7 +151,7 @@
               </div>
 
               <div class="flex mt-5">
-                <StarRate :size="20" :score="5.0" />
+                <StarRate :size="20" :score="`5.0`" />
                 <span class="ml-1 txt-base-bold">5.0</span>
               </div>
             </div>
@@ -221,6 +225,43 @@
 <script>
 export default {
   layout: "home",
+  async asyncData({ $axios, params }) {
+    console.log("params.id", params.id);
+
+    const tutorInfoData = await $axios.$get(
+      `/api/reviews/instructors/${params.id}/avg`
+    );
+    console.log("tutorInfoData", tutorInfoData);
+
+    const totalNumOfTutorLecture = await $axios.$get(
+      `/api/reviews/instructors/${params.id}/count`
+    );
+    console.log("totalNumOfTutorLecture", totalNumOfTutorLecture);
+
+    let questionList = [
+      {
+        question: "강의소개와 일치",
+      },
+      {
+        question: "전달력",
+      },
+      {
+        question: "업데이트 반영",
+      },
+      {
+        question: "가성비",
+      },
+    ];
+    questionList.forEach((elem, idx) => {
+      elem["score"] = tutorInfoData[`q${idx + 1}`];
+    });
+    console.log("questionList", questionList);
+
+    return { tutorInfoData, totalNumOfTutorLecture, questionList };
+  },
+  data() {
+    return {};
+  },
 };
 </script>
 
