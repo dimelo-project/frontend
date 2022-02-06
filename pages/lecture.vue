@@ -134,8 +134,12 @@
               <div class="flex items-center">
                 <span
                   class="mr-4 underline cursor-pointer txt-sub-bold text-orange2"
-                  >{{ lecture["instructor_name"] }}</span
+                  @click="
+                    $router.push(`/tutorinfo/${lecture['instructor_id']}`)
+                  "
                 >
+                  {{ lecture["instructor_name"] }}
+                </span>
                 <span class="mr-1 text-gray1 txt-sub">{{
                   lecture["course_platform"]
                 }}</span>
