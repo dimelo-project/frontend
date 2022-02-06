@@ -21,7 +21,7 @@
             <span class="txt-mid-bold">
               {{ tutorInfoData["avg"] }}
               <span class="txt-mini">
-                ({{ totalNumOfTutorLecture["num_review"] }})
+                ({{ totalNumOfTutorReview["num_review"] }})
               </span>
             </span>
           </div>
@@ -55,26 +55,38 @@
       <div class="mt-3 bg-white rounded-8px py-14 px-18 test">
         <span class="txt-mid-bold">
           등록된 강의
-          <span class="text-orange2">4개</span></span
-        >
+          <span class="text-orange2">
+            {{ totalNumOfTutorLecture["num_course"] }}개
+          </span>
+        </span>
         <!-- lecture card data -->
-        <div v-for="i in 3" :key="i" class="flex mt-10" style="width: 684px">
+        <div
+          v-for="(lecture, lectureIdx) in tutorLectureData"
+          :key="lectureIdx"
+          class="flex mt-10"
+          style="width: 684px"
+        >
           <!-- site logo -->
-          <div class="bg-black1 rounded-8px" style="width: 69px; height: 69px">
-            <span class="p-3 text-white txt-mini"> 사이트 로고 이미지 </span>
+          <div class="bg-gray1 rounded-8px" style="width: 69px; height: 69px">
+            <img
+              class="max-w-none"
+              :src="cardImageLogo(lecture['course_platform'])"
+              alt="강의사이트"
+            />
           </div>
 
           <div class="flex-grow">
             <!-- first line -->
-            <div
-              class="flex justify-between flex-grow mt-1 ml-6"
-              style="height: 25px"
-            >
-              <span class="txt-base-bold">강의명</span>
+            <div class="flex justify-between flex-grow mt-1 ml-6">
+              <span class="txt-base-bold" style="width: 375px">{{
+                lecture["course_title"]
+              }}</span>
               <div class="flex items-center">
-                <StarRate :score="`3.6`" />
-                <span class="ml-1 txt-base-bold">3.6</span>
-                <span class="txt-mini">(4)</span>
+                <StarRate :score="lecture['course_avg']" />
+                <span class="ml-1 txt-base-bold"
+                  >{{ lecture["course_avg"] }}
+                </span>
+                <span class="txt-mini">({{ lecture["num_review"] }})</span>
               </div>
             </div>
             <!-- second line -->
@@ -82,19 +94,46 @@
               class="flex justify-between items-center flex-grow ml-6 mt-1.5"
             >
               <div>
-                <span class="underline txt-sub-bold text-orange2">김지원</span>
-                <span class="ml-4 text-gray1 txt-sub">강의사이트명</span>
-                <span class="ml-0.5 text-gray1 txt-sub">00,000원</span>
-                <span class="ml-1 underline text-gray1 txt-sub">보러가기</span>
+                <!-- <span class="underline txt-sub-bold text-orange2">김지원</span> -->
+                <span class="text-gray1 txt-sub">
+                  {{ lecture["course_platform"] }}
+                </span>
+                <span class="ml-0.5 text-gray1 txt-sub">{{
+                  `${Number(lecture["course_price"]).toLocaleString()}원`
+                }}</span>
+                <span class="ml-1 underline text-gray1 txt-sub">
+                  <a :href="lecture['course_siteUrl']" target="_blank">
+                    보러가기
+                  </a>
+                </span>
               </div>
 
               <div class="flex items-center">
-                <SvgHeartOutline :color="`#868296`" />
+                <div
+                  v-if="lecture['course_liked'] === 'true'"
+                  @click="
+                    removeHeartToLecture(lectureIdx, lecture['course_id'])
+                  "
+                >
+                  <SvgHeartOutline
+                    :color="`#ff6b6b`"
+                    :fill="`#ff6b6b`"
+                    class="cursor-pointer"
+                  />
+                </div>
+                <div
+                  v-else
+                  @click="giveHeartToLecture(lectureIdx, lecture['course_id'])"
+                >
+                  <SvgHeartOutline :color="`#868296`" class="cursor-pointer" />
+                </div>
                 <ButtonGeneral
                   class="ml-3 text-white bg-orange2 rounded-4px"
                   style="width: 172px; height: 32px"
                 >
-                  <span>4개의 리뷰 보기</span>
+                  <NuxtLink :to="`/review/${lecture['course_id']}`">
+                    <span>{{ lecture["num_review"] }}개의 리뷰 보기</span>
+                  </NuxtLink>
                 </ButtonGeneral>
               </div>
             </div>
@@ -103,6 +142,11 @@
 
         <!-- see more button -->
         <ButtonGeneral
+          v-if="
+            tutorLectureData.length !==
+            Number(totalNumOfTutorLecture['num_course'])
+          "
+          @click="seeMoreTutorLecture"
           class="w-full mt-8 rounded-4px bg-gray3 text-gray1"
           style="width: 684px; height: 56px"
         >
@@ -233,10 +277,10 @@ export default {
     );
     console.log("tutorInfoData", tutorInfoData);
 
-    const totalNumOfTutorLecture = await $axios.$get(
+    const totalNumOfTutorReview = await $axios.$get(
       `/api/reviews/instructors/${params.id}/count`
     );
-    console.log("totalNumOfTutorLecture", totalNumOfTutorLecture);
+    console.log("totalNumOfTutorReview", totalNumOfTutorReview);
 
     let questionList = [
       {
@@ -257,10 +301,91 @@ export default {
     });
     console.log("questionList", questionList);
 
-    return { tutorInfoData, totalNumOfTutorLecture, questionList };
+    const tutorLectureData = await $axios.$get(
+      `/api/courses/instructors/${params.id}`,
+      {
+        params: {
+          perPage: 3,
+          page: 1,
+          sort: "num_review",
+        },
+      }
+    );
+    console.log("tutorLectureData", tutorLectureData);
+
+    const totalNumOfTutorLecture = await $axios.$get(
+      `/api/courses/instructors/${params.id}/count`
+    );
+    console.log("totalNumOfTutorLecture", totalNumOfTutorLecture);
+
+    return {
+      tutorInfoData,
+      totalNumOfTutorReview,
+      questionList,
+      tutorLectureData,
+      totalNumOfTutorLecture,
+    };
   },
   data() {
-    return {};
+    return {
+      currentLecturePage: 1,
+    };
+  },
+  methods: {
+    cardImageLogo(siteName) {
+      let imgName = "";
+
+      if (siteName === "탈잉") {
+        imgName = "taling";
+      } else if (siteName === "인프런") {
+        imgName = "inflearn";
+      } else if (siteName === "유데미") {
+        imgName = "udemy";
+      } else if (siteName === "클래스101") {
+        imgName = "class101";
+      } else if (siteName === "리메인") {
+        imgName = "remain";
+      } else if (siteName === "패스트캠퍼스") {
+        imgName = "fastcampus";
+      } else if (siteName === "프로그래머스") {
+        imgName = "programmers";
+      } else if (siteName === "코드잇") {
+        imgName = "codeit";
+      } else {
+        imgName = "etc";
+      }
+
+      return require(`assets/imgs/logo/lecturesite/${imgName}.png`);
+    },
+    async seeMoreTutorLecture() {
+      this.currentLecturePage += 1;
+      const response = await this.$axios.$get(
+        `/api/courses/instructors/${this.$route.params.id}`,
+        {
+          params: {
+            perPage: 3,
+            page: this.currentLecturePage,
+            sort: "num_review",
+          },
+        }
+      );
+      this.tutorLectureData = [...this.tutorLectureData, ...response];
+    },
+    async giveHeartToLecture(lectureIdx, course_id) {
+      console.log("give heart idx", lectureIdx);
+      const response = this.$axios.$post(`/api/courses/likes/${course_id}`);
+      if (response) {
+        this.tutorLectureData[lectureIdx]["course_liked"] = "true";
+      }
+      console.log("hi");
+    },
+    async removeHeartToLecture(lectureIdx, course_id) {
+      console.log("remove heart idx", lectureIdx);
+      const response = this.$axios.$delete(`/api/courses/likes/${course_id}`);
+      if (response) {
+        this.tutorLectureData[lectureIdx]["course_liked"] = "false";
+      }
+    },
   },
 };
 </script>
