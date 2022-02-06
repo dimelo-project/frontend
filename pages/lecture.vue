@@ -208,7 +208,7 @@
           v-for="(tech, index) in popularTechData"
           :key="index"
           @click="clickPopularTech(tech.skill_skill)"
-          class="py-2 pl-2 mb-2 cursor-pointer bg-gray3 rounded-4px"
+          class="py-2 pl-5 mb-2 cursor-pointer bg-gray3 rounded-4px"
         >
           <span class="txt-sub">{{ tech.skill_skill }}</span>
         </div>
