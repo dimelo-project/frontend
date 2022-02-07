@@ -163,58 +163,87 @@
         <div class="flex items-center justify-between">
           <span class="txt-mid-bold">
             받은 리뷰
-            <span class="text-orange2">6개</span></span
-          >
+            <span class="text-orange2">
+              {{ totalNumOfTutorReview["num_review"] }}개
+            </span>
+          </span>
           <div class="txt-sub">
-            <span class="cursor-pointer txt-sub-bold text-orange2">추천순</span>
-            <span class="ml-2 cursor-pointer text-gray1">추천순</span>
-            <span class="ml-2 cursor-pointer text-gray1">추천순</span>
-            <span class="ml-2 cursor-pointer text-gray1">추천순</span>
+            <span
+              v-for="(menu, menuIdx) in filteringMenu"
+              :key="menuIdx"
+              @click="
+                getFilteredReviewData(menu.sortWay, menu.orderWay, menuIdx)
+              "
+              class="ml-2 cursor-pointer"
+              :class="{
+                'txt-sub-bold text-orange2':
+                  menuIdx === selectedFilteringMenuIdx,
+                'pointer-events-none': loading,
+              }"
+            >
+              {{ menu.name }}
+            </span>
           </div>
         </div>
 
         <!-- divider -->
         <div class="mt-4 border-t border-gray2"></div>
 
-        <div v-for="i in 4" :key="i">
+        <div
+          v-for="(review, reviewDataIdx) in tutorReviewData"
+          :key="reviewDataIdx"
+        >
           <!-- review card data -->
           <div class="flex justify-between mt-8">
             <!-- left side -->
             <div class="flex-shrink-0">
               <div class="flex">
+                <!-- user profile image -->
                 <div
+                  v-if="review['user_imageUrl']"
+                  style="width: 48px; height: 48px"
+                >
+                  <img
+                    :src="review['user_imageUrl']"
+                    alt=""
+                    class="rounded-full"
+                    style="width: 48px; height: 48px"
+                  />
+                </div>
+                <div
+                  v-else
                   class="rounded-full bg-gray1"
                   style="width: 48px; height: 48px"
                 ></div>
 
                 <div class="ml-2.5 flex flex-col">
-                  <span class="txt-sub-bold">닉네임</span>
-                  <span class="mt-1 txt-sub">UX 디자이너</span>
-                  <span class="txt-sub">2~3년차</span>
+                  <span class="txt-sub-bold">
+                    {{ review["user_nickname"] }}
+                  </span>
+                  <span class="mt-1 txt-sub">{{ review["user_job"] }}</span>
+                  <span class="txt-sub">{{ review["user_career"] }}</span>
                 </div>
               </div>
 
               <div class="flex mt-5">
-                <StarRate :size="20" :score="`5.0`" />
-                <span class="ml-1 txt-base-bold">5.0</span>
+                <StarRate :size="20" :score="review['review_avg']" />
+                <span class="ml-1 txt-base-bold">
+                  {{ review["review_avg"] }}
+                </span>
               </div>
             </div>
             <!-- right side -->
             <div style="width: 480px">
               <!-- title -->
               <span class="underline txt-sub text-gray1">
-                파이썬입문과 크롤링기초 부트캠프 (2021 업데이트) [쉽게! 견고한
-                자료까지!]
+                {{ review["course_title"] }}
               </span>
 
               <!-- pros -->
               <div class="mt-4">
                 <span class="txt-sub-bold text-orange2">장점</span>
                 <p class="txt-sub">
-                  실무와 연관이 깊고, 실용적이고 실무에서 쓰일법한 지식들을
-                  골라서 강의해주신게 인상적이었습니다. 또한 강의를 함께 듣는
-                  수강생끼리 협업이나 소통을 하도록 분위기를 만들어주셔서 공부할
-                  때 도움을 많이 받았습니다
+                  {{ review["review_pros"] }}
                 </p>
               </div>
 
@@ -222,37 +251,56 @@
               <div class="mt-4">
                 <span class="txt-sub-bold text-orange2">단점</span>
                 <p class="txt-sub">
-                  강의 전체 횟수와 시간이 조금 루즈했던 것 같습니다. 어느정도
-                  공부를 해본 사람보다는 아예 입문자가 수강하면 괜찮을 것
-                  같습니다. 그리고 자료를 공유해주셨는데 그 자료가 좀 오래된
-                  버전이었다는 사실을 뒤늦게 알았습니다. 아마 강사님도 모르셨던
-                  것 같았습니다.
+                  {{ review["review_cons"] }}
                 </p>
               </div>
 
               <!-- update, delete button & date & recommend button -->
               <div class="flex items-center justify-end mt-4">
-                <span class="underline cursor-pointer txt-sub text-gray1">
+                <span
+                  v-if="review['user_id'] === $auth.user.id"
+                  class="underline cursor-pointer txt-sub text-gray1"
+                >
                   수정
                 </span>
-                <span class="ml-4 underline cursor-pointer txt-sub text-gray1">
+                <span
+                  v-if="review['user_id'] === $auth.user.id"
+                  class="ml-4 underline cursor-pointer txt-sub text-gray1"
+                >
                   삭제
                 </span>
-                <span class="ml-8 txt-mini text-gray1">2022-01-26</span>
+                <span class="ml-8 txt-mini text-gray1">
+                  {{ review["review_createdAt"] }}
+                </span>
                 <ButtonGeneral
+                  v-if="review['review_helped'] === 'true'"
+                  @click="
+                    removeHelpedToReview(reviewDataIdx, review['review_id'])
+                  "
+                  :width="139"
+                  :height="32"
+                  class="ml-3 border border-orange2 rounded-4px"
+                >
+                  <span class="txt-mini">이 리뷰가 도움됨</span>
+                  <span class="ml-1 txt-mini-bold text-orange2">
+                    {{ review["num_help"] }}
+                  </span>
+                  <SvgCheck class="ml-1" :color="`#F3732B`" />
+                </ButtonGeneral>
+                <ButtonGeneral
+                  v-else
+                  @click="
+                    giveHelpedToReview(reviewDataIdx, review['review_id'])
+                  "
                   :width="139"
                   :height="32"
                   class="ml-3 border border-gray2 rounded-4px"
                 >
                   <span class="txt-mini">이 리뷰가 도움됨</span>
-                  <span class="ml-1 txt-mini-bold">5</span>
-                  <img
-                    src="~/assets/imgs/icon/check.png"
-                    alt="추천"
-                    style="width: 14px; height: 10px"
-                    draggable="false"
-                    class="ml-2"
-                  />
+                  <span class="ml-1 txt-mini-bold">
+                    {{ review["num_help"] }}
+                  </span>
+                  <SvgCheck class="ml-1" :color="`#E0E1E5`" />
                 </ButtonGeneral>
               </div>
             </div>
@@ -261,6 +309,20 @@
           <!-- divider -->
           <div class="mt-4 border-t border-gray2"></div>
         </div>
+
+        <div v-if="loading" class="flex items-center justify-center h-32">
+          <SvgSpinner />
+        </div>
+
+        <InfiniteScrollObserver
+          v-if="
+            !loading &&
+            tutorReviewData.length !==
+              Number(totalNumOfTutorReview['num_review'])
+          "
+          @intersect="intersected"
+          :options="{ threshold: 0.0 }"
+        />
       </div>
     </div>
   </div>
@@ -270,17 +332,17 @@
 export default {
   layout: "home",
   async asyncData({ $axios, params }) {
-    console.log("params.id", params.id);
+    // console.log("params.id", params.id);
 
     const tutorInfoData = await $axios.$get(
       `/api/reviews/instructors/${params.id}/avg`
     );
-    console.log("tutorInfoData", tutorInfoData);
+    // console.log("tutorInfoData", tutorInfoData);
 
     const totalNumOfTutorReview = await $axios.$get(
       `/api/reviews/instructors/${params.id}/count`
     );
-    console.log("totalNumOfTutorReview", totalNumOfTutorReview);
+    // console.log("totalNumOfTutorReview", totalNumOfTutorReview);
 
     let questionList = [
       {
@@ -299,7 +361,7 @@ export default {
     questionList.forEach((elem, idx) => {
       elem["score"] = tutorInfoData[`q${idx + 1}`];
     });
-    console.log("questionList", questionList);
+    // console.log("questionList", questionList);
 
     const tutorLectureData = await $axios.$get(
       `/api/courses/instructors/${params.id}`,
@@ -311,12 +373,25 @@ export default {
         },
       }
     );
-    console.log("tutorLectureData", tutorLectureData);
+    // console.log("tutorLectureData", tutorLectureData);
 
     const totalNumOfTutorLecture = await $axios.$get(
       `/api/courses/instructors/${params.id}/count`
     );
-    console.log("totalNumOfTutorLecture", totalNumOfTutorLecture);
+    // console.log("totalNumOfTutorLecture", totalNumOfTutorLecture);
+
+    const tutorReviewData = await $axios.$get(
+      `/api/reviews/instructors/${params.id}`,
+      {
+        params: {
+          sort: "help",
+          order: "DESC",
+          perPage: 3,
+          page: 1,
+        },
+      }
+    );
+    // console.log("tutorReviewData", tutorReviewData);
 
     return {
       tutorInfoData,
@@ -324,11 +399,41 @@ export default {
       questionList,
       tutorLectureData,
       totalNumOfTutorLecture,
+      tutorReviewData,
     };
   },
   data() {
     return {
+      loading: false,
       currentLecturePage: 1,
+      currentReviewPage: 2,
+      filteringMenu: [
+        {
+          id: 0,
+          name: "추천순",
+          sortWay: "help",
+          orderWay: "DESC",
+        },
+        {
+          id: 1,
+          name: "최신순",
+          sortWay: "date",
+          orderWay: "DESC",
+        },
+        {
+          id: 2,
+          name: "별점높은순",
+          sortWay: "avg",
+          orderWay: "DESC",
+        },
+        {
+          id: 3,
+          name: "별점낮은순",
+          sortWay: "avg",
+          orderWay: "ASC",
+        },
+      ],
+      selectedFilteringMenuIdx: 0,
     };
   },
   methods: {
@@ -358,32 +463,135 @@ export default {
       return require(`assets/imgs/logo/lecturesite/${imgName}.png`);
     },
     async seeMoreTutorLecture() {
-      this.currentLecturePage += 1;
-      const response = await this.$axios.$get(
-        `/api/courses/instructors/${this.$route.params.id}`,
-        {
-          params: {
-            perPage: 3,
-            page: this.currentLecturePage,
-            sort: "num_review",
-          },
-        }
-      );
-      this.tutorLectureData = [...this.tutorLectureData, ...response];
+      try {
+        this.currentLecturePage += 1;
+        const response = await this.$axios.$get(
+          `/api/courses/instructors/${this.$route.params.id}`,
+          {
+            params: {
+              perPage: 3,
+              page: this.currentLecturePage,
+              sort: "num_review",
+            },
+          }
+        );
+        this.tutorLectureData = [...this.tutorLectureData, ...response];
+      } catch (err) {
+        console.log(err);
+      }
     },
     async giveHeartToLecture(lectureIdx, course_id) {
-      console.log("give heart idx", lectureIdx);
-      const response = this.$axios.$post(`/api/courses/likes/${course_id}`);
-      if (response) {
-        this.tutorLectureData[lectureIdx]["course_liked"] = "true";
+      try {
+        // console.log("give heart idx", lectureIdx);
+        const response = await this.$axios.$post(
+          `/api/courses/likes/${course_id}`
+        );
+        if (response) {
+          this.tutorLectureData[lectureIdx]["course_liked"] = "true";
+        }
+      } catch (err) {
+        console.log(err);
       }
-      console.log("hi");
     },
     async removeHeartToLecture(lectureIdx, course_id) {
-      console.log("remove heart idx", lectureIdx);
-      const response = this.$axios.$delete(`/api/courses/likes/${course_id}`);
-      if (response) {
-        this.tutorLectureData[lectureIdx]["course_liked"] = "false";
+      try {
+        // console.log("remove heart idx", lectureIdx);
+        const response = await this.$axios.$delete(
+          `/api/courses/likes/${course_id}`
+        );
+        if (response) {
+          this.tutorLectureData[lectureIdx]["course_liked"] = "false";
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async giveHelpedToReview(reviewDataIdx, review_id) {
+      try {
+        const response = await this.$axios.$post(
+          `/api/reviews/help/${review_id}`
+        );
+        if (response) {
+          const num_helped = Number(
+            this.tutorReviewData[reviewDataIdx]["num_help"]
+          );
+          this.tutorReviewData[reviewDataIdx]["num_help"] = String(
+            num_helped + 1
+          );
+          this.tutorReviewData[reviewDataIdx]["review_helped"] = "true";
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async removeHelpedToReview(reviewDataIdx, review_id) {
+      try {
+        const response = await this.$axios.$delete(
+          `/api/reviews/help/${review_id}`
+        );
+        if (response) {
+          const num_helped = Number(
+            this.tutorReviewData[reviewDataIdx]["num_help"]
+          );
+          this.tutorReviewData[reviewDataIdx]["num_help"] = String(
+            num_helped - 1
+          );
+          this.tutorReviewData[reviewDataIdx]["review_helped"] = "false";
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async intersected() {
+      try {
+        this.loading = true;
+        const response = await this.$axios.$get(
+          `/api/reviews/instructors/${this.$route.params.id}`,
+          {
+            params: {
+              sort: this.filteringMenu[this.selectedFilteringMenuIdx][
+                "sortWay"
+              ],
+              order:
+                this.filteringMenu[this.selectedFilteringMenuIdx]["orderWay"],
+              perPage: 3,
+              page: this.currentReviewPage,
+            },
+          }
+        );
+
+        setTimeout(() => {
+          if (response) {
+            this.currentReviewPage += 1;
+            this.tutorReviewData = [...this.tutorReviewData, ...response];
+          }
+          this.loading = false;
+        }, 1500);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getFilteredReviewData(sortWay, orderWay, menuIdx) {
+      try {
+        const response = await this.$axios.$get(
+          `/api/reviews/instructors/${this.$route.params.id}`,
+          {
+            params: {
+              sort: sortWay,
+              order: orderWay,
+              perPage: 3,
+              page: 1,
+            },
+          }
+        );
+        if (response) {
+          this.tutorReviewData = response;
+
+          this.currentReviewPage = 2;
+        }
+        this.selectedFilteringMenuIdx = menuIdx;
+      } catch (err) {
+        console.log(err);
       }
     },
   },
