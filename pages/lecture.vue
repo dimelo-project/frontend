@@ -225,6 +225,17 @@
 <script>
 export default {
   layout: "home",
+  middleware({ redirect, query }) {
+    if (Object.entries(query).length === 0) {
+      return redirect("/lecture", {
+        categoryBig: "개발",
+        category: "웹 개발",
+        perPage: 17,
+        page: 1,
+        sort: "avg",
+      });
+    }
+  },
   async asyncData({ $axios, query }) {
     const {
       categoryBig,
