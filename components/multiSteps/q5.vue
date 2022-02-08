@@ -49,6 +49,7 @@
         <span class="text-orange2">이전</span>
       </ButtonGeneral>
       <ButtonGeneral
+        @click="$emit('reviewUpload')"
         class="w-full ml-6 border py-5px txt-sub-bold rounded-8px"
         :class="[
           submitBtnActive
