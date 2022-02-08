@@ -23,8 +23,12 @@
           <div
             v-for="i in 5"
             :key="i"
-            class="flex items-center justify-center transition-colors border rounded-full cursor-pointer text-gray1 bg-gray4 border-gray2 hover:bg-yellow1 hover:text-white"
-            :class="{ 'bg-orange2 text-white': i === $store.state.q2score }"
+            class="flex items-center justify-center transition-colors border rounded-full cursor-pointer border-gray2 hover:bg-yellow1 hover:text-white"
+            :class="[
+              i === $store.state.q2score
+                ? 'bg-orange2 text-white'
+                : 'bg-gray4 text-gray1',
+            ]"
             style="width: 56px; height: 56px"
             @click="$store.commit('changeQ2score', i)"
           >
