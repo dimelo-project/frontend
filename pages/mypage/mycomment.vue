@@ -4,15 +4,15 @@
     <div class="border-t-2 border-gray2"></div>
 
     <!-- comment date list -->
-    <div v-for="i in 3" :key="i" class="mt-4">
+    <div v-for="(comment, idx) in myCommentData" :key="idx" class="mt-4">
       <div>
-        <span>저도 참여하고 싶습니다!! 열심히 하고자 합니다!!ㅎㅎㅎㅎㅎㅇ</span>
+        <span>{{ comment["comment_commentText"] }}</span>
       </div>
       <div class="txt-sub text-gray6">
-        <span>2021.11.23</span>
+        <span>{{ comment["comment_updatedAt"] }}</span>
       </div>
       <div class="txt-sub text-rgay1">
-        <span>원글제목 말머리는빼고</span>
+        <span>{{ comment["title"] }}</span>
       </div>
       <div class="mt-4 border-t border-gray2"></div>
     </div>
@@ -22,6 +22,12 @@
 <script>
 export default {
   layout: "mypage",
+  async asyncData({ $axios }) {
+    const myCommentData = await $axios.$get("/api/users/me/comments");
+    console.log("myCommentData", myCommentData);
+
+    return { myCommentData };
+  },
   mounted() {
     this.$store.commit("changeCntCategoryIdx", 3);
   },
