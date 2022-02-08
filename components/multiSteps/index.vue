@@ -22,7 +22,10 @@
             <StepProgressBar />
           </div>
           <!-- dynamic component here -->
-          <component v-bind:is="steps[$store.state.currentStep].component" />
+          <component
+            v-bind:is="steps[$store.state.currentStep].component"
+            @reviewUpload="$emit('reviewUpload')"
+          />
         </div>
       </div>
     </div>
