@@ -1,5 +1,6 @@
 <template>
   <textarea
+    ref="textarea"
     class="w-full overflow-hidden outline-none resize-none hide-scrollbar"
     :rows="rows"
     :placeholder="placeholder"
@@ -27,12 +28,19 @@ export default {
     };
   },
   methods: {
+    resize() {
+      const $textarea = this.$refs.textarea;
+
+      $textarea.style.height = "0px";
+      $textarea.style.height = `${$textarea.scrollHeight}px`;
+    },
     onChangeComment(event) {
       const rows = event.target.value.split("\n").length;
 
       this.rows = rows;
       this.userNewCommment = event.target.value;
       this.$emit("input", this.userNewCommment);
+      this.resize();
     },
   },
 };
