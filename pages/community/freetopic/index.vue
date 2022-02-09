@@ -220,6 +220,7 @@ export default {
       this.freetopicSearchInput = value;
     },
     searchByUserInput() {
+      console.log("search!");
       if (this.freetopicSearchInput === "") {
         return;
       }
@@ -234,6 +235,15 @@ export default {
           },
         });
       } else {
+        this.$router.push({
+          path: "/community/freetopic",
+          query: {
+            category: this.categoryMenu[this.currentMenuIdx].name,
+            perPage: 16,
+            page: this.pageIdx + 1,
+            keyword: this.freetopicSearchInput,
+          },
+        });
       }
     },
     clickCategoryMenu(idx) {
