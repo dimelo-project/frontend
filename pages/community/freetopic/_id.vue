@@ -7,25 +7,41 @@
         <ChipGeneral
           :height="34"
           :borderRadius="`rounded-4px`"
-          :chipText="`개발`"
+          :chipText="articleData['talk_category']"
           class="bg-green2 text-green1 py-5px px-2.5 txt-base-bold"
         />
         <h3 class="ml-3 txt-heading3">
-          파이썬 입문하려고 하는데 강의 추천해주세요!
+          {{ articleData["talk_title"] }}
         </h3>
       </div>
       <!-- author info & created date -->
       <div class="flex items-center mt-5">
         <!-- profile image -->
-        <div class="bg-gray-700 rounded-full w-9 h-9"></div>
+        <div
+          v-if="!articleData['user_imageUrl']"
+          class="bg-gray-700 rounded-full w-9 h-9"
+        ></div>
+        <img
+          v-else
+          style="width: 36px; height: 36px"
+          :src="articleData['user_imageUrl']"
+          class="object-cover rounded-full"
+          alt="프로필이미지"
+        />
         <!-- nickname -->
-        <span class="ml-2 txt-base-bold">코딩꿈나무</span>
+        <span class="ml-2 txt-base-bold">
+          {{ articleData["user_nickname"] }}
+        </span>
         <!-- career duration -->
-        <span class="ml-1.5">개발자 3년차</span>
+        <span class="ml-1.5">
+          {{ articleData["user_job"] }} {{ articleData["user_career"] }}
+        </span>
         <!-- created date -->
         <div class="ml-6 text-gray6">
-          <span>2021.11.23</span>
-          <span class="ml-1">03:03</span>
+          <span>{{ articleData["talk_createdAt"].split(" ")[0] }}</span>
+          <span class="ml-1">
+            {{ articleData["talk_createdAt"].split(" ")[1] }}
+          </span>
         </div>
       </div>
       <!-- divider -->
@@ -33,38 +49,48 @@
       <!-- content body -->
       <div class="mt-9">
         <p>
-          안녕하세요. 문과생이에요. 파이썬 강의 입문하려고 하는데 어떤 것이
-          좋은지 몰라서요.. 혹시 괜찮은 강의 추천좀 부탁드려도 될까요?
-          비전공자라서 알아듣기 쉬운 강의였으면 좋겠어요!!!
+          {{ articleData["talk_content"] }}
         </p>
       </div>
       <!-- divider -->
       <div class="mt-9"></div>
       <!-- number of comments -->
       <div class="mt-7">
-        <span class="txt-mid-bold">댓글 3</span>
+        <span class="txt-mid-bold">댓글 {{ articleData["num_comment"] }}</span>
       </div>
       <!-- comments list -->
-      <div class="mt-7" v-for="i in 3" :key="i">
+      <div class="mt-7" v-for="(comment, idx) in allCommentData" :key="idx">
         <!-- commentor info -->
         <div class="flex items-center">
           <!-- commentor profile image -->
-          <div class="bg-gray-300 rounded-full w-9 h-9"></div>
+          <div
+            v-if="!comment['user_imageUrl']"
+            class="bg-gray-300 rounded-full w-9 h-9"
+          ></div>
+          <img
+            style="width: 36px; height: 36px"
+            class="object-cover rounded-full"
+            :src="comment['user_imageUrl']"
+            alt="프로필이미지"
+          />
           <!-- commentor nickname -->
-          <span class="ml-2 txt-base-bold">코딩은둔고수</span>
+          <span class="ml-2 txt-base-bold">{{ comment["user_nickname"] }}</span>
           <!-- commentor career duration -->
-          <span class="ml-1.5 txt-base">개발자 13년차</span>
+          <span class="ml-1.5 txt-base"
+            >{{ comment["user_job"] }}{{ comment["user_career"] }}</span
+          >
         </div>
         <!-- comment body -->
         <div class="mt-2.5">
           <span>
-            ABC 선생님의 AB 강의 추천드립니다. 귀에 쏙쏙 들어오더라고요!! 공부
-            열심히 하시길 바랄게요 ㅎㅎ
+            {{ comment["comment_commentText"] }}
           </span>
         </div>
         <!-- comment created date -->
         <div class="mt-2">
-          <span class="text-gray1">2021.11.13</span>
+          <span class="text-gray1">
+            {{ comment["comment_updatedAt"].split(" ")[0] }}
+          </span>
         </div>
       </div>
       <!-- comment Box & submit button -->
@@ -76,9 +102,13 @@
           class="border border-gray2 rounded-8px py-2.5 px-3 w-full max-h-40"
         />
         <ButtonGeneral
-          class="w-18 h-11 txt-base-bold py-2.5 px-5 flex-shrink-0 ml-3.5"
-          :btnText="`등록`"
-        />
+          @click="uploadComment"
+          :width="72"
+          :height="44"
+          class="rounded-8px txt-base-bold text-white bg-orange1 hover:bg-orange2 py-2.5 px-5 flex-shrink-0 ml-3.5"
+        >
+          <span>등록</span>
+        </ButtonGeneral>
       </div>
     </div>
   </div>
@@ -87,6 +117,18 @@
 <script>
 export default {
   layout: "home",
+  async asyncData({ $axios, params }) {
+    // console.log(params.id);
+    const articleData = await $axios.$get(`/api/talks/${params.id}`);
+    console.log("articleData", articleData);
+
+    const allCommentData = await $axios.$get(
+      `/api/talks/${params.id}/comments`
+    );
+    console.log("allCommentData", allCommentData);
+
+    return { articleData, allCommentData };
+  },
   data() {
     return {
       rows: 1,
@@ -99,6 +141,24 @@ export default {
     },
     handleClick() {
       this.$router.go(-1);
+    },
+    async getAllCommentData() {
+      this.allCommentData = await this.$axios.$get(
+        `/api/talks/${this.$route.params.id}/comments`
+      );
+    },
+    async uploadComment() {
+      const response = await this.$axios.$post(
+        `/api/talks/${this.$route.params.id}/comments`,
+        {
+          commentText: this.userComment,
+        }
+      );
+      if (response) {
+        this.userComment = "";
+        this.getAllCommentData();
+      }
+      console.log(response);
     },
   },
 };
