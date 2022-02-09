@@ -118,13 +118,15 @@
           >
             <div class="flex items-center h-full">
               <div class="txt-mid">
-                <button
-                  :class="{ 'font-bold': isCommunityMenuOpened }"
-                  type="button"
-                  @mouseover="isCommunityMenuOpened = true"
+                <NuxtLink to="/community/freetopic">
+                  <button
+                    :class="{ 'font-bold': isCommunityMenuOpened }"
+                    type="button"
+                    @mouseover="isCommunityMenuOpened = true"
+                  >
+                    커뮤니티
+                  </button></NuxtLink
                 >
-                  커뮤니티
-                </button>
               </div>
 
               <div
@@ -139,7 +141,7 @@
                   <div class="py-1">
                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                     <div>
-                      <NuxtLink to="/">
+                      <NuxtLink to="/community/freetopic">
                         <p
                           class="whitespace-nowrap hover:font-bold hover:underline"
                         >
@@ -148,7 +150,7 @@
                       </NuxtLink>
                     </div>
                     <div class="mt-4">
-                      <NuxtLink to="/">
+                      <NuxtLink to="/community/study">
                         <p
                           class="whitespace-nowrap hover:font-bold hover:underline"
                         >
@@ -157,7 +159,7 @@
                       </NuxtLink>
                     </div>
                     <div class="mt-4">
-                      <NuxtLink to="/">
+                      <NuxtLink to="/community/sideproject">
                         <p
                           class="whitespace-nowrap hover:font-bold hover:underline"
                         >
