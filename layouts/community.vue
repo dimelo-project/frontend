@@ -2,7 +2,7 @@
   <div>
     <HomeLayerHeader />
     <div class="flex justify-center text-black1">
-      <div style="width: 1090px" class="flex mt-16">
+      <div style="width: 1090px" class="flex">
         <!-- left side navigation -->
         <div class="flex-shrink-0" style="width: 174px">
           <div class="sticky top-30 txt-mid">
@@ -23,7 +23,7 @@
         </div>
 
         <!-- right panel -->
-        <div class="flex-grow" style="padding-top: 82px">
+        <div class="flex-grow" style="margin-top: 82px">
           <nuxt />
         </div>
       </div>
