@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="select-none">
     <HomeLayerHeader />
     <div class="flex justify-center text-black1">
       <div style="width: 1090px" class="flex">
@@ -10,9 +10,6 @@
               <nuxt-link :to="category.pageLink">
                 <span
                   @click="cntCategoryIdx = category.id"
-                  :class="{
-                    'txt-mid-bold text-orange2': category.id === cntCategoryIdx,
-                  }"
                   class="cursor-pointer"
                 >
                   {{ category.title }}
@@ -41,17 +38,35 @@ export default {
         {
           id: 0,
           title: "자유주제",
-          pageLink: "/community/freetopic",
+          pageLink: {
+            path: "/community/freetopic",
+            query: {
+              perPage: 16,
+              page: 1,
+            },
+          },
         },
         {
           id: 1,
           title: "스터디",
-          pageLink: "/community/study",
+          pageLink: {
+            path: "/community/study",
+            query: {
+              perPage: 16,
+              page: 1,
+            },
+          },
         },
         {
           id: 2,
           title: "사이드 프로젝트",
-          pageLink: "/community/sideproject",
+          pageLink: {
+            path: "/community/sideproject",
+            query: {
+              perPage: 16,
+              page: 1,
+            },
+          },
         },
       ],
     };
@@ -62,5 +77,9 @@ export default {
 <style lang="postcss" scoped>
 .test {
   @apply border border-orange2;
+}
+a.nuxt-link-active {
+  font-weight: bold;
+  color: #f3732b;
 }
 </style>

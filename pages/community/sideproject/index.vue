@@ -340,7 +340,7 @@ export default {
       },
       {
         chipName: "Vue.js",
-        techName: "vue",
+        techName: "vuejs",
         selected: false,
       },
       {
@@ -512,6 +512,25 @@ export default {
       this.projectData = response;
 
       console.log("projectData", this.projectData);
+
+      //data처리
+      if (ongoing) {
+        this.cntActivationStatus = ongoing;
+      } else {
+        this.cntActivationStatus = "전체";
+      }
+
+      if (!positions) {
+        this.positionsData.forEach((elem) => {
+          elem.selected = false;
+        });
+      }
+
+      if (!skills) {
+        this.techStacks.forEach((elem) => {
+          elem.selected = false;
+        });
+      }
     },
   },
   methods: {
