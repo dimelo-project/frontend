@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-16 select-none">
     <!-- top content -->
     <div class="flex justify-center">
       <div style="width: 786px">
@@ -19,6 +19,7 @@
             :borderRadius="`rounded-4px`"
             :chipText="`초기화`"
             class="border border-gray2 px-2.5 py-2.5 mr-1 mb-3 bg-black1 text-white"
+            @click="clickResetChip"
           />
           <!-- tech buttons -->
           <ChipGeneral
@@ -28,7 +29,12 @@
             :imgGap="`mr-1`"
             :borderRadius="`rounded-4px`"
             :chipText="stack.chipName"
+            @click="clickTechChip(index)"
             class="border border-gray2 px-2.5 py-2.5 mr-1 mb-3"
+            :class="{
+              'bg-yellow1 text-black1 ': stack.selected,
+              'hover:bg-gray3 hover:border-gray3 ': !stack.selected,
+            }"
           />
           <!-- ET CETERA button -->
           <ChipGeneral
@@ -46,59 +52,80 @@
         <!-- filtering button & create study button -->
         <div class="flex items-center justify-between mt-10">
           <div>
-            <span class="font-bold text-orange2">전체</span>
-            <span class="ml-5">모집중</span>
-            <span class="ml-5">모집 완료</span>
+            <span
+              v-for="(status, index) in ativationStatus"
+              :key="index"
+              @click="clickActivationStatus(status.paramName)"
+              class="mr-5 cursor-pointer"
+              :class="{
+                'text-orange2 font-bold': status.name === cntActivationStatus,
+              }"
+            >
+              {{ status.name }}
+            </span>
           </div>
 
           <ButtonGeneral
             :width="145"
             :height="44"
-            :btnText="`스터디 모집하기`"
-            class="font-bold txt-base py-2.5"
-          />
+            class="font-bold text-white bg-orange1 hover:bg-orange2 txt-base py-2.5 rounded-8px"
+          >
+            <span>스터디 모집하기</span>
+          </ButtonGeneral>
         </div>
 
         <!-- cards list -->
         <div>
-          <div class="flex flex-wrap justify-between">
+          <div
+            v-if="studyData.length > 0"
+            class="flex flex-wrap justify-between"
+          >
             <!-- card -->
             <div
-              v-for="i in 10"
-              :key="i"
+              v-for="(study, index) in studyData"
+              :key="index"
               style="width: 378px; height: 363px"
               class="mt-12 bg-white"
             >
-              <NuxtLink :to="`/community/study/${i}`">
+              <NuxtLink :to="`/community/study/${study.study_id}`">
                 <div class="p-6">
                   <!-- active status chip & number of people -->
                   <div class="flex">
                     <ChipGeneral
                       :height="34"
                       :borderRadius="`rounded-8px`"
-                      :chipText="`모집중`"
-                      class="font-bold bg-green2 text-green3 py-1.5 px-2.5"
+                      :chipText="
+                        study.study_ongoing === '모집중'
+                          ? '모집중'
+                          : '모집 완료'
+                      "
+                      class="font-bold py-1.5 px-2.5"
+                      :class="{
+                        'text-green3 bg-green2':
+                          study.study_ongoing === '모집중',
+                        'text-white bg-gray8':
+                          study.study_ongoing === '모집 완료',
+                      }"
                     />
                     <ChipGeneral
                       :height="34"
                       :borderRadius="`rounded-8px`"
-                      :chipText="`4명`"
+                      :chipText="`${study.study_participant}명`"
                       class="bg-gray3 text-gray1 py-1.5 px-3 ml-2"
                     />
                   </div>
                   <!-- card title -->
                   <div class="mt-5">
                     <p class="txt-mid-bold">
-                      같이 스터디하실 분 구해요! 함께 해요! 초보이신 분도 환영
-                      :)
+                      {{ study.study_title }}
                     </p>
                   </div>
                   <!-- tech logos -->
                   <div class="flex mt-12">
                     <img
-                      v-for="i in 5"
-                      :key="`${i}-i`"
-                      src="~/assets/imgs/logo/tech/javascript48.png"
+                      v-for="skill in study.study_skill"
+                      :key="skill"
+                      :src="require(`~/assets/imgs/logo/tech/${skill}.png`)"
                       alt="스택"
                       class="mr-5"
                     />
@@ -108,11 +135,11 @@
                   <!-- nickname & date & number of comments -->
                   <div class="flex justify-between mt-4">
                     <div class="text-gray6">
-                      <span>내이름은 김삼순</span>
-                      <span>2022.1.14</span>
+                      <span>{{ study.user_nickname }}</span>
+                      <span>{{ study.project_createdAt }}</span>
                     </div>
                     <div class="text-gray1">
-                      <span>댓글 3</span>
+                      <span>댓글 {{ study.num_comment }}</span>
                     </div>
                   </div>
                 </div>
@@ -120,8 +147,16 @@
             </div>
           </div>
 
+          <div v-else class="flex items-center justify-center h-80">
+            <span class="txt-mid-bold">검색결과가 없습니다.</span>
+          </div>
+          <!-- pagination -->
           <div class="flex justify-center">
-            <PaginationGeneral class="my-16" />
+            <PaginationGeneral
+              :pageIdx="pageIdx"
+              :pageNum="totalPageNum"
+              class="my-16"
+            />
           </div>
         </div>
       </div>
@@ -132,99 +167,299 @@
 <script>
 export default {
   layout: "community",
-  data() {
+  middleware({ redirect, query }) {
+    if (Object.entries(query).length === 0) {
+      return redirect("/community/study", {
+        perPage: 16,
+        page: 1,
+      });
+    }
+  },
+  async asyncData({ $axios, query }) {
+    const { ongoing, skills, page } = query;
+
+    // 최종 param data 생성
+    let paramData = {};
+    if (ongoing) {
+      paramData["ongoing"] = ongoing;
+    }
+    if (skills) {
+      paramData["skills"] = skills;
+    }
+    paramData["perPage"] = 16;
+    paramData["page"] = page;
+
+    // param에 맞는 study data 요청
+    const studyData = await $axios.$get("/api/studies", {
+      params: paramData,
+    });
+
+    studyData.forEach((elem) => {
+      if (elem.study_skill) {
+        elem.study_skill = elem.study_skill.split(",");
+      }
+    });
+    // console.log("studyData", studyData);
+
+    // data값들 반환
+
+    let ativationStatus = [
+      {
+        id: 0,
+        name: "전체",
+        paramName: "전체",
+      },
+      {
+        id: 1,
+        name: "모집중",
+        paramName: "모집중",
+      },
+      {
+        id: 2,
+        name: "모집완료",
+        paramName: "모집완료",
+      },
+    ];
+
+    let techStacks = [
+      {
+        chipName: "JavaScript",
+        techName: "javascript",
+        selected: false,
+      },
+      {
+        chipName: "TypeScript",
+        techName: "typescript",
+        selected: false,
+      },
+      {
+        chipName: "React",
+        techName: "react",
+        selected: false,
+      },
+      {
+        chipName: "Vue.js",
+        techName: "vuejs",
+        selected: false,
+      },
+      {
+        chipName: "Java",
+        techName: "java",
+        selected: false,
+      },
+      {
+        chipName: "Spring",
+        techName: "spring",
+        selected: false,
+      },
+      {
+        chipName: "Php",
+        techName: "php",
+        selected: false,
+      },
+      {
+        chipName: "Go",
+        techName: "go",
+        selected: false,
+      },
+      {
+        chipName: "C++",
+        techName: "c++",
+        selected: false,
+      },
+      {
+        chipName: "Kotlin",
+        techName: "kotlin",
+        selected: false,
+      },
+      {
+        chipName: "Python",
+        techName: "python",
+        selected: false,
+      },
+      {
+        chipName: "Django",
+        techName: "django",
+        selected: false,
+      },
+      {
+        chipName: "Flutter",
+        techName: "flutter",
+        selected: false,
+      },
+      {
+        chipName: "Swift",
+        techName: "swift",
+        selected: false,
+      },
+      {
+        chipName: "Node.js",
+        techName: "nodejs",
+        selected: false,
+      },
+      {
+        chipName: "Next.js",
+        techName: "nextjs",
+        selected: false,
+      },
+      {
+        chipName: "Nuxt.js",
+        techName: "nuxtjs",
+        selected: false,
+      },
+      {
+        chipName: "Svelt",
+        techName: "svelt",
+        selected: false,
+      },
+      {
+        chipName: "Nest.js",
+        techName: "nestjs",
+        selected: false,
+      },
+      {
+        chipName: "Xd",
+        techName: "xd",
+        selected: false,
+      },
+      {
+        chipName: "Zeplin",
+        techName: "zeplin",
+        selected: false,
+      },
+      {
+        chipName: "Figma",
+        techName: "figma",
+        selected: false,
+      },
+    ];
+    let skillsArr = [];
+    if (skills) {
+      skillsArr = skills.split(",");
+      while (skillsArr.length > 0) {
+        let elem = skillsArr.pop();
+        for (let i = 0; i < techStacks.length; i++) {
+          if (elem === techStacks[i]["techName"]) {
+            techStacks[i]["selected"] = true;
+            continue;
+          }
+        }
+      }
+    }
+
+    let cntActivationStatus;
+    if (ongoing) {
+      cntActivationStatus = ongoing;
+    } else {
+      cntActivationStatus = "전체";
+    }
+
+    let pageIdx = page - 1;
+
+    let totalPageNum;
+    const totalPageNumResponse = await $axios.$get(`/api/studies/count`);
+    if (totalPageNumResponse) {
+      totalPageNum = Math.ceil(Number(totalPageNumResponse["num_study"]) / 16);
+    }
+
     return {
-      techStacks: [
-        {
-          chipName: "JavaScript",
-          techName: "javascript",
-        },
-        {
-          chipName: "TypeScript",
-          techName: "typescript",
-        },
-        {
-          chipName: "React",
-          techName: "react",
-        },
-        {
-          chipName: "Vue.js",
-          techName: "vue",
-        },
-        {
-          chipName: "Java",
-          techName: "java",
-        },
-        {
-          chipName: "Spring",
-          techName: "spring",
-        },
-        {
-          chipName: "Php",
-          techName: "php",
-        },
-        {
-          chipName: "Go",
-          techName: "go",
-        },
-        {
-          chipName: "C++",
-          techName: "c++",
-        },
-        {
-          chipName: "Kotlin",
-          techName: "kotlin",
-        },
-        {
-          chipName: "Python",
-          techName: "python",
-        },
-        {
-          chipName: "Django",
-          techName: "django",
-        },
-        {
-          chipName: "Flutter",
-          techName: "flutter",
-        },
-        {
-          chipName: "Swift",
-          techName: "swift",
-        },
-        {
-          chipName: "Node.js",
-          techName: "nodejs",
-        },
-        {
-          chipName: "Next.js",
-          techName: "nextjs",
-        },
-        {
-          chipName: "Nuxt.js",
-          techName: "nuxtjs",
-        },
-        {
-          chipName: "Svelt",
-          techName: "svelt",
-        },
-        {
-          chipName: "Nest.js",
-          techName: "nestjs",
-        },
-        {
-          chipName: "Xd",
-          techName: "xd",
-        },
-        {
-          chipName: "Zeplin",
-          techName: "zeplin",
-        },
-        {
-          chipName: "Figma",
-          techName: "figma",
-        },
-      ],
+      studyData,
+      ativationStatus,
+      techStacks,
+      cntActivationStatus,
+      pageIdx,
+      totalPageNum,
     };
+  },
+  data() {
+    return {};
+  },
+  watch: {
+    async $route(to, from) {
+      const { ongoing, skills } = to.query;
+
+      // 최종 param data 생성
+      let paramData = {};
+      if (ongoing) {
+        paramData["ongoing"] = ongoing;
+      }
+      if (skills) {
+        paramData["skills"] = skills;
+      }
+      paramData["perPage"] = 16;
+      paramData["page"] = 1;
+
+      // param에 맞는 study data 요청
+      let response = await this.$axios.$get("/api/studies", {
+        params: paramData,
+      });
+
+      response.forEach((elem) => {
+        if (elem.study_skill) {
+          elem.study_skill = elem.study_skill.split(",");
+        }
+      });
+      this.studyData = response;
+
+      //data처리
+      if (ongoing) {
+        this.cntActivationStatus = ongoing;
+      } else {
+        this.cntActivationStatus = "전체";
+      }
+
+      if (!skills) {
+        this.techStacks.forEach((elem) => {
+          elem.selected = false;
+        });
+      }
+    },
+  },
+  methods: {
+    async routerPushWithNewQuery() {
+      // skills query data 생성
+      let selectedSkills = this.techStacks
+        .filter((elem) => elem.selected === true)
+        .map((elem) => elem.techName)
+        .join(",");
+
+      // 최종 query data 생성
+      let queryData = {};
+      if (this.cntActivationStatus !== "전체") {
+        queryData["ongoing"] = this.cntActivationStatus;
+      }
+      if (selectedSkills !== "") {
+        queryData["skills"] = selectedSkills;
+      }
+      queryData["perPage"] = 16;
+      queryData["page"] = this.pageIdx + 1;
+
+      // query payload와 함께 router push
+      this.$router.push({
+        path: "/community/study",
+        query: queryData,
+      });
+    },
+    clickTechChip(index) {
+      this.pageIdx = 0;
+      this.techStacks[index]["selected"] = !this.techStacks[index]["selected"];
+      this.routerPushWithNewQuery();
+    },
+    clickResetChip() {
+      // this.positions.forEach((elem) => {
+      //   elem.selected = false;
+      // });
+      this.pageIdx = 0;
+      this.techStacks.forEach((elem) => {
+        elem.selected = false;
+      });
+      this.routerPushWithNewQuery();
+    },
+    clickActivationStatus(name) {
+      this.pageIdx = 0;
+      this.cntActivationStatus = name;
+      this.routerPushWithNewQuery();
+    },
   },
 };
 </script>
