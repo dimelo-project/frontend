@@ -146,34 +146,38 @@
                 <span class="text-gray1 txt-sub">{{
                   `${Number(lecture["course_price"]).toLocaleString()}원`
                 }}</span>
-                <NuxtLink :to="lecture['course_siteUrl']">
+                <a :href="lecture['course_siteUrl']" target="_blank">
                   <span
                     class="ml-1 underline cursor-pointer txt-sub text-gray1"
                   >
                     보러가기
                   </span>
-                </NuxtLink>
+                </a>
               </div>
 
               <div class="flex items-center">
                 <SvgHeartOutline class="cursor-pointer" />
 
-                <ButtonGeneral
-                  v-if="Number(lecture['num_review']) === 0"
-                  :width="172"
-                  :height="32"
-                  class="ml-3 border text-gray6 txt-base rounded-4px border-gray2"
-                >
-                  <span>아직 리뷰가 없습니다</span>
-                </ButtonGeneral>
-                <ButtonGeneral
-                  v-else
-                  :width="172"
-                  :height="32"
-                  class="ml-3 text-white txt-base rounded-4px bg-orange1"
-                >
-                  <span>{{ lecture["num_review"] }}개의 리뷰 보기</span>
-                </ButtonGeneral>
+                <div v-if="Number(lecture['num_review']) === 0">
+                  <ButtonGeneral
+                    :width="172"
+                    :height="32"
+                    class="ml-3 border pointer-events-none text-gray6 txt-base rounded-4px border-gray2"
+                  >
+                    <span>아직 리뷰가 없습니다</span>
+                  </ButtonGeneral>
+                </div>
+                <div v-else>
+                  <NuxtLink :to="`review/${lecture['course_id']}`">
+                    <ButtonGeneral
+                      :width="172"
+                      :height="32"
+                      class="ml-3 text-white txt-base rounded-4px bg-orange1"
+                    >
+                      <span>{{ lecture["num_review"] }}개의 리뷰 보기</span>
+                    </ButtonGeneral>
+                  </NuxtLink>
+                </div>
               </div>
             </div>
           </div>
@@ -330,6 +334,8 @@ export default {
     }
 
     currentPageNum = Math.ceil(Number(countResponse["num_course"]) / 17);
+
+    console.log(lectureData);
 
     return {
       lectureData,

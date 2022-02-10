@@ -110,7 +110,12 @@
 
               <div class="flex items-center">
                 <div
-                  v-if="lecture['course_liked'] === 'true'"
+                  v-if="
+                    $auth &&
+                    $auth.user &&
+                    lecture['course_liked'] &&
+                    lecture['course_liked'] === 'true'
+                  "
                   @click="
                     removeHeartToLecture(lectureIdx, lecture['course_id'])
                   "
@@ -258,13 +263,17 @@
               <!-- update, delete button & date & recommend button -->
               <div class="flex items-center justify-end mt-4">
                 <span
-                  v-if="review['user_id'] === $auth.user.id"
+                  v-if="
+                    $auth && $auth.user && review['user_id'] === $auth.user.id
+                  "
                   class="underline cursor-pointer txt-sub text-gray1"
                 >
                   수정
                 </span>
                 <span
-                  v-if="review['user_id'] === $auth.user.id"
+                  v-if="
+                    $auth && $auth.user && review['user_id'] === $auth.user.id
+                  "
                   class="ml-4 underline cursor-pointer txt-sub text-gray1"
                 >
                   삭제

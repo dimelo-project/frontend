@@ -1,37 +1,54 @@
 <template>
-  <div>
+  <div class="select-none mb-96">
     <!-- top -- lecture info -->
     <div class="flex justify-center">
       <div class="flex items-center test" style="width: 990px; height: 149px">
         <!-- left content -->
-        <div
-          class="text-white bg-black rounded-8px"
-          style="width: 69px; height: 69px"
-        >
-          img
+        <div>
+          <img
+            :src="cardImageLogo(courseData['course_platform'])"
+            alt="강의사이트로고"
+            style="width: 69px; height: 69px"
+            draggable="false"
+          />
         </div>
         <!-- right content -->
         <div class="ml-8">
           <div>
             <span class="txt-mid-bold">
-              파이썬입문과 크롤링기초 부트캠프 (2021 업데이트) [쉽게! 견고한
-              자료까지!]
+              {{ courseData["course_title"] }}
             </span>
           </div>
-          <div class="flex items-center mt-2.5">
+          <div class="flex items-end mt-2.5">
             <!-- star rate -->
             <div class="flex items-center">
-              <starRate :score="`3`" />
-              <span class="ml-1 txt-base-bold">3.5</span>
-              <span class="txt-mini">(4)</span>
+              <starRate :score="courseData['course_avg']" />
+              <span class="ml-1 txt-base-bold">
+                {{ courseData["course_avg"] }}
+              </span>
+              <span class="txt-mini">({{ courseData["num_review"] }})</span>
             </div>
             <!-- tutor name -->
-            <span class="ml-6 txt-sub-bold">강사</span>
-            <span class="ml-1 underline txt-sub-bold">김댕댕</span>
+            <div>
+              <span class="ml-6 txt-sub-bold">강사</span>
+            </div>
+            <NuxtLink :to="`/tutorinfo/${courseData['instructor_id']}`">
+              <span class="ml-1 underline txt-sub-bold">
+                {{ courseData["instructor_name"] }}
+              </span>
+            </NuxtLink>
             <!-- lecture site name -->
-            <span class="ml-5 txt-sub text-gray1">강의사이트명</span>
+            <div>
+              <span class="ml-5 txt-sub text-gray1">
+                {{ courseData["course_platform"] }}
+              </span>
+            </div>
             <!-- lecture price -->
-            <span class="ml-1 txt-usb text-gray1">00,000원</span>
+            <div>
+              <span class="ml-1 txt-usb text-gray1">
+                {{ courseData["course_price"].toLocaleString() }}원
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -45,7 +62,8 @@
           <!-- review analysis -->
           <div class="mt-12">
             <span class="txt-base-bold">
-              총 <span class="text-orange2">4개</span>의 리뷰가 있습니다.
+              총 <span class="text-orange2">{{ totalNumOfReview }}개</span>의
+              리뷰가 있습니다.
             </span>
 
             <div class="border mt-7 border-yellow1 rounded-4px py-7">
@@ -55,27 +73,26 @@
                 </div>
 
                 <div class="flex-shrink-0">
-                  <div v-for="i in 4" :key="i" class="flex items-center mb-3">
-                    <div>
-                      <img
-                        src="~/assets/imgs/icon/ellipse.png"
-                        style="width: 6px; height: 6px"
-                        alt=""
-                      />
-                    </div>
-                    <div style="width: 96px" class="ml-2 txt-sub">
-                      강의소개와 일치
-                    </div>
-                    <div>
-                      <img
-                        class="ml-3 border border-black"
-                        src="~/assets/imgs/icon/progressbar.png"
-                        style="width: 172px"
-                        alt=""
-                      />
-                    </div>
-                    <SvgReviewStar class="ml-1" />
-                    <span class="ml-1 txt-sub-bold">3.4</span>
+                  <div
+                    v-for="(item, idx) in questionList"
+                    :key="idx"
+                    class="flex items-center"
+                    :class="{ 'mb-2': idx !== 3 }"
+                  >
+                    <img
+                      src="~/assets/imgs/icon/ellipse.png"
+                      style="width: 6px; height: 6px"
+                      draggable="false"
+                    />
+                    <span class="ml-2 txt-sub" style="width: 96px">
+                      {{ item.question }}
+                    </span>
+                    <PlainProgressBar
+                      class="ml-3"
+                      :score="Number(item.score)"
+                    />
+                    <SvgReviewStar class="ml-2" />
+                    <span class="ml-1 txt-sub-bold">{{ item.score }}</span>
                   </div>
                 </div>
 
@@ -84,7 +101,7 @@
                 >
                   <SvgReviewStar />
                   <div class="text-gray1">평균</div>
-                  <div class="txt-heading3">3.5</div>
+                  <div class="txt-heading3">{{ scoreData["avg"] }}</div>
                 </div>
               </div>
             </div>
@@ -95,16 +112,32 @@
             <!-- review filtering butotn -->
             <div class="flex justify-between mt-13">
               <span class="txt-mid-bold"
-                >상세 리뷰<span class="ml-1 txt-mini">(4)</span></span
+                >상세 리뷰<span class="ml-1 txt-mini"
+                  >({{ totalNumOfReview }})</span
+                ></span
               >
-              <div>
-                <span v-for="i in 4" :key="i" class="ml-2 text-gray1"
-                  >추천순</span
+              <div class="txt-sub">
+                <span
+                  v-for="(menu, menuIdx) in filteringMenu"
+                  :key="menuIdx"
+                  @click="
+                    getFilteredReviewData(menu.sortWay, menu.orderWay, menuIdx)
+                  "
+                  class="ml-2 cursor-pointer"
+                  :class="{
+                    'txt-sub-bold text-orange2':
+                      menuIdx === selectedFilteringMenuIdx,
+                  }"
                 >
+                  {{ menu.name }}
+                </span>
               </div>
             </div>
             <!-- review card data list -->
-            <div v-for="i in 10" :key="i">
+            <div
+              v-for="(review, reviewDataIdx) in reviewData"
+              :key="reviewDataIdx"
+            >
               <!-- divider -->
               <div class="mt-4 border border-gray2"></div>
               <!-- card data -->
@@ -113,26 +146,38 @@
                 <div class="flex flex-col flex-shrink-0">
                   <!-- user profile -->
                   <div class="flex">
+                    <img
+                      v-if="review['user_imageUrl']"
+                      :src="review['user_imageUrl']"
+                      alt=""
+                      class="object-contain rounded-full"
+                      style="width: 48px; height: 48px"
+                    />
                     <div
+                      v-else
                       class="rounded-full bg-gray1"
                       style="width: 48px; height: 48px"
                     ></div>
                     <div class="ml-2.5">
                       <div>
-                        <span class="txt-sub-bold">닉네임</span>
+                        <span class="txt-sub-bold">{{
+                          review["user_nickname"]
+                        }}</span>
                       </div>
                       <div class="mt-1">
-                        <span class="txt-sub">안드로이드 개발자</span>
+                        <span class="txt-sub">{{ review["user_job"] }}</span>
                       </div>
                       <div>
-                        <span class="txt-sub">8년차</span>
+                        <span class="txt-sub">{{ review["user_career"] }}</span>
                       </div>
                     </div>
                   </div>
                   <!-- user review rate -->
                   <div class="flex mt-6">
-                    <StarRate :size="20" :score="`5`" />
-                    <span class="ml-1 txt-base-bold">5.0</span>
+                    <StarRate :size="20" :score="review['review_avg']" />
+                    <span class="ml-1 txt-base-bold">{{
+                      review["review_avg"]
+                    }}</span>
                   </div>
                 </div>
                 <!-- pros and cons -->
@@ -140,44 +185,75 @@
                   <div>
                     <span class="text-orange2 txt-sub-bold">장점</span>
                     <p class="txt-sub mt-0.5">
-                      실무와 연관이 깊고, 실용적이고 실무에서 쓰일법한 지식들을
-                      골라서 강의해주신게 인상적이었습니다. 또한 강의를 함께
-                      듣는 수강생끼리 협업이나 소통을 하도록 분위기를
-                      만들어주셔서 공부할 때 도움을 많이 받았습니다
+                      {{ review["review_pros"] }}
                     </p>
                   </div>
                   <div class="mt-4">
                     <span class="text-orange2 txt-sub-bold">단점</span>
                     <p class="txt-sub mt-0.5">
-                      강의 전체 횟수와 시간이 조금 루즈했던 것 같습니다.
-                      어느정도 공부를 해본 사람보다는 아예 입문자가 수강하면
-                      괜찮을 것 같습니다. 그리고 자료를 공유해주셨는데 그 자료가
-                      좀 오래된 버전이었다는 사실을 뒤늦게 알았습니다. 아마
-                      강사님도 모르셨던 것 같았습니다.
+                      {{ review["review_cons"] }}
                     </p>
                   </div>
                 </div>
               </div>
               <!-- udpate & remove button & date & recommend button -->
               <div class="flex items-center justify-end mt-5">
-                <span class="underline text-gray1 txt-sub">수정</span>
-                <span class="ml-4 underline text-gray1 txt-sub">삭제</span>
-                <span class="ml-8 text-gray1 txt-sub">2022-01-26</span>
-                <button
-                  class="flex items-center px-3 ml-3 border border-gray2 rounded-4px py-7px txt-sub"
+                <span
+                  v-if="
+                    $auth && $auth.user && review['user_id'] === $auth.user.id
+                  "
+                  class="underline cursor-pointer text-gray1 txt-sub"
+                  @click="openReviewModal('update', review['review_id'])"
+                  >수정</span
                 >
-                  이 리뷰가 도움됨 <span class="ml-1 txt-sub-bold">5</span>
-                  <img
-                    src="~/assets/imgs/icon/check.png"
-                    class="ml-2"
-                    alt="확인"
-                  />
-                </button>
+                <span
+                  v-if="
+                    $auth && $auth.user && review['user_id'] === $auth.user.id
+                  "
+                  class="ml-4 underline cursor-pointer text-gray1 txt-sub"
+                  >삭제</span
+                >
+                <span class="ml-8 text-gray1 txt-sub">{{
+                  review["review_createdAt"]
+                }}</span>
+
+                <ButtonGeneral
+                  v-if="review['review_helped'] === 'true'"
+                  @click="
+                    removeHelpedToReview(reviewDataIdx, review['review_id'])
+                  "
+                  :width="139"
+                  :height="32"
+                  class="ml-3 border border-orange2 rounded-4px"
+                >
+                  <span class="txt-mini">이 리뷰가 도움됨</span>
+                  <span class="ml-1 txt-mini-bold text-orange2">
+                    {{ review["num_help"] }}
+                  </span>
+                  <SvgCheck class="ml-1" :color="`#F3732B`" />
+                </ButtonGeneral>
+                <ButtonGeneral
+                  v-else
+                  @click="
+                    giveHelpedToReview(reviewDataIdx, review['review_id'])
+                  "
+                  :width="139"
+                  :height="32"
+                  class="ml-3 border border-gray2 rounded-4px"
+                >
+                  <span class="txt-mini">이 리뷰가 도움됨</span>
+                  <span class="ml-1 txt-mini-bold">
+                    {{ review["num_help"] }}
+                  </span>
+                  <SvgCheck class="ml-1" :color="`#E0E1E5`" />
+                </ButtonGeneral>
               </div>
             </div>
 
             <!-- see more button -->
             <ButtonGeneral
+              v-if="totalNumOfReview !== reviewData.length"
+              @click="seeMoreReviewData"
               :large="true"
               class="w-full py-4 mt-4 border-none text-gray1 rounded-8px bg-gray3 mb-14"
             >
@@ -201,21 +277,23 @@
                   style="width: 24px; height: 24px"
                 />
                 <div class="flex flex-col ml-2">
-                  <span>패스트캠퍼스</span>
-                  <span>40,000원</span>
+                  <span>{{ courseData["course_platform"] }}</span>
+                  <span>{{ courseData["course_price"].toLocaleString() }}</span>
                 </div>
               </div>
-              <ButtonGeneral
-                class="py-2.5 px-9 txt-base-bold bg-black1 text-white mt-5 rounded-8px"
+              <a :href="courseData['course_siteUrl']" target="_blank">
+                <ButtonGeneral
+                  class="py-2.5 px-9 txt-base-bold bg-black1 text-white mt-5 rounded-8px"
+                >
+                  <span>강의 보러가기</span>
+                </ButtonGeneral></a
               >
-                <span>강의 보러가기</span>
-              </ButtonGeneral>
             </div>
             <!-- create review button -->
             <ButtonGeneral
               :color="`orange1`"
               class="text-white px-9 py-2.5 mt-7 txt-base-bold rounded-4px bg-orange2"
-              @click="isModalOpened = !isModalOpened"
+              @click="openReviewModal('create')"
             >
               <span>리뷰 작성</span>
             </ButtonGeneral>
@@ -223,14 +301,20 @@
             <ButtonGeneral
               :width="200"
               class="py-2.5 mt-2 text-gray1 rounded-4px border border-gray2"
-              @click="hearted = !hearted"
+              @click="toggleHeartToLecture"
             >
-              <span v-if="!hearted">관심강의 추가</span>
+              <span v-if="courseData['course_liked'] === 'false'">
+                관심강의 추가
+              </span>
               <span v-else>관심강의 해제</span>
               <SvgHeartOutline
                 class="ml-1"
-                :fill="hearted ? '#FF6B6B' : `white`"
-                :color="hearted ? 'none' : '#868E96'"
+                :fill="
+                  courseData['course_liked'] === 'true' ? '#FF6B6B' : `white`
+                "
+                :color="
+                  courseData['course_liked'] === 'true' ? 'none' : '#868E96'
+                "
               />
             </ButtonGeneral>
           </div>
@@ -242,6 +326,7 @@
     <MultiSteps
       :isModalOpened="isModalOpened"
       @modalClose="isModalOpened = false"
+      @reviewUpload="uploadReview"
     />
   </div>
 </template>
@@ -249,11 +334,312 @@
 <script>
 export default {
   layout: "home",
+  async asyncData({ $axios, params }) {
+    let courseData, scoreData, reviewData, totalNumOfReview;
+    try {
+      // 해당 강의정보 가져오기
+      const courseDataResponse = await $axios.$get(`/api/courses/${params.id}`);
+      if (courseDataResponse) {
+        courseData = courseDataResponse;
+      }
+      console.log("courseData", courseData);
+
+      const totalNumOfReviewResponse = await $axios.$get(
+        `/api/reviews/courses/${params.id}/count`
+      );
+      totalNumOfReview = Number(totalNumOfReviewResponse["num_review"]);
+      console.log("totalNumOfReview", totalNumOfReview);
+
+      // 해당 강의의 평점 가져오기
+      const scoreDataResponse = await $axios.$get(
+        `/api/reviews/courses/${params.id}/avg`
+      );
+      if (scoreDataResponse) {
+        scoreData = scoreDataResponse;
+      }
+      console.log("scoreData", scoreData);
+
+      // 해당 강의의 리뷰들 가져오기
+      const reviewDataResponse = await $axios.$get(
+        `/api/reviews/courses/${params.id}?perPage=10&page=1&sort=help&order=DESC`
+      );
+      if (reviewDataResponse) {
+        reviewData = reviewDataResponse;
+      }
+      console.log("reviewData", reviewData);
+    } catch (err) {
+      console.error(err.response);
+    }
+
+    // 점수 데이터 생성
+    let questionList = [
+      {
+        question: "강의소개와 일치",
+      },
+      {
+        question: "전달력",
+      },
+      {
+        question: "업데이트 반영",
+      },
+      {
+        question: "가성비",
+      },
+    ];
+    questionList.forEach((elem, idx) => {
+      elem["score"] = scoreData[`q${idx + 1}`];
+    });
+    console.log("questionList", questionList);
+
+    return {
+      courseData,
+      scoreData,
+      reviewData,
+      questionList,
+      totalNumOfReview,
+    };
+  },
   data() {
     return {
       hearted: true,
       isModalOpened: false,
+      reviewMode: null,
+      updateReviewIdx: null,
+      filteringMenu: [
+        {
+          id: 0,
+          name: "추천순",
+          sortWay: "help",
+          orderWay: "DESC",
+        },
+        {
+          id: 1,
+          name: "최신순",
+          sortWay: "date",
+          orderWay: "DESC",
+        },
+        {
+          id: 2,
+          name: "별점높은순",
+          sortWay: "avg",
+          orderWay: "DESC",
+        },
+        {
+          id: 3,
+          name: "별점낮은순",
+          sortWay: "avg",
+          orderWay: "ASC",
+        },
+      ],
+      selectedFilteringMenuIdx: 0,
+      currentReviewPage: 2,
     };
+  },
+  methods: {
+    cardImageLogo(siteName) {
+      let imgName = "";
+
+      if (siteName === "탈잉") {
+        imgName = "taling";
+      } else if (siteName === "인프런") {
+        imgName = "inflearn";
+      } else if (siteName === "유데미") {
+        imgName = "udemy";
+      } else if (siteName === "클래스101") {
+        imgName = "class101";
+      } else if (siteName === "리메인") {
+        imgName = "remain";
+      } else if (siteName === "패스트캠퍼스") {
+        imgName = "fastcampus";
+      } else if (siteName === "프로그래머스") {
+        imgName = "programmers";
+      } else if (siteName === "코드잇") {
+        imgName = "codeit";
+      } else {
+        imgName = "etc";
+      }
+
+      return require(`assets/imgs/logo/lecturesite/${imgName}.png`);
+    },
+    async getFilteredReviewData(sortWay, orderWay, menuIdx) {
+      try {
+        const response = await this.$axios.$get(
+          `/api/reviews/courses/${this.$route.params.id}`,
+          {
+            params: {
+              sort: sortWay,
+              order: orderWay,
+              perPage: 10,
+              page: 1,
+            },
+          }
+        );
+        if (response) {
+          this.reviewData = response;
+
+          this.currentReviewPage = 2;
+        }
+        this.selectedFilteringMenuIdx = menuIdx;
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    async giveHelpedToReview(reviewDataIdx, review_id) {
+      try {
+        const response = await this.$axios.$post(
+          `/api/reviews/help/${review_id}`
+        );
+        if (response) {
+          const num_helped = Number(this.reviewData[reviewDataIdx]["num_help"]);
+          this.reviewData[reviewDataIdx]["num_help"] = String(num_helped + 1);
+          this.reviewData[reviewDataIdx]["review_helped"] = "true";
+        }
+      } catch (err) {
+        console.error(err.response);
+      }
+    },
+    async removeHelpedToReview(reviewDataIdx, review_id) {
+      try {
+        const response = await this.$axios.$delete(
+          `/api/reviews/help/${review_id}`
+        );
+        if (response) {
+          const num_helped = Number(this.reviewData[reviewDataIdx]["num_help"]);
+          this.reviewData[reviewDataIdx]["num_help"] = String(num_helped - 1);
+          this.reviewData[reviewDataIdx]["review_helped"] = "false";
+        }
+      } catch (err) {
+        console.error(err.response);
+      }
+    },
+    async toggleHeartToLecture() {
+      if (this.courseData["course_liked"] === "false") {
+        const response = await this.$axios.$post(
+          `/api/courses/likes/${this.$route.params.id}`
+        );
+
+        if (response) {
+          this.courseData = Object.assign({}, this.courseData, {
+            course_liked: "true",
+          });
+        }
+      } else {
+        const response = await this.$axios.$delete(
+          `/api/courses/likes/${this.$route.params.id}`
+        );
+
+        if (response) {
+          this.courseData = Object.assign({}, this.courseData, {
+            course_liked: "false",
+          });
+        }
+      }
+    },
+    async openReviewModal(mode, review_id) {
+      this.isModalOpened = !this.isModalOpened;
+      this.reviewMode = mode;
+      if (mode === "update" && review_id) {
+        this.updateReviewIdx = review_id;
+
+        const getReviewDataResponse = await this.$axios.$get(
+          `/api/reviews/courses/${this.$route.params.id}/${this.updateReviewIdx}`
+        );
+
+        const { q1, q2, q3, q4, pros, cons } = getReviewDataResponse;
+
+        this.$store.commit("changeQ1score", q1);
+        this.$store.commit("changeQ2score", q2);
+        this.$store.commit("changeQ3score", q3);
+        this.$store.commit("changeQ4score", q4);
+        this.$store.commit("changeQ5pros", pros);
+        this.$store.commit("changeQ5cons", cons);
+      }
+    },
+    async uploadReview() {
+      if (this.reviewMode === "create") {
+        try {
+          console.log("create!!!");
+          const response = await this.$axios.$post(
+            `/api/reviews/courses/${this.$route.params.id}`,
+            {
+              q1: this.$store.state.q1score,
+              q2: this.$store.state.q2score,
+              q3: this.$store.state.q3score,
+              q4: this.$store.state.q4score,
+              pros: this.$store.state.q5pros,
+              cons: this.$store.state.q5cons,
+            }
+          );
+
+          if (response) {
+            this.getAllMyReview();
+          }
+        } catch (err) {
+          console.error(err.response);
+        }
+      } else if (this.reviewMode === "update") {
+        try {
+          console.log("update!");
+
+          const updateReviewResponse = await this.$axios.$patch(
+            `/api/reviews/courses/${this.$route.params.id}/${this.updateReviewIdx}`,
+            {
+              q1: this.$store.state.q1score,
+              q2: this.$store.state.q2score,
+              q3: this.$store.state.q3score,
+              q4: this.$store.state.q4score,
+              pros: this.$store.state.q5pros,
+              cons: this.$store.state.q5cons,
+            }
+          );
+
+          if (updateReviewResponse) {
+            this.getAllMyReview();
+          }
+        } catch (err) {
+          console.error(err.response);
+        }
+      }
+
+      this.isModalOpened = false;
+      this.reviewMode = null;
+    },
+    async getAllMyReview() {
+      this.reviewData = await this.$axios.$get(
+        `/api/reviews/courses/${this.$route.params.id}`,
+        {
+          params: {
+            perPage: 10,
+            page: 1,
+            sort: this.filteringMenu[this.selectedFilteringMenuIdx]["sortWay"],
+            order:
+              this.filteringMenu[this.selectedFilteringMenuIdx]["orderWay"],
+          },
+        }
+      );
+    },
+    async seeMoreReviewData() {
+      try {
+        const response = await this.$axios.$get(
+          `/api/reviews/courses/${this.$route.params.id}`,
+          {
+            params: {
+              perPage: 3,
+              page: this.currentReviewPage,
+              sort: this.filteringMenu[this.selectedFilteringMenuIdx][
+                "sortWay"
+              ],
+              order:
+                this.filteringMenu[this.selectedFilteringMenuIdx]["orderWay"],
+            },
+          }
+        );
+        this.reviewData = [...this.reviewData, ...response];
+        this.currentReviewPage += 1;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 };
 </script>

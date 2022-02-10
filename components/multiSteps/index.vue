@@ -7,7 +7,7 @@
       <!-- close button -->
       <div
         class="absolute top-0 right-0 translate-x-full cursor-pointer"
-        @click="$emit('modalClose')"
+        @click="closeModal"
       >
         <SvgCloseWindow :color="`white`" class="ml-4" />
       </div>
@@ -77,6 +77,16 @@ export default {
   methods: {
     submit() {
       this.submitted = true;
+    },
+    closeModal() {
+      this.$store.commit("changeQ1score", "");
+      this.$store.commit("changeQ2score", "");
+      this.$store.commit("changeQ3score", "");
+      this.$store.commit("changeQ4score", "");
+      this.$store.commit("changeQ5pros", "");
+      this.$store.commit("changeQ5cons", "");
+
+      this.$emit("modalClose");
     },
   },
 };
