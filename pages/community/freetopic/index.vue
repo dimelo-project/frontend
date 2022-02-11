@@ -2,8 +2,8 @@
   <div class="flex justify-center select-none">
     <div style="width: 786px">
       <!-- category menu & post button -->
-      <div class="flex items-center justify-between">
-        <div class="mt-16">
+      <div class="flex items-center justify-between mt-16">
+        <div class="">
           <span
             v-for="(menu, idx) in categoryMenu"
             @click="clickCategoryMenu(idx)"
@@ -16,13 +16,15 @@
         </div>
 
         <div>
-          <ButtonGeneral
-            :width="88"
-            :height="44"
-            :btnText="`글쓰기`"
-            :small="true"
-            class="font-bold txt-base"
-          />
+          <NuxtLink to="/community/freetopic/post">
+            <ButtonGeneral
+              :width="88"
+              :height="44"
+              class="font-bold text-white rounded-8px txt-base bg-orange1 hover:bg-orange2"
+            >
+              <span>글쓰기</span>
+            </ButtonGeneral></NuxtLink
+          >
         </div>
       </div>
 

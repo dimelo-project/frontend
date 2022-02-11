@@ -5,7 +5,7 @@
       <div style="width: 1090px" class="flex">
         <!-- left side navigation -->
         <div class="flex-shrink-0" style="width: 174px">
-          <div class="sticky top-30 txt-mid">
+          <div class="sticky txt-mid" style="top: calc(82px + 4rem)">
             <div v-for="category in categorys" :key="category.id" class="mt-8">
               <nuxt-link :to="category.pageLink">
                 <span
