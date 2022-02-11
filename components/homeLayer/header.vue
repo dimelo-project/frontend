@@ -29,7 +29,10 @@
                   }"
                 >
                   <button
-                    :class="{ 'font-bold': isReviewMenuOpened }"
+                    :class="{
+                      'font-bold': isReviewMenuOpened,
+                      'font-bold': $route.path === '/lecture',
+                    }"
                     type="button"
                     @mouseover="isReviewMenuOpened = true"
                   >
@@ -120,13 +123,16 @@
               <div class="txt-mid">
                 <NuxtLink to="/community/freetopic">
                   <button
-                    :class="{ 'font-bold': isCommunityMenuOpened }"
+                    :class="{
+                      'font-bold': isCommunityMenuOpened,
+                      'font-bold': $route.path.includes('/community'),
+                    }"
                     type="button"
                     @mouseover="isCommunityMenuOpened = true"
                   >
                     커뮤니티
-                  </button></NuxtLink
-                >
+                  </button>
+                </NuxtLink>
               </div>
 
               <div
@@ -333,6 +339,9 @@ export default {
       isNotiMenuOpened: false,
       isProfileBtnOpened: false,
     };
+  },
+  mounted() {
+    console.log(this.$route.path);
   },
   methods: {
     async onLogout() {
