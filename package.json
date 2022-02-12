@@ -11,6 +11,9 @@
   "dependencies": {
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.13.6",
+    "@tiptap/extension-placeholder": "^2.0.0-beta.48",
+    "@tiptap/starter-kit": "^2.0.0-beta.183",
+    "@tiptap/vue-2": "^2.0.0-beta.77",
     "core-js": "^3.19.3",
     "nuxt": "^2.15.8",
     "vue": "^2.6.14",
