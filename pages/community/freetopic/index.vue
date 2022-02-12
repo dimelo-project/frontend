@@ -55,14 +55,14 @@
       >
         <div class="hover:bg-gray4 rounded-4px outline-magic">
           <nuxt-link :to="`/community/freetopic/${topic['talk_id']}`">
-            <div class="flex items-center">
+            <div class="flex items-start">
               <ChipGeneral
                 v-if="currentMenuIdx === 0"
                 :width="46"
                 :height="37"
                 :borderRadius="`rounded-8px`"
                 :chipText="topic['talk_category']"
-                class="font-bold pointer-events-none py-8px px-10px txt-sub text-green3 bg-green2"
+                class="flex-shrink-0 font-bold pointer-events-none py-8px px-10px txt-sub text-green3 bg-green2"
               />
               <p
                 class="txt-mid-bold"
@@ -72,11 +72,8 @@
               </p>
             </div>
 
-            <div class="mt-3">
-              <span>
-                {{ topic["talk_content"] }}
-              </span>
-            </div>
+            <!-- prettier-ignore -->
+            <div class="mt-3 break-words whitespace-pre-line ellipse-line">{{ topic["talk_content"] }}</div>
 
             <div class="mt-3 text-gray6">
               <span> {{ topic["user_nickname"] }}</span>
@@ -396,5 +393,12 @@ export default {
 .outline-magic:hover {
   background-color: #f1f3f5;
   outline: 8px solid #f1f3f5;
+}
+.ellipse-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
 }
 </style>

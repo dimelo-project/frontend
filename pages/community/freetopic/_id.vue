@@ -3,16 +3,18 @@
     <PageMoveBtn :btnText="`sdf`" @click="handleClick" class="" />
     <div style="width: 788px; margin-bottom: 544px" class="ml-12">
       <!-- content title -->
-      <div class="flex items-center">
+      <div class="flex items-start">
         <ChipGeneral
           :height="34"
           :borderRadius="`rounded-4px`"
           :chipText="articleData['talk_category']"
-          class="bg-green2 text-green1 py-5px px-2.5 txt-base-bold"
+          class="bg-green2 mt-2 text-green1 py-5px px-2.5 txt-base-bold flex-shrink-0 pointer-events-none select-none"
         />
-        <h3 class="ml-3 txt-heading3">
-          {{ articleData["talk_title"] }}
-        </h3>
+        <div class="break-all">
+          <h3 class="ml-3 txt-heading3">
+            {{ articleData["talk_title"] }}
+          </h3>
+        </div>
       </div>
       <!-- author info & created date -->
       <div class="flex items-center mt-5">
@@ -48,9 +50,8 @@
       <div class="mt-5 border border-gray2"></div>
       <!-- content body -->
       <div class="mt-9">
-        <p>
-          {{ articleData["talk_content"] }}
-        </p>
+        <!-- prettier-ignore -->
+        <p class="break-words whitespace-pre-line">{{ articleData["talk_content"] }}</p>
       </div>
       <!-- divider -->
       <div class="mt-9"></div>
