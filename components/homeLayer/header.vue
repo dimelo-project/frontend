@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed top-0 z-50 w-full bg-white border-b-2">
+  <nav class="fixed top-0 z-50 w-full bg-white border-b-2 border-gray7">
     <div class="relative flex items-center mx-auto nav-content-wrapper-size">
       <!-- content--left -->
       <div class="absolute left-0 h-full">
