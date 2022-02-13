@@ -64,14 +64,14 @@
       <!-- OAuth logo link-->
       <div class="mt-5">
         <div class="flex">
-          <NuxtLink class="mr-3" to="/">
+          <div class="mr-3" @click="googlLogin">
             <img
               draggable="false"
               src="~assets/imgs/logo/google_logo.png"
               alt="구글로그인"
               style="width: 40px; height: 40px"
             />
-          </NuxtLink>
+          </div>
           <NuxtLink class="ml-3" to="/">
             <img
               draggable="false"
@@ -126,6 +126,9 @@ export default {
         console.error(err);
         this.formError = true;
       }
+    },
+    googlLogin() {
+      window.open("http://localhost:3000/api/auth/google", "_self");
     },
   },
 };
