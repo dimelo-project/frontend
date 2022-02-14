@@ -30,50 +30,56 @@
       class="flex items-center justify-center bg-gray4"
     >
       <div class="grid grid-cols-3 gap-15">
-        <div
-          class="flex flex-col items-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
-          style="width: 276px; height: 400px"
-        >
-          <span class="mt-8 txt-mid-bold">솔직한 강의리뷰</span>
+        <NuxtLink to="/lecture">
           <div
-            style="width: 172px; height: 172px"
-            class="mt-10 bg-green1 rounded-8px"
-          ></div>
-          <span class="mt-10 text-orange2"
-            >개발, 데이터 과학, 디자인<br />
-            인강/현장강의 찐리뷰</span
+            class="flex flex-col items-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
+            style="width: 276px; height: 400px"
           >
-        </div>
+            <span class="mt-8 txt-mid-bold">솔직한 강의리뷰</span>
+            <div
+              style="width: 172px; height: 172px"
+              class="mt-10 bg-green1 rounded-8px"
+            ></div>
+            <span class="mt-10 text-orange2"
+              >개발, 데이터 과학, 디자인<br />
+              인강/현장강의 찐리뷰</span
+            >
+          </div>
+        </NuxtLink>
 
-        <div
-          class="flex flex-col items-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
-          style="width: 276px; height: 400px"
-        >
-          <span class="mt-8 txt-mid-bold">스터디 모집</span>
+        <NuxtLink to="/community/study">
           <div
-            style="width: 172px; height: 172px"
-            class="mt-10 bg-green1 rounded-8px"
-          ></div>
-          <span class="mt-10 text-orange2"
-            >당신을 책상에 앉혀줄<br />
-            스터디원이 대기중입니다</span
+            class="flex flex-col items-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
+            style="width: 276px; height: 400px"
           >
-        </div>
+            <span class="mt-8 txt-mid-bold">스터디 모집</span>
+            <div
+              style="width: 172px; height: 172px"
+              class="mt-10 bg-green1 rounded-8px"
+            ></div>
+            <span class="mt-10 text-orange2"
+              >당신을 책상에 앉혀줄<br />
+              스터디원이 대기중입니다</span
+            >
+          </div>
+        </NuxtLink>
 
-        <div
-          class="flex flex-col items-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
-          style="width: 276px; height: 400px"
-        >
-          <span class="mt-8 txt-mid-bold">사이드 프로젝트</span>
+        <NuxtLink to="/community/sideproject">
           <div
-            style="width: 172px; height: 172px"
-            class="mt-10 bg-green1 rounded-8px"
-          ></div>
-          <span class="mt-10 text-orange2"
-            >아직도 토이 프로젝트해?<br />
-            서비스 배포까지!</span
+            class="flex flex-col items-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
+            style="width: 276px; height: 400px"
           >
-        </div>
+            <span class="mt-8 txt-mid-bold">사이드 프로젝트</span>
+            <div
+              style="width: 172px; height: 172px"
+              class="mt-10 bg-green1 rounded-8px"
+            ></div>
+            <span class="mt-10 text-orange2"
+              >아직도 토이 프로젝트해?<br />
+              서비스 배포까지!</span
+            >
+          </div>
+        </NuxtLink>
       </div>
     </div>
 
