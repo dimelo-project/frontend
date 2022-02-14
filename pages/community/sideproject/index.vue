@@ -115,7 +115,7 @@
                 v-for="(project, index) in projectData"
                 :key="index"
                 style="width: 378px; height: 471px"
-                class="mt-12 bg-white"
+                class="mt-12 bg-white hover-boxshadow"
               >
                 <NuxtLink :to="`/community/sideproject/${project.project_id}`">
                   <div class="flex flex-col h-full p-6">
@@ -602,3 +602,9 @@ export default {
   },
 };
 </script>
+
+<style lang="postcss" scoped>
+.hover-boxshadow:hover {
+  box-shadow: 0px 2px 20px rgba(25, 25, 25, 0.05);
+}
+</style>
