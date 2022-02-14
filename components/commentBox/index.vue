@@ -27,6 +27,14 @@ export default {
       userNewCommment: "",
     };
   },
+  watch: {
+    value() {
+      if (!this.value) {
+        this.rows = 0;
+        this.$refs.textarea.style.height = "44px";
+      }
+    },
+  },
   methods: {
     resize() {
       const $textarea = this.$refs.textarea;
