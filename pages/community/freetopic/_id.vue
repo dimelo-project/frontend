@@ -83,9 +83,8 @@
         </div>
         <!-- comment body -->
         <div class="mt-2.5">
-          <span>
-            {{ comment["comment_commentText"] }}
-          </span>
+          <!-- prettier-ignore -->
+          <span class="break-words whitespace-pre-line">{{ comment["comment_commentText"] }}</span>
         </div>
         <!-- comment created date -->
         <div class="mt-2">
