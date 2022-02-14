@@ -93,13 +93,15 @@
               </span>
             </div>
 
-            <ButtonGeneral
-              :width="145"
-              :height="44"
-              class="font-bold txt-base py-2.5 bg-orange1 hover:bg-orange2 rounded-8px text-white"
+            <NuxtLink to="/community/sideproject/post">
+              <ButtonGeneral
+                :width="145"
+                :height="44"
+                class="font-bold txt-base py-2.5 bg-orange1 hover:bg-orange2 rounded-8px text-white"
+              >
+                <span>프로젝트 모집하기</span>
+              </ButtonGeneral></NuxtLink
             >
-              <span>프로젝트 모집하기</span>
-            </ButtonGeneral>
           </div>
 
           <!-- cards list -->
@@ -116,7 +118,7 @@
                 class="mt-12 bg-white"
               >
                 <NuxtLink :to="`/community/sideproject/${project.project_id}`">
-                  <div class="p-6">
+                  <div class="flex flex-col h-full p-6">
                     <!-- active status chip & number of people chip -->
                     <div class="flex">
                       <!-- active status chip  -->
@@ -144,15 +146,21 @@
                       />
                     </div>
                     <!-- card title -->
-                    <div class="mt-5">
-                      <p class="txt-mid-bold">
+                    <div class="flex items-center flex-grow mt-5">
+                      <p
+                        v-if="project.project_title.length < 40"
+                        class="txt-mid-bold"
+                      >
                         {{ project.project_title }}
+                      </p>
+                      <p v-else class="txt-mid-bold">
+                        {{ project.project_title.slice(0, 40) + "..." }}
                       </p>
                     </div>
                     <!-- position chips || noti message box-->
                     <div
                       v-if="project.project_position"
-                      class="flex flex-wrap mt-8"
+                      class="flex flex-wrap items-center flex-grow mt-8"
                     >
                       <ChipGeneral
                         v-for="(position, index) in project.project_position"
@@ -174,9 +182,9 @@
                     </div>
 
                     <!-- tech logos -->
-                    <div class="flex mt-12">
+                    <div class="flex mt-8">
                       <img
-                        v-for="skill in project.project_skill"
+                        v-for="skill in project.project_skill.slice(0, 5)"
                         :key="skill"
                         :src="require(`~/assets/imgs/logo/tech/${skill}.png`)"
                         alt="스택"
@@ -192,7 +200,7 @@
                         <span>{{ project.project_createdAt }}</span>
                       </div>
                       <div class="text-gray1">
-                        <span>댓글 {{ project.project_participant }}</span>
+                        <span>댓글 {{ project.num_comment }}</span>
                       </div>
                     </div>
                   </div>
