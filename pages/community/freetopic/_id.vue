@@ -51,7 +51,10 @@
       <!-- content body -->
       <div class="mt-9">
         <!-- prettier-ignore -->
-        <p class="break-words whitespace-pre-line">{{ articleData["talk_content"] }}</p>
+        <p
+          class="break-words whitespace-pre-wrap ProseMirror"
+          v-html="articleData['talk_markup']"
+        ></p>
       </div>
       <!-- divider -->
       <div class="mt-9"></div>
@@ -164,4 +167,78 @@ export default {
 };
 </script>
 
-<style lang="postcss" scoped></style>
+<style lang="postcss" scoped>
+>>> p:empty:before {
+  content: " ";
+  white-space: pre;
+}
+>>> .ProseMirror > * + * {
+  margin-top: 0.75em;
+}
+>>> .ProseMirror ul,
+ol {
+  padding: 0 1rem;
+}
+>>> .ProseMirror ol {
+  padding: 0 1rem;
+}
+>>> .ProseMirror h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.1;
+}
+>>> .ProseMirror h1 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 2.8125rem;
+}
+>>> .ProseMirror h2 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 2.375rem;
+}
+>>> .ProseMirror h3 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 1.75rem;
+}
+>>> .ProseMirror h4 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 1.25rem;
+}
+>>> .ProseMirror h5 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 1rem;
+}
+>>> .ProseMirror h6 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 0.75rem;
+}
+>>> .ProseMirror code {
+  background-color: rgb(97, 97, 97, 0.5);
+  color: black;
+}
+>>> .ProseMirror blockquote {
+  padding-left: 1rem;
+  border-left: 2px solid #616161;
+}
+>>> .ProseMirror hr {
+  border: none;
+  border-top: 2px solid #616161;
+  margin: 2rem 0;
+}
+>>> .ProseMirror pre {
+  background: #0d0d0d;
+  color: #fff;
+  font-family: "JetBrainsMono", monospace;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+
+>>> .ProseMirror pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.8rem;
+}
+</style>

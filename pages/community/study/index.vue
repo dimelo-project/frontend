@@ -87,10 +87,10 @@
               v-for="(study, index) in studyData"
               :key="index"
               style="width: 378px; height: 363px"
-              class="mt-12 bg-white hover-boxshadow"
+              class="mt-12 bg-white hover-boxshadow rounded-4px"
             >
               <NuxtLink :to="`/community/study/${study.study_id}`">
-                <div class="p-6">
+                <div class="flex flex-col h-full p-6">
                   <!-- active status chip & number of people -->
                   <div class="flex">
                     <ChipGeneral
@@ -106,7 +106,7 @@
                         'text-green3 bg-green2':
                           study.study_ongoing === '모집중',
                         'text-white bg-gray8':
-                          study.study_ongoing === '모집 완료',
+                          study.study_ongoing === '모집완료',
                       }"
                     />
                     <ChipGeneral
@@ -117,15 +117,21 @@
                     />
                   </div>
                   <!-- card title -->
-                  <div class="mt-5">
-                    <p class="txt-mid-bold">
+                  <div class="flex items-center flex-grow mt-5">
+                    <p
+                      v-if="study['study_title'].length > 35"
+                      class="txt-mid-bold"
+                    >
+                      {{ study.study_title.slice(0, 35) + "..." }}
+                    </p>
+                    <p v-else class="txt-mid-bold">
                       {{ study.study_title }}
                     </p>
                   </div>
                   <!-- tech logos -->
                   <div class="flex mt-12">
                     <img
-                      v-for="skill in study.study_skill"
+                      v-for="skill in study.study_skill.slice(0, 5)"
                       :key="skill"
                       :src="require(`~/assets/imgs/logo/tech/${skill}.png`)"
                       alt="스택"
@@ -310,8 +316,8 @@ export default {
         selected: false,
       },
       {
-        chipName: "Svelt",
-        techName: "svelt",
+        chipName: "Svelte",
+        techName: "svelte",
         selected: false,
       },
       {
