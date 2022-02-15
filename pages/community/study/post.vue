@@ -147,113 +147,129 @@
       </div>
 
       <client-only>
-        <!-- <div v-if="editor">
+        <div
+          v-if="editor"
+          style="width: 990px; height: 56px"
+          class="flex items-center px-6 border border-gray2 rounded-4px"
+        >
           <button
             @click="editor.chain().focus().toggleBold().run()"
-            class="p-1 transition duration-500 border border-black1 rounded-4px hover:text-white hover:bg-black1"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('bold') }"
           >
-            bold
+            <EditorIconBold class="editor-icon-size" />
           </button>
           <button
             @click="editor.chain().focus().toggleItalic().run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('italic') }"
           >
-            italic
+            <EditorIconItalic class="editor-icon-size" />
+          </button>
+          <button
+            @click="editor.chain().focus().toggleUnderline().run()"
+            class="editor-icon-style"
+            :class="{ 'is-active': editor.isActive('underline') }"
+          >
+            <EditorIconUnderline class="editor-icon-size" />
           </button>
           <button
             @click="editor.chain().focus().toggleStrike().run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('strike') }"
           >
-            strike
-          </button>
-          <button
-            @click="editor.chain().focus().toggleCode().run()"
-            :class="{ 'is-active': editor.isActive('code') }"
-          >
-            code
-          </button>
-          <button @click="editor.chain().focus().unsetAllMarks().run()">
-            clear marks
-          </button>
-          <button @click="editor.chain().focus().clearNodes().run()">
-            clear nodes
+            <EditorIconStrike class="editor-icon-size" />
           </button>
           <button
             @click="editor.chain().focus().setParagraph().run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('paragraph') }"
           >
-            paragraph
+            <EditorIconParagraph class="editor-icon-size" />
           </button>
           <button
             @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
           >
-            h1
+            <span class="editor-icon-size txt-base-bold"> h1 </span>
           </button>
           <button
             @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
           >
-            h2
+            <span class="editor-icon-size txt-base-bold"> h2 </span>
           </button>
           <button
             @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
           >
-            h3
+            <span class="editor-icon-size txt-base-bold"> h3 </span>
           </button>
           <button
             @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
           >
-            h4
+            <span class="editor-icon-size txt-base-bold"> h4 </span>
           </button>
           <button
             @click="editor.chain().focus().toggleHeading({ level: 5 }).run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }"
           >
-            h5
+            <span class="editor-icon-size txt-base-bold"> h5 </span>
           </button>
           <button
             @click="editor.chain().focus().toggleHeading({ level: 6 }).run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }"
           >
-            h6
+            <span class="editor-icon-size txt-base-bold"> h6 </span>
           </button>
           <button
             @click="editor.chain().focus().toggleBulletList().run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('bulletList') }"
           >
-            bullet list
+            <EditorIconUl class="editor-icon-size" />
           </button>
           <button
             @click="editor.chain().focus().toggleOrderedList().run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('orderedList') }"
           >
-            ordered list
+            <EditorIconOl class="editor-icon-size" />
           </button>
           <button
             @click="editor.chain().focus().toggleCodeBlock().run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('codeBlock') }"
           >
-            code block
+            <EditorIconCode class="editor-icon-size" />
           </button>
           <button
             @click="editor.chain().focus().toggleBlockquote().run()"
+            class="editor-icon-style"
             :class="{ 'is-active': editor.isActive('blockquote') }"
           >
-            blockquote
+            <EditorIconQuote class="editor-icon-size" />
           </button>
-          <button @click="editor.chain().focus().setHorizontalRule().run()">
-            horizontal rule
+          <button
+            @click="editor.chain().focus().undo().run()"
+            class="editor-icon-style"
+          >
+            <EditorIconUndo class="editor-icon-size" />
           </button>
-          <button @click="editor.chain().focus().setHardBreak().run()">
-            hard break
+          <button
+            @click="editor.chain().focus().redo().run()"
+            class="editor-icon-style"
+          >
+            <EditorIconRedo class="editor-icon-size" />
           </button>
-          <button @click="editor.chain().focus().undo().run()">undo</button>
-          <button @click="editor.chain().focus().redo().run()">redo</button>
-        </div> -->
+        </div>
         <editor-content class="txt-sub" :editor="editor" />
       </client-only>
 
@@ -284,6 +300,7 @@
 import { Editor, EditorContent } from "@tiptap/vue-2";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
+import Underline from "@tiptap/extension-underline";
 
 export default {
   layout: "home",
@@ -437,6 +454,7 @@ export default {
         Placeholder.configure({
           placeholder: "서로에게 예의를 지키며 이야기를 나눠보세요 :)",
         }),
+        Underline,
       ],
       content: "",
     });
@@ -466,6 +484,7 @@ export default {
       const data = {
         title: this.titleInput,
         content: textData,
+        markup: htmlData,
         ongoing: this.categoryMenu[this.selectedCategoryMenuIdx].name,
         participant: this.selectedParticpantNum,
         skills: this.selecetedTechStacks
@@ -512,9 +531,8 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-/* Basic editor styles */
-.ProseMirror {
+<style lang="postcss" scoped>
+>>> .ProseMirror {
   width: 990px;
   height: 320px;
   overflow-y: auto;
@@ -523,69 +541,74 @@ export default {
   outline: none;
   border: 1px solid #e0e1e5;
   border-radius: 4px;
-
-  > * + * {
-    margin-top: 0.75em;
-  }
-
-  ul,
-  ol {
-    padding: 0 1rem;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    line-height: 1.1;
-  }
-
-  code {
-    background-color: rgba(#616161, 0.1);
-    color: #616161;
-  }
-
-  pre {
-    background: #0d0d0d;
-    color: #fff;
-    font-family: "JetBrainsMono", monospace;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-
-    code {
-      color: inherit;
-      padding: 0;
-      background: none;
-      font-size: 0.8rem;
-    }
-  }
-
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  blockquote {
-    padding-left: 1rem;
-    border-left: 2px solid rgba(#0d0d0d, 0.1);
-  }
-
-  hr {
-    border: none;
-    border-top: 2px solid rgba(#0d0d0d, 0.1);
-    margin: 2rem 0;
-  }
 }
-
-/* Placeholder (at the top) */
-.ProseMirror p.is-editor-empty:first-child::before {
-  content: attr(data-placeholder);
-  float: left;
-  color: #adb5bd;
-  pointer-events: none;
-  height: 0;
+>>> .ProseMirror > * + * {
+  margin-top: 0.75em;
+}
+>>> .ProseMirror ul,
+ol {
+  padding: 0 1rem;
+}
+>>> .ProseMirror ol {
+  padding: 0 1rem;
+}
+>>> .ProseMirror h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.1;
+}
+>>> .ProseMirror h1 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 2.8125rem;
+}
+>>> .ProseMirror h2 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 2.375rem;
+}
+>>> .ProseMirror h3 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 1.75rem;
+}
+>>> .ProseMirror h4 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 1.25rem;
+}
+>>> .ProseMirror h5 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 1rem;
+}
+>>> .ProseMirror h6 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 0.75rem;
+}
+>>> .ProseMirror code {
+  background-color: rgb(97, 97, 97, 0.5);
+  color: black;
+}
+>>> .ProseMirror blockquote {
+  padding-left: 1rem;
+  border-left: 2px solid #616161;
+}
+>>> .ProseMirror hr {
+  border: none;
+  border-top: 2px solid #616161;
+  margin: 2rem 0;
+}
+>>> .ProseMirror pre {
+  background: #0d0d0d;
+  color: #fff;
+  font-family: "JetBrainsMono", monospace;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+>>> .ProseMirror pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.8rem;
 }
 
 .hide-arrow {
@@ -600,5 +623,13 @@ export default {
   input[type="number"] {
     -moz-appearance: textfield;
   }
+}
+
+.editor-icon-style {
+  @apply p-1 transition rounded-4px hover:text-white hover:bg-black1;
+}
+.editor-icon-size {
+  width: 20px;
+  height: 20px;
 }
 </style>

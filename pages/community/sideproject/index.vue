@@ -138,12 +138,6 @@
                             project.project_ongoing === '모집 완료',
                         }"
                       />
-                      <!-- number of people chip -->
-                      <ChipGeneral
-                        :borderRadius="`rounded-8px`"
-                        :chipText="`${project.project_participant}명`"
-                        class="px-3 ml-2 bg-gray3 text-gray1"
-                      />
                     </div>
                     <!-- card title -->
                     <div class="flex items-center flex-grow mt-5">
@@ -173,7 +167,7 @@
                     </div>
                     <div
                       v-else
-                      class="flex items-center justify-center w-full mt-8 bg-gray3 text-gray1 rounded-4px"
+                      class="flex items-center justify-center flex-grow w-full mt-4 bg-gray3 text-gray1 rounded-4px"
                     >
                       <div class="my-5">
                         <div><span>아직 정해진 포지션이 없어요.</span></div>
@@ -186,9 +180,11 @@
                       <img
                         v-for="skill in project.project_skill.slice(0, 5)"
                         :key="skill"
-                        :src="require(`~/assets/imgs/logo/tech/${skill}.png`)"
+                        :src="requireTechLogoImg(skill)"
                         alt="스택"
-                        class="mr-5"
+                        class="object-contain mr-5"
+                        style="width: 44px; height: 44px"
+                        draggable="false"
                       />
                     </div>
                     <!-- divider -->
@@ -417,8 +413,8 @@ export default {
         selected: false,
       },
       {
-        chipName: "Svelt",
-        techName: "svelt",
+        chipName: "Svelte",
+        techName: "svelte",
         selected: false,
       },
       {
@@ -598,6 +594,13 @@ export default {
       this.pageIdx = 0;
       this.cntActivationStatus = name;
       this.routerPushWithNewQuery();
+    },
+    requireTechLogoImg(skill) {
+      try {
+        return require(`~/assets/imgs/logo/tech/${skill}.png`);
+      } catch (err) {
+        console.error(err.response);
+      }
     },
   },
 };

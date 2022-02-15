@@ -3,92 +3,120 @@
     <PageMoveBtn :btnText="`sdf`" @click="handleClick" class="" />
     <div style="width: 788px; margin-bottom: 544px" class="ml-12">
       <!-- content title -->
-      <div class="flex items-center">
+      <div class="flex items-start">
         <ChipGeneral
           :height="34"
           :borderRadius="`rounded-4px`"
-          :chipText="`개발`"
-          class="bg-green2 text-green1 py-5px px-2.5 txt-base-bold"
+          :chipText="articleData['project_ongoing']"
+          class="bg-green2 text-green1 py-5px px-2.5 txt-base-bold pointer-events-none flex-shrink-0 mt-1"
         />
         <h3 class="ml-3 txt-heading3">
-          파이썬 입문하려고 하는데 강의 추천해주세요!
+          {{ articleData["project_title"] }}
         </h3>
       </div>
       <!-- author info & created date -->
       <div class="flex items-center mt-5">
         <!-- profile image -->
-        <div class="bg-gray-700 rounded-full w-9 h-9"></div>
+        <img
+          v-if="articleData['user_imageUrl']"
+          :src="articleData['user_imageUrl']"
+          alt="프로필사진"
+          style="width: 36px; height: 36px"
+          draggable="false"
+          class="rounded-full"
+        />
+        <div v-else class="bg-gray-700 rounded-full w-9 h-9"></div>
         <!-- nickname -->
-        <span class="ml-2 txt-base-bold">코딩꿈나무</span>
+        <span class="ml-2 txt-base-bold">{{
+          articleData["user_nickname"]
+        }}</span>
         <!-- career duration -->
-        <span class="ml-1.5">개발자 3년차</span>
+        <span class="ml-1.5">{{ articleData["user_career"] }}</span>
         <!-- created date -->
         <div class="ml-6 text-gray6">
-          <span>2021.11.23</span>
-          <span class="ml-1">03:03</span>
+          <span>{{ articleData["project_createdAt"].split(" ")[0] }}</span>
+          <span class="ml-1">{{
+            articleData["project_createdAt"].split(" ")[1]
+          }}</span>
         </div>
       </div>
       <!-- divider -->
       <div class="mt-5 border border-gray2"></div>
       <!-- number of people -->
-      <div class="flex items-center mt-7">
+      <div
+        v-if="articleData['project_position']"
+        class="flex items-center mt-7"
+      >
         <span class="mr-5 txt-base-bold text-gray1">모집 포지션</span>
         <ChipGeneral
+          v-for="(position, idx) in articleData['project_position'].split(',')"
+          :key="idx"
           :height="40"
           :borderRadius="`rounded-4px`"
-          :chipText="`백엔드 개발자`"
-          class="px-3 py-2 mr-3 bg-gray3"
+          :chipText="position"
+          class="px-3 py-2 mr-3 pointer-events-none bg-gray3"
         />
       </div>
       <!-- selected tech stacks -->
       <div class="flex items-center mt-8">
         <span class="mr-8 txt-base-bold text-gray1">사용 기술</span>
         <ChipGeneral
-          v-for="i in 3"
-          :key="i"
+          v-for="(skill, idx) in articleData['project_skill'].split(',')"
+          :key="idx"
           :height="40"
           :borderRadius="`rounded-4px`"
-          :chipText="`javascript`"
-          class="px-3 py-2 mr-3 bg-gray3"
+          :chipText="skill"
+          class="px-3 py-2 mr-3 pointer-events-none bg-gray3"
         />
       </div>
       <!-- divider -->
       <div class="mt-5 border border-gray2"></div>
       <!-- content body -->
       <div class="mt-9">
-        <p>
-          안녕하세요. 문과생이에요. 파이썬 강의 입문하려고 하는데 어떤 것이
-          좋은지 몰라서요.. 혹시 괜찮은 강의 추천좀 부탁드려도 될까요?
-          비전공자라서 알아듣기 쉬운 강의였으면 좋겠어요!!!
-        </p>
+        <p
+          class="break-words whitespace-pre-wrap ProseMirror"
+          v-html="articleData['project_markup']"
+        ></p>
+        <!-- <p>
+          {{ articleData["project_content"] }}
+        </p> -->
       </div>
       <!-- divider -->
       <div class="mt-9"></div>
       <!-- number of comments -->
       <div class="mt-7">
-        <span class="txt-mid-bold">댓글 3</span>
+        <span class="txt-mid-bold">댓글 {{ allCommentData.length }}</span>
       </div>
       <!-- comments list -->
-      <div class="mt-7" v-for="i in 3" :key="i">
+      <div class="mt-7" v-for="(comment, idx) in allCommentData" :key="idx">
         <!-- commentor info -->
         <div class="flex items-center">
           <!-- commentor profile image -->
-          <div class="bg-gray-300 rounded-full w-9 h-9"></div>
+          <img
+            v-if="comment['user_imageUrl']"
+            :src="comment['user_imageUrl']"
+            alt="프로필사진"
+            style="width: 36px; height: 36px"
+            draggable="false"
+            class="rounded-full"
+          />
+          <div v-else class="bg-gray-300 rounded-full w-9 h-9"></div>
           <!-- commentor nickname -->
-          <span class="ml-2 txt-base-bold">코딩은둔고수</span>
+          <span class="ml-2 txt-base-bold">{{ comment["user_nickname"] }}</span>
           <!-- commentor career duration -->
-          <span class="ml-1.5 txt-base">개발자 13년차</span>
+          <span class="ml-1.5 txt-base">{{ comment["user_career"] }}</span>
         </div>
         <!-- comment body -->
         <div class="mt-2.5">
           <span>
-            ABC 선생님의 AB 강의 추천드립니다. 귀에 쏙쏙 들어오더라고요!! 공부
-            열심히 하시길 바랄게요 ㅎㅎ
+            {{ comment["comment_commentText"] }}
           </span>
         </div>
         <!-- comment created date -->
         <div class="mt-2">
-          <span class="text-gray1">2021.11.13</span>
+          <span class="text-gray1">{{
+            comment["comment_updatedAt"].split(" ")[0]
+          }}</span>
         </div>
       </div>
       <!-- comment Box & submit button -->
@@ -100,9 +128,13 @@
           class="border border-gray2 rounded-8px py-2.5 px-3 w-full max-h-40"
         />
         <ButtonGeneral
-          class="w-18 h-11 txt-base-bold py-2.5 px-5 flex-shrink-0 ml-3.5"
-          :btnText="`등록`"
-        />
+          @click="uploadComment"
+          :width="72"
+          :height="44"
+          class="rounded-8px txt-base-bold text-white bg-orange1 hover:bg-orange2 py-2.5 px-5 flex-shrink-0 ml-3.5"
+        >
+          <span>등록</span>
+        </ButtonGeneral>
       </div>
     </div>
   </div>
@@ -111,9 +143,24 @@
 <script>
 export default {
   layout: "home",
+  async asyncData({ $axios, params }) {
+    // console.log(params.id);
+    let articleData, allCommentData;
+
+    try {
+      articleData = await $axios.$get(`/api/projects/${params.id}`);
+      console.log("articleData", articleData);
+
+      allCommentData = await $axios.$get(`/api/projects/${params.id}/comments`);
+      console.log("allCommentData", allCommentData);
+    } catch (err) {
+      console.error(err.response);
+    }
+
+    return { articleData, allCommentData };
+  },
   data() {
     return {
-      rows: 1,
       userComment: "",
     };
   },
@@ -124,8 +171,108 @@ export default {
     handleClick() {
       this.$router.go(-1);
     },
+    async getAllCommentData() {
+      try {
+        this.allCommentData = await this.$axios.$get(
+          `/api/projects/${this.$route.params.id}/comments`
+        );
+      } catch (err) {
+        console.error(err.response);
+      }
+    },
+    async uploadComment() {
+      try {
+        const response = await this.$axios.$post(
+          `/api/projects/${this.$route.params.id}/comments`,
+          {
+            commentText: this.userComment,
+          }
+        );
+        if (response) {
+          this.userComment = "";
+          this.getAllCommentData();
+        }
+        console.log(response);
+      } catch (err) {
+        console.error(err.response);
+      }
+    },
   },
 };
 </script>
 
-<style lang="postcss" scoped></style>
+<style lang="postcss" scoped>
+>>> p:empty:before {
+  content: " ";
+  white-space: pre;
+}
+>>> .ProseMirror > * + * {
+  margin-top: 0.75em;
+}
+>>> .ProseMirror ul,
+ol {
+  padding: 0 1rem;
+}
+>>> .ProseMirror ol {
+  padding: 0 1rem;
+}
+>>> .ProseMirror h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.1;
+}
+>>> .ProseMirror h1 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 2.8125rem;
+}
+>>> .ProseMirror h2 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 2.375rem;
+}
+>>> .ProseMirror h3 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 1.75rem;
+}
+>>> .ProseMirror h4 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 1.25rem;
+}
+>>> .ProseMirror h5 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 1rem;
+}
+>>> .ProseMirror h6 {
+  font-family: "NotoSansKR-Regular";
+  font-size: 0.75rem;
+}
+>>> .ProseMirror code {
+  background-color: rgb(97, 97, 97, 0.5);
+  color: black;
+}
+>>> .ProseMirror blockquote {
+  padding-left: 1rem;
+  border-left: 2px solid #616161;
+}
+>>> .ProseMirror hr {
+  border: none;
+  border-top: 2px solid #616161;
+  margin: 2rem 0;
+}
+>>> .ProseMirror pre {
+  background: #0d0d0d;
+  color: #fff;
+  font-family: "JetBrainsMono", monospace;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+
+>>> .ProseMirror pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.8rem;
+}
+</style>
