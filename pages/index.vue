@@ -302,10 +302,14 @@
       <div style="width: 1194px">
         <div class="flex justify-between">
           <div>
-            <span class="cursor-pointer txt-sub text-black1"
+            <span
+              @click="$router.push('/terms')"
+              class="cursor-pointer txt-sub text-black1"
               >서비스 이용약관</span
             >
-            <span class="ml-4 cursor-pointer txt-sub-bold text-black1"
+            <span
+              @click="$router.push('/privacy')"
+              class="ml-4 cursor-pointer txt-sub-bold text-black1"
               >개인정보취급방침</span
             >
             <span class="ml-4 cursor-pointer txt-sub-bold text-orange2"
