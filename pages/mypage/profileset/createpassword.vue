@@ -2,38 +2,18 @@
   <div class="select-none mb-96">
     <p class="txt-sub">
       <NuxtLink to="/mypage/profileset"> 프로필 수정</NuxtLink> >
-      <span class="txt-sub-bold">비밀번호 변경</span>
+      <span class="txt-sub-bold">비밀번호 생성</span>
     </p>
 
     <div class="mt-3 border-t border-gray2"></div>
 
     <div class="mt-4">
-      <span class="txt-mid-bold">비밀번호 변경</span>
-    </div>
-
-    <div class="mt-5">
-      <span class="txt-base-bold">현재 비밀번호</span>
-    </div>
-
-    <div class="mt-2">
-      <InputGeneral
-        :type="`password`"
-        :value="currentPassword"
-        :width="360"
-        :height="44"
-        class="p-3 rounded-4px"
-        :class="{ 'border-orange2': currentPassword.length > 0 }"
-        @input="handleCurrentPassword"
-      />
-    </div>
-
-    <div class="h-8">
-      <span class="text-red1 txt-mini">{{ currentPasswordNotiMsg }}</span>
+      <span class="txt-mid-bold">비밀번호 생성</span>
     </div>
 
     <!-- 새 비밀번호 입력 -->
-    <div>
-      <span class="txt-base-bold">새 비밀번호</span>
+    <div class="mt-5">
+      <span class="txt-base-bold">비밀번호 입력</span>
     </div>
 
     <div class="mt-2">
@@ -42,7 +22,7 @@
         :value="newPassword"
         :width="360"
         :height="44"
-        class="p-3 rounded-4px"
+        class="p-3 border rounded-4px border-gray2"
         :class="{ 'border-orange2': newPassword.length > 0 }"
         @input="handleNewPassword"
       />
@@ -68,7 +48,7 @@
         :value="newPasswordConfirm"
         :width="360"
         :height="44"
-        class="p-3 rounded-4px"
+        class="p-3 border rounded-4px border-gray2"
         :class="{ 'border-orange2': newPasswordConfirm.length > 0 }"
         @input="handleNewPasswordConfirm"
       />
@@ -83,9 +63,9 @@
       @click="changeUserPassword"
       :width="360"
       :height="44"
-      class="text-white bg-orange2 txt-base-bold rounded-4px"
+      class="text-white bg-orange1 hover:bg-orange2 txt-base-bold rounded-4px"
     >
-      <span>비밀번호 변경하기</span>
+      <span>비밀번호 생성하기</span>
     </ButtonGeneral>
 
     <!-- cancel submit button -->
@@ -93,9 +73,9 @@
       @click="$router.push('/mypage/profileset')"
       :width="360"
       :height="44"
-      class="mt-3 border text-orange2 border-orange2 txt-base-bold rounded-4px"
+      class="mt-3 border text-orange2 border-orange2 txt-base-bold rounded-4px hover:bg-orange2 hover:text-white"
     >
-      <span>다음에 변경하기</span>
+      <span>다음에 생성하기</span>
     </ButtonGeneral>
   </div>
 </template>
@@ -105,9 +85,6 @@ export default {
   layout: "mypage",
   data() {
     return {
-      // current password
-      currentPassword: "",
-      currentPasswordNotiMsg: "",
       timeout: null,
       // new password
       newPassword: "",
@@ -119,29 +96,6 @@ export default {
     };
   },
   methods: {
-    handleCurrentPassword(value) {
-      this.currentPassword = value;
-      this.currentPasswordNotiMsg = "";
-
-      // debounce input event
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-      }
-
-      this.timeout = setTimeout(async () => {
-        try {
-          const response = await this.$axios.$post(
-            "/api/users/check/password",
-            {
-              password: this.currentPassword,
-            }
-          );
-        } catch (err) {
-          console.log(err.response);
-          this.currentPasswordNotiMsg = "비밀번호가 일치하지 않습니다.";
-        }
-      }, 500);
-    },
     handleNewPassword(value) {
       this.newPassword = value;
 
@@ -170,16 +124,14 @@ export default {
     },
     async changeUserPassword() {
       try {
-        const response = await this.$axios.$patch(
-          "/api/users/change/password",
-          {
-            password: this.currentPassword,
-            newPassword: this.newPassword,
-            passwordConfirm: this.newPasswordConfirm,
-          }
-        );
-        await this.$auth.logout();
-        this.$router.push("/mypage/profileset/passwordchangecomplete");
+        const response = await this.$axios.$patch("api/users/set/password", {
+          newPassword: this.newPassword,
+          passwordConfirm: this.newPasswordConfirm,
+        });
+        console.log(response);
+        if (response) {
+          // create password success alert modal
+        }
       } catch (err) {
         console.log(err.response);
       }

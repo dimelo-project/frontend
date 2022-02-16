@@ -70,6 +70,7 @@
               src="~assets/imgs/logo/google_logo.png"
               alt="구글로그인"
               style="width: 40px; height: 40px"
+              class="cursor-pointer"
             />
           </div>
           <NuxtLink class="ml-3" to="/">

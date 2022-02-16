@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center select-none">
+  <div class="flex justify-center select-none mb-96">
     <div class="flex flex-col test" style="width: 888px">
       <div class="relative">
         <!-- profile image  -->
@@ -45,11 +45,21 @@
         <div class="flex items-center mt-6">
           <span class="txt-base-bold">아이디</span>
           <span class="ml-9">{{ $auth.user.email }}</span>
-          <NuxtLink to="/mypage/profileset/passwordchange">
+          <NuxtLink
+            v-if="userHasPassword"
+            to="/mypage/profileset/passwordchange"
+          >
             <ButtonGeneral
-              class="border border-orange2 text-orange2 px-4 py-1.5 rounded-8px ml-5 txt-base-bold"
+              class="border border-orange2 text-orange2 px-4 py-1.5 rounded-8px ml-5 txt-base-bold hover:bg-orange2 hover:text-white"
             >
               <span>비밀번호 변경하기</span>
+            </ButtonGeneral>
+          </NuxtLink>
+          <NuxtLink v-else to="/mypage/profileset/createpassword">
+            <ButtonGeneral
+              class="border border-orange2 text-orange2 px-4 py-1.5 rounded-8px ml-5 txt-base-bold hover:bg-orange2 hover:text-white"
+            >
+              <span>비밀번호 생성하기</span>
             </ButtonGeneral>
           </NuxtLink>
         </div>
@@ -68,7 +78,7 @@
               :width="312"
               :height="44"
               :placeholder="$auth.user.nickname"
-              class="p-3 txt-sub rounded-4px"
+              class="p-3 border txt-sub rounded-4px border-gray2"
               :class="{ 'border-orange2': userNickName.length > 0 }"
             />
           </div>
@@ -138,7 +148,7 @@
             <ChipGeneral
               @click="setUserMajor(major)"
               :chipText="major"
-              class="px-4 mb-1 mr-1 border py-9px rounded-8px"
+              class="px-4 mb-1 mr-1 border py-9px rounded-8px border-gray2"
               :class="{ 'bg-gray3': major === selectedMajor }"
             />
           </span>
@@ -154,7 +164,7 @@
             <ChipGeneral
               @click="setUserPeriod(data)"
               :chipText="data.period"
-              class="px-4 mb-1 mr-1 border py-9px rounded-8px"
+              class="px-4 mb-1 mr-1 border py-9px rounded-8px border-gray2"
               :class="{ 'bg-gray3': data.period === selectedPeriod }"
             />
           </span>
@@ -173,7 +183,7 @@
         <ButtonGeneral
           :width="200"
           :height="44"
-          class="border border-orange2 text-orange2 rounded-4px"
+          class="border border-orange2 text-orange2 rounded-4px hover:bg-orange2 hover:text-white"
         >
           <span>취소</span>
         </ButtonGeneral>
@@ -182,7 +192,7 @@
           @click="changeProfileSetting"
           :width="200"
           :height="44"
-          class="ml-2 text-white bg-orange2 rounded-4px"
+          class="ml-2 text-white bg-orange1 hover:bg-orange2 rounded-4px"
         >
           <span>프로필 수정</span>
         </ButtonGeneral>
@@ -204,6 +214,24 @@
 <script>
 export default {
   layout: "mypage",
+  async asyncData({ $axios }) {
+    let userHasPassword;
+
+    try {
+      const response = await $axios.$get("api/users/password");
+      if (response) {
+        userHasPassword = true;
+      } else {
+        userHasPassword = false;
+      }
+
+      console.log("userHasPassword", response);
+    } catch (err) {
+      console.error(err.response);
+    }
+
+    return { userHasPassword };
+  },
   data() {
     return {
       preview: "",
@@ -291,7 +319,9 @@ export default {
     this.$store.commit("changeCntCategoryIdx", 0);
 
     this.preview = this.$auth.user.imageUrl;
-    this.userNickName = this.$auth.user.nickname;
+    if (this.$auth.user.nickname) {
+      this.userNickName = this.$auth.user.nickname;
+    }
     this.jobPosition.forEach((elem, idx) => {
       elem.major.forEach((major) => {
         if (major === this.$auth.user.job) {
@@ -386,7 +416,8 @@ export default {
         this.$auth.setUser(response);
         this.$router.push("/");
       } catch (err) {
-        console.log(err);
+        console.error(err.response);
+        alert("필수 항목을 모두 입력해주세요.");
       }
     },
   },
