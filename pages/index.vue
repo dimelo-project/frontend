@@ -20,7 +20,11 @@
             <span class="txt-mid-bold">디멜로에게 말해주세요</span>
           </div>
         </div>
-        <div class="test" style="width: 400px; height: 100%">image here</div>
+        <img
+          src="~/assets/imgs/banner/main.gif"
+          alt="함께공부하기"
+          draggable="false"
+        />
       </div>
     </div>
 
@@ -36,10 +40,13 @@
             style="width: 276px; height: 400px"
           >
             <span class="mt-8 txt-mid-bold">솔직한 강의리뷰</span>
-            <div
-              style="width: 172px; height: 172px"
-              class="mt-10 bg-green1 rounded-8px"
-            ></div>
+            <img
+              src="~/assets/imgs/banner/lecture.gif"
+              alt="강의리뷰"
+              style="width: 200px; height: 200px"
+              class="mt-8"
+              draggable="false"
+            />
             <span class="mt-10 text-orange2"
               >개발, 데이터 과학, 디자인<br />
               인강/현장강의 찐리뷰</span
@@ -53,10 +60,13 @@
             style="width: 276px; height: 400px"
           >
             <span class="mt-8 txt-mid-bold">스터디 모집</span>
-            <div
-              style="width: 172px; height: 172px"
-              class="mt-10 bg-green1 rounded-8px"
-            ></div>
+            <img
+              src="~/assets/imgs/banner/study.gif"
+              alt="스터디모집"
+              style="width: 200px; height: 200px"
+              class="mt-8"
+              draggable="false"
+            />
             <span class="mt-10 text-orange2"
               >당신을 책상에 앉혀줄<br />
               스터디원이 대기중입니다</span
@@ -70,10 +80,13 @@
             style="width: 276px; height: 400px"
           >
             <span class="mt-8 txt-mid-bold">사이드 프로젝트</span>
-            <div
-              style="width: 172px; height: 172px"
-              class="mt-10 bg-green1 rounded-8px"
-            ></div>
+            <img
+              src="~/assets/imgs/banner/project.gif"
+              alt="사이드프로젝트"
+              style="width: 200px; height: 200px"
+              class="mt-8"
+              draggable="false"
+            />
             <span class="mt-10 text-orange2"
               >아직도 토이 프로젝트해?<br />
               서비스 배포까지!</span
