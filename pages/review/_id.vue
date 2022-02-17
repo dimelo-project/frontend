@@ -26,7 +26,7 @@
               <span class="ml-1 txt-base-bold">
                 {{ courseData["course_avg"] }}
               </span>
-              <span class="txt-mini">({{ courseData["num_review"] }})</span>
+              <span class="txt-mini">({{ totalNumOfReview }})</span>
             </div>
             <!-- tutor name -->
             <div>
@@ -210,6 +210,13 @@
                   v-if="
                     $auth && $auth.user && review['user_id'] === $auth.user.id
                   "
+                  @click="
+                    openAlertModal(
+                      reviewDataIdx,
+                      $route.params.id,
+                      review['review_id']
+                    )
+                  "
                   class="ml-4 underline cursor-pointer text-gray1 txt-sub"
                   >삭제</span
                 >
@@ -328,6 +335,35 @@
       @modalClose="isModalOpened = false"
       @reviewUpload="uploadReview"
     />
+
+    <!-- Alert Modal -->
+    <AlertModal :isModalOpened="isAlertModalOpened">
+      <div
+        class="flex items-center justify-center w-full h-full border-0 select-none"
+      >
+        <div class="text-center">
+          <span class="txt-mid">삭제하시겠습니까?</span>
+          <div class="flex mt-11">
+            <ButtonGeneral
+              @click="isAlertModalOpened = false"
+              :width="145"
+              :height="44"
+              class="border border-orange2 text-orange2 rounded-4px hover:bg-orange2 hover:text-white"
+            >
+              <span class="txt-base-bold"> 취소 </span>
+            </ButtonGeneral>
+            <ButtonGeneral
+              @click="deleteMyReview()"
+              :width="145"
+              :height="44"
+              class="ml-4 text-white bg-orange1 rounded-4px hover:bg-orange2"
+            >
+              <span class="txt-base-bold"> 삭제 </span>
+            </ButtonGeneral>
+          </div>
+        </div>
+      </div>
+    </AlertModal>
   </div>
 </template>
 
@@ -403,6 +439,7 @@ export default {
     return {
       hearted: true,
       isModalOpened: false,
+      isAlertModalOpened: false,
       reviewMode: null,
       updateReviewIdx: null,
       filteringMenu: [
@@ -433,6 +470,11 @@ export default {
       ],
       selectedFilteringMenuIdx: 0,
       currentReviewPage: 2,
+      selectedReivew: {
+        myReviewIdx: null,
+        course_id: null,
+        review_id: null,
+      },
     };
   },
   methods: {
@@ -535,6 +577,14 @@ export default {
         }
       }
     },
+    openAlertModal(myReviewIdx, course_id, review_id) {
+      this.isAlertModalOpened = true;
+      this.selectedReivew = {
+        myReviewIdx,
+        course_id,
+        review_id,
+      };
+    },
     async openReviewModal(mode, review_id) {
       this.isModalOpened = !this.isModalOpened;
       this.reviewMode = mode;
@@ -573,6 +623,7 @@ export default {
 
           if (response) {
             this.getAllMyReview();
+            this.totalNumOfReview += 1;
           }
         } catch (err) {
           console.error(err.response);
@@ -639,6 +690,22 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    async deleteMyReview() {
+      const { myReviewIdx, course_id, review_id } = this.selectedReivew;
+
+      try {
+        const response = await this.$axios.delete(
+          `/api/reviews/courses/${course_id}/${review_id}`
+        );
+        console.log(response);
+
+        this.reviewData.splice(myReviewIdx, 1);
+        this.totalNumOfReview -= 1;
+      } catch (err) {
+        console.log(err.response);
+      }
+      this.isAlertModalOpened = false;
     },
   },
 };
