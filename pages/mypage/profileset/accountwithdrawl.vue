@@ -31,6 +31,7 @@
     </div>
 
     <InputGeneral
+      v-if="userHasPassword"
       :width="360"
       :height="44"
       :value="userPassword"
@@ -49,25 +50,46 @@
       @click="withdrawlUserAccount"
       :width="360"
       :height="44"
-      class="text-white rounded-4px"
-      :class="[btnActive ? 'bg-orange2' : 'bg-gray10 pointer-events-none']"
+      class="text-white rounded-4px hover:bg-orange2"
+      :class="[btnActive ? 'bg-orange1' : 'bg-gray10 pointer-events-none']"
     >
       <span>회원 탈퇴하기</span>
     </ButtonGeneral>
 
-    <ButtonGeneral
-      :width="360"
-      :height="44"
-      class="mt-3 border-2 pointer-events-none text-gray10 border-gray10 rounded-4px"
+    <NuxtLink to="/mypage/profileset">
+      <ButtonGeneral
+        :width="360"
+        :height="44"
+        class="mt-3 border text-orange2 border-orange2 rounded-4px hover:bg-orange2 hover:text-white"
+      >
+        <span>취소</span>
+      </ButtonGeneral></NuxtLink
     >
-      <span>취소</span>
-    </ButtonGeneral>
   </div>
 </template>
 
 <script>
 export default {
   layout: "mypage",
+  async asyncData({ $axios }) {
+    let userHasPassword, btnActive;
+
+    try {
+      const response = await $axios.$get("/api/users/password");
+
+      console.log(response);
+      if (response) {
+        userHasPassword = true;
+        btnActive = false;
+      } else {
+        userHasPassword = false;
+        btnActive = true;
+      }
+    } catch (err) {
+      console.error(err.response);
+    }
+    return { userHasPassword, btnActive };
+  },
   data() {
     return {
       userPassword: "",
@@ -106,13 +128,22 @@ export default {
     },
     async withdrawlUserAccount() {
       try {
-        const response = this.$axios.$post("/api/users/delete/me", {
-          password: this.userPassword,
-        });
-        await this.$auth.logout();
+        if (this.userHasPassword) {
+          const response = await this.$axios.$post("/api/users/delete/me", {
+            password: this.userPassword,
+          });
+          console.log(response);
+        } else {
+          const response = await this.$axios.$post("/api/users/deactivate/me");
+
+          console.log(response);
+        }
+
         this.$router.push("/");
+        this.$store.commit("auth/SET", { key: "user", value: false });
+        this.$store.commit("auth/SET", { key: "loggedIn", value: false });
       } catch (err) {
-        console.log(err);
+        console.log(err.response);
       }
     },
   },
