@@ -22,6 +22,9 @@
         </span>
       </div>
     </div>
+    <div v-else-if="error.statusCode === 500" class="mt-14">
+      <p>서버에 문제가 있습니다. 불편을 드려 죄송합니다.</p>
+    </div>
     <h1 v-else>An error occurred</h1>
   </div>
 </template>
