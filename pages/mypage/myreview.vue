@@ -94,7 +94,9 @@
 
     <!-- Alert Modal -->
     <AlertModal :isModalOpened="isAlertModalOpened">
-      <div class="flex items-center justify-center w-full h-full select-none">
+      <div
+        class="flex items-center justify-center w-full h-full border-0 select-none"
+      >
         <div class="text-center">
           <span class="txt-mid">삭제하시겠습니까?</span>
           <div class="flex mt-11">
@@ -102,7 +104,7 @@
               @click="isAlertModalOpened = false"
               :width="145"
               :height="44"
-              class="border border-orange2 text-orange2 rounded-4px"
+              class="border border-orange2 text-orange2 rounded-4px hover:bg-orange2 hover:text-white"
             >
               <span class="txt-base-bold"> 취소 </span>
             </ButtonGeneral>
