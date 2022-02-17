@@ -6,7 +6,11 @@
         <div class="flex items-center h-full mr-6">
           <!-- logo -->
           <NuxtLink to="/">
-            <span style="padding-left: 50px" class="txt-mid-bold">Dimelo</span>
+            <img
+              src="~/assets/imgs/banner/logo.png"
+              alt="dimelo"
+              style="height: 18px"
+            />
           </NuxtLink>
 
           <!-- menus -->
