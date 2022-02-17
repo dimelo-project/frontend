@@ -181,14 +181,6 @@
       <!-- buttons -->
       <div class="flex justify-end mt-13">
         <ButtonGeneral
-          :width="200"
-          :height="44"
-          class="border border-orange2 text-orange2 rounded-4px hover:bg-orange2 hover:text-white"
-        >
-          <span>취소</span>
-        </ButtonGeneral>
-
-        <ButtonGeneral
           @click="changeProfileSetting"
           :width="200"
           :height="44"

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="select-none">
     <HomeLayerHeader />
     <div class="flex justify-center text-black1">
       <div
