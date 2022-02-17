@@ -7,6 +7,13 @@
     <!-- divider -->
     <div class="mt-3 border-t-2 border-gray2"></div>
 
+    <div
+      v-if="myAllReviewData.review.length === 0"
+      class="mt-10 text-center txt-base"
+    >
+      <span>작성한 리뷰가 없습니다.</span>
+    </div>
+
     <!-- review data list -->
     <div
       v-for="(review, myReviewIdx) in myAllReviewData.review"
@@ -119,7 +126,7 @@ export default {
   layout: "mypage",
   async asyncData({ $axios }) {
     const myAllReviewData = await $axios.$get("/api/reviews/me");
-    // console.log("myAllReviewData", myAllReviewData);
+    console.log("myAllReviewData", myAllReviewData);
 
     return { myAllReviewData };
   },

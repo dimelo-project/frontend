@@ -19,10 +19,14 @@
     </div>
 
     <!-- divider -->
-    <div class="mt-3 border-t-2" border-gray2></div>
+    <div class="mt-3 border-t-2 border-gray2"></div>
 
     <!-- my article data list -->
     <div v-if="$route.query.category === 'freetopic'">
+      <div v-if="articleData.length === 0" class="mt-10 text-center txt-base">
+        <span>작성한 게시글이 없습니다.</span>
+      </div>
+
       <div v-for="(article, idx) in articleData" :key="idx" class="mt-6">
         <!-- tag & title -->
         <div class="flex items-center">
@@ -57,6 +61,10 @@
       </div>
     </div>
     <div v-else-if="$route.query.category === 'study'">
+      <div v-if="articleData.length === 0" class="mt-10 text-center txt-base">
+        <span>작성한 게시글이 없습니다.</span>
+      </div>
+
       <div v-for="(article, idx) in articleData" :key="idx" class="mt-6">
         <!-- tag & title -->
         <div class="flex items-center">
@@ -91,6 +99,10 @@
       </div>
     </div>
     <div v-else-if="$route.query.category === 'project'">
+      <div v-if="articleData.length === 0" class="mt-10 text-center txt-base">
+        <span>작성한 게시글이 없습니다.</span>
+      </div>
+
       <div v-for="(article, idx) in articleData" :key="idx" class="mt-6">
         <!-- tag & title -->
         <div class="flex items-center">

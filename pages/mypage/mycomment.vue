@@ -3,6 +3,10 @@
     <!-- divider -->
     <div class="border-t-2 border-gray2"></div>
 
+    <div v-if="myCommentData.length === 0" class="mt-10 text-center txt-base">
+      <span>작성한 댓글이 없습니다.</span>
+    </div>
+
     <!-- comment date list -->
     <div v-for="(comment, idx) in myCommentData" :key="idx" class="mt-4">
       <div>
