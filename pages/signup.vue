@@ -12,8 +12,8 @@
         :type="`test`"
         :width="360"
         :height="44"
-        class="p-3 mt-2 rounded-4px txt-sub"
-        :class="{ 'border-orange2': signup.userId.length > 0 }"
+        class="p-3 mt-2 border rounded-4px txt-sub"
+        :class="[signup.userId.length > 0 ? 'border-orange2' : 'border-gray2']"
       />
 
       <!-- email Msg Box -->
@@ -31,21 +31,21 @@
 
       <InputGeneral
         @input="handleUserPassword"
-        @focus="focusUserPassword"
-        @focusout="focusOutUserPassword"
         :value="signup.userPassword"
         :type="`password`"
         :width="360"
         :height="44"
-        class="p-3 mt-2 rounded-4px txt-sub"
-        :class="{ 'border-orange2': signup.userPassword.length > 0 }"
+        class="p-3 mt-2 border rounded-4px txt-sub"
+        :class="[
+          signup.userPassword.length > 0 ? 'border-orange2' : 'border-gray2',
+        ]"
       />
 
       <!-- password Msg Box -->
       <div class="h-8 pt-1 txt-sub">
         <p
           class="txt-mini"
-          :class="[isPasswordMsgError ? 'text-red1' : 'text-gray1']"
+          :class="[isPasswordMsgError ? 'text-red1' : 'text-green1']"
         >
           {{ passwordMsg }}
         </p>
@@ -60,8 +60,12 @@
         :type="`password`"
         :width="360"
         :height="44"
-        class="p-3 mt-2 rounded-4px txt-sub"
-        :class="{ 'border-orange2': signup.userPasswordConfirm.length > 0 }"
+        class="p-3 mt-2 border rounded-4px txt-sub"
+        :class="[
+          signup.userPasswordConfirm.length > 0
+            ? 'border-orange2'
+            : 'border-gray2',
+        ]"
       />
 
       <!-- password confirm Msg Box -->
@@ -76,7 +80,7 @@
         @click="userSignUp"
         :width="360"
         :height="56"
-        class="text-white bg-orange2 txt-mid-bold rounded-4px"
+        class="text-white bg-orange1 txt-mid-bold rounded-4px hover:bg-orange2"
       >
         <span>회원가입</span>
       </ButtonGeneral>
@@ -87,22 +91,24 @@
       <!-- OAuth logo link-->
       <div class="mt-5">
         <div class="flex justify-center">
-          <NuxtLink class="mr-3" to="/">
+          <div class="mr-3" @click="googlLogin">
             <img
               src="~assets/imgs/logo/google_logo.png"
               alt="구글로그인"
               style="width: 40px; height: 40px"
               draggable="false"
+              class="cursor-pointer"
             />
-          </NuxtLink>
-          <NuxtLink class="ml-3" to="/">
+          </div>
+          <div class="ml-3" @click="githubLogin">
             <img
               src="~assets/imgs/logo/github_logo.png"
               alt="깃헙로그인"
               style="width: 40px; height: 40px"
               draggable="false"
+              class="cursor-pointer"
             />
-          </NuxtLink>
+          </div>
         </div>
       </div>
     </div>
@@ -160,26 +166,18 @@ export default {
 
       const regExp = new RegExp("(?=.*[0-9])(?=.*[a-z])");
       // console.log(regExp.test(value));
-      if (regExp.test(value) === false) {
-        this.passwordMsg = "영문, 숫자를 포함해 12자 이상으로 만들어주세요.";
+      if (regExp.test(value) === false || this.signup.userPassword.length < 8) {
+        this.passwordMsg = "영문, 숫자를 포함해 8자 이상으로 만들어주세요.";
         this.isPasswordMsgError = true;
       } else if (regExp.test(value) === true) {
-        this.passwordMsg = "";
+        this.passwordMsg = "사용 가능한 비밀번호 입니다.";
         this.isPasswordMsgError = false;
       }
-    },
-    focusUserPassword() {
-      if (
-        this.signup.userPassword.length === 0 &&
-        this.signup.userPassword.length >= 12
-      ) {
-        this.passwordMsg = "영문, 숫자를 포함해 12자 이상으로 만들어주세요.";
-        this.isPasswordMsgError = false;
-      }
-    },
-    focusOutUserPassword() {
-      if (this.signup.userPassword.length === 0) {
-        this.passwordMsg = "";
+
+      if (this.signup.userPassword !== this.signup.userPasswordConfirm) {
+        this.passwordconfirmMsg = "비밀번호가 일치하지 않습니다.";
+      } else {
+        this.passwordconfirmMsg = "";
       }
     },
     handleUserPasswordConfirm(value) {
@@ -209,6 +207,12 @@ export default {
         console.error(err.response.data);
         // 에러 상태에 따른 로직
       }
+    },
+    googlLogin() {
+      window.open("http://localhost:3000/api/auth/google", "_self");
+    },
+    githubLogin() {
+      window.open("http://localhost:3000/api/auth/github", "_self");
     },
   },
 };

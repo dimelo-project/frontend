@@ -11,8 +11,8 @@
         :placeholder="`아이디(이메일)`"
         :width="360"
         :height="44"
-        class="p-3 mt-7 txt-sub rounded-4px"
-        :class="{ 'border-orange2': login.userId.length > 0 }"
+        class="p-3 border mt-7 txt-sub rounded-4px"
+        :class="[login.userId.length > 0 ? 'border-orange2' : 'border-gray2']"
       />
 
       <!-- PASSWORD -->
@@ -22,8 +22,10 @@
         :placeholder="`비밀번호`"
         :width="360"
         :height="44"
-        class="p-3 mt-4 txt-sub rounded-4px"
-        :class="{ 'border-orange2': login.userPassword.length > 0 }"
+        class="p-3 mt-4 border txt-sub rounded-4px"
+        :class="[
+          login.userPassword.length > 0 ? 'border-orange2' : 'border-gray2',
+        ]"
       />
 
       <!-- error Msg box -->
@@ -39,7 +41,7 @@
         btnText="로그인"
         :width="360"
         :height="56"
-        class="text-white bg-orange2 rounded-4px txt-mid-bold"
+        class="text-white hover:bg-orange2 bg-orange1 rounded-4px txt-mid-bold"
       >
         <span>로그인</span>
       </ButtonGeneral>
@@ -51,7 +53,7 @@
         </p>
         <div
           style="height: 24px"
-          class="absolute -translate-x-1/2 border left-1/2"
+          class="absolute -translate-x-1/2 border left-1/2 border-gray2"
         ></div>
         <p class="absolute pl-4 left-1/2">
           <NuxtLink to="/forgotpassword"> 비밀번호 찾기 </NuxtLink>
@@ -73,14 +75,15 @@
               class="cursor-pointer"
             />
           </div>
-          <NuxtLink class="ml-3" to="/">
+          <div class="ml-3" @click="githubLogin">
             <img
               draggable="false"
               src="~assets/imgs/logo/github_logo.png"
               alt="깃헙로그인"
               style="width: 40px; height: 40px"
+              class="cursor-pointer"
             />
-          </NuxtLink>
+          </div>
         </div>
       </div>
     </div>
@@ -130,6 +133,9 @@ export default {
     },
     googlLogin() {
       window.open("http://localhost:3000/api/auth/google", "_self");
+    },
+    githubLogin() {
+      window.open("http://localhost:3000/api/auth/github", "_self");
     },
   },
 };
