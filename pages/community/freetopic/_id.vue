@@ -8,7 +8,7 @@
           :height="34"
           :borderRadius="`rounded-4px`"
           :chipText="articleData['talk_category']"
-          class="bg-green2 mt-2 text-green1 py-5px px-2.5 txt-base-bold flex-shrink-0 pointer-events-none select-none"
+          class="bg-green2 text-green1 py-5px px-2.5 txt-base-bold flex-shrink-0 pointer-events-none select-none"
         />
         <div class="break-all">
           <h3 class="ml-3 txt-heading3">
@@ -80,9 +80,8 @@
           <!-- commentor nickname -->
           <span class="ml-2 txt-base-bold">{{ comment["user_nickname"] }}</span>
           <!-- commentor career duration -->
-          <span class="ml-1.5 txt-base"
-            >{{ comment["user_job"] }}{{ comment["user_career"] }}</span
-          >
+          <span class="ml-1.5 txt-base">{{ comment["user_job"] }}</span>
+          <span class="ml-1.5">{{ comment["user_career"] }}</span>
         </div>
         <!-- comment body -->
         <div class="mt-2.5">
@@ -94,17 +93,52 @@
           <span class="text-gray1">
             {{ comment["comment_updatedAt"].split(" ")[0] }}
           </span>
+
+          <span
+            v-if="$auth && $auth.user && $auth.user.id === comment['user_id']"
+            @click="clickUpdateText(idx, comment['comment_id'])"
+            class="ml-10 underline cursor-pointer text-gray1 txt-sub"
+          >
+            수정
+          </span>
+          <span
+            v-if="$auth && $auth.user && $auth.user.id === comment['user_id']"
+            @click="deleteComment(idx, comment['comment_id'])"
+            class="ml-4 underline cursor-pointer text-gray1 txt-sub"
+          >
+            삭제
+          </span>
         </div>
       </div>
       <!-- comment Box & submit button -->
       <div class="flex mt-12">
         <CommentBox
+          ref="commentbox"
           :value="userComment"
           @input="handleInput"
           :placeholder="`답변을 남겨보세요.`"
           class="border border-gray2 rounded-8px py-2.5 px-3 w-full max-h-40"
         />
         <ButtonGeneral
+          v-if="commentEditMode"
+          @click="cancelCommentEdit"
+          :width="72"
+          :height="44"
+          class="rounded-8px txt-base-bold text-orange2 bg-white border border-orange2 hover:text-white hover:bg-orange2 py-2.5 px-5 flex-shrink-0 ml-3.5"
+        >
+          <span>취소</span>
+        </ButtonGeneral>
+        <ButtonGeneral
+          v-if="commentEditMode"
+          @click="updateComment"
+          :width="72"
+          :height="44"
+          class="rounded-8px txt-base-bold text-white bg-orange1 hover:bg-orange2 py-2.5 px-5 flex-shrink-0 ml-3.5"
+        >
+          <span>수정</span>
+        </ButtonGeneral>
+        <ButtonGeneral
+          v-if="!commentEditMode"
           @click="uploadComment"
           :width="72"
           :height="44"
@@ -136,6 +170,9 @@ export default {
     return {
       rows: 1,
       userComment: "",
+      commentEditMode: false,
+      selectedCommentDataIdx: null,
+      selectedCommentId: null,
     };
   },
   methods: {
@@ -162,6 +199,61 @@ export default {
         this.getAllCommentData();
       }
       console.log(response);
+    },
+    async deleteComment(commentDataIdx, comment_id) {
+      try {
+        const response = await this.$axios.$delete(
+          `/api/talks/${this.$route.params.id}/comments/${comment_id}`
+        );
+
+        console.log(response);
+        if (response) {
+          this.allCommentData.splice(commentDataIdx, 1);
+        }
+      } catch (err) {
+        console.error(err.response);
+      }
+    },
+    clickUpdateText(commentDataIdx, comment_id) {
+      this.selectedCommentDataIdx = commentDataIdx;
+      this.selectedCommentId = comment_id;
+      this.userComment =
+        this.allCommentData[commentDataIdx]["comment_commentText"];
+      this.$refs.commentbox.$el.focus();
+      this.commentEditMode = true;
+    },
+    cancelCommentEdit() {
+      this.userComment = "";
+      this.commentEditMode = false;
+    },
+    async updateComment() {
+      try {
+        const response = await this.$axios.$patch(
+          `/api/talks/${this.$route.params.id}/comments/${this.selectedCommentId}`,
+          {
+            commentText: this.userComment,
+          }
+        );
+
+        console.log(response);
+        if (response) {
+          this.commentEditMode = false;
+          this.allCommentData.splice(
+            this.selectedCommentDataIdx,
+            1,
+            Object.assign(
+              {},
+              this.allCommentData[this.selectedCommentDataIdx],
+              {
+                comment_commentText: this.userComment,
+              }
+            )
+          );
+          this.userComment = "";
+        }
+      } catch (err) {
+        console.err(err.response);
+      }
     },
   },
 };

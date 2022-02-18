@@ -29,6 +29,10 @@ export default {
   },
   watch: {
     value() {
+      const rows = this.value.split("\n").length;
+      this.rows = rows;
+      this.$refs.textarea.style.height = `${rows * 25 + 20}px`;
+
       if (!this.value) {
         this.rows = 0;
         this.$refs.textarea.style.height = "44px";
@@ -43,6 +47,7 @@ export default {
       $textarea.style.height = `${$textarea.scrollHeight}px`;
     },
     onChangeComment(event) {
+      console.log("onchange!!!");
       const rows = event.target.value.split("\n").length;
 
       this.rows = rows;
