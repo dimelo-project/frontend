@@ -11,6 +11,7 @@
   "dependencies": {
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/vercel-builder": "^0.22.1",
     "@tiptap/extension-placeholder": "^2.0.0-beta.48",
     "@tiptap/extension-underline": "^2.0.0-beta.23",
     "@tiptap/starter-kit": "^2.0.0-beta.183",
