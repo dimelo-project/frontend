@@ -216,12 +216,16 @@
         >
           <span class="txt-sub">{{ tech.skill_skill }}</span>
         </div>
-
-        <!-- scroll to top button -->
-        <div class="flex justify-end mt-20">
-          <ScrollToTop />
-        </div>
       </div>
+    </div>
+
+    <!-- scroll to top button -->
+    <div
+      class="fixed flex justify-end invisible xl:visible"
+      style="left: calc(50% - 534px - 100px); bottom: 100px"
+      @click="ScrollToTop"
+    >
+      <ScrollToTop />
     </div>
   </div>
 </template>
@@ -634,6 +638,9 @@ export default {
           searchCategoryKeyword: this.categorySearchInput,
         },
       });
+    },
+    ScrollToTop() {
+      window.scrollTo(0, 0);
     },
   },
   mounted() {
