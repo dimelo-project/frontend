@@ -585,6 +585,7 @@ export default {
     clickPaginationBtn(selectedPageIdx) {
       this.currentPageIndex = selectedPageIdx;
       this.getLectureData();
+      this.ScrollToTop();
     },
     cardImageLogo(siteName) {
       let imgName = "";
@@ -640,7 +641,11 @@ export default {
       });
     },
     ScrollToTop() {
-      window.scrollTo(0, 0);
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
     },
   },
   mounted() {
