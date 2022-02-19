@@ -116,7 +116,11 @@
             <div class="flex justify-between">
               <!-- course title -->
               <div style="width: 440px">
-                <p class="txt-base-bold">{{ lecture["course_title"] }}</p>
+                <NuxtLink :to="`/review/${lecture['course_id']}`">
+                  <span class="cursor-pointer txt-base-bold hover:underline">{{
+                    lecture["course_title"]
+                  }}</span>
+                </NuxtLink>
               </div>
               <!-- review star & score -->
               <div class="flex items-center">
@@ -156,7 +160,32 @@
               </div>
 
               <div class="flex items-center">
-                <SvgHeartOutline class="cursor-pointer" />
+                <div
+                  v-if="
+                    $auth &&
+                    $auth.user &&
+                    lecture['course_liked'] &&
+                    lecture['course_liked'] === 'true'
+                  "
+                  @click="removeHeartToLecture(index, lecture['course_id'])"
+                >
+                  <SvgHeartOutline
+                    :color="`#ff6b6b`"
+                    :fill="`#ff6b6b`"
+                    class="cursor-pointer"
+                  />
+                </div>
+                <div
+                  v-if="
+                    $auth &&
+                    $auth.user &&
+                    lecture['course_liked'] &&
+                    lecture['course_liked'] === 'false'
+                  "
+                  @click="giveHeartToLecture(index, lecture['course_id'])"
+                >
+                  <SvgHeartOutline :color="`#868296`" class="cursor-pointer" />
+                </div>
 
                 <div v-if="Number(lecture['num_review']) === 0">
                   <ButtonGeneral
@@ -646,6 +675,32 @@ export default {
         left: 0,
         behavior: "smooth",
       });
+    },
+    async giveHeartToLecture(lectureIdx, course_id) {
+      try {
+        // console.log("give heart idx", lectureIdx);
+        const response = await this.$axios.$post(
+          `/api/courses/likes/${course_id}`
+        );
+        if (response) {
+          this.lectureData[lectureIdx]["course_liked"] = "true";
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async removeHeartToLecture(lectureIdx, course_id) {
+      try {
+        // console.log("remove heart idx", lectureIdx);
+        const response = await this.$axios.$delete(
+          `/api/courses/likes/${course_id}`
+        );
+        if (response) {
+          this.lectureData[lectureIdx]["course_liked"] = "false";
+        }
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
   mounted() {
