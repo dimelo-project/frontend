@@ -222,7 +222,13 @@
                     class="object-cover rounded-full"
                     style="width: 36px; height: 36px"
                   />
-                  <div v-else class="w-6 h-6 bg-gray-500 rounded-full"></div>
+                  <img
+                    v-else
+                    src="~/assets/imgs/profile/default_user_profile.png"
+                    alt="프로필기본"
+                    class="object-cover rounded-full"
+                    style="width: 36px; height: 36px"
+                  />
                 </button>
 
                 <div
