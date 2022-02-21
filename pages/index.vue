@@ -2,6 +2,8 @@
   <div class="select-none">
     <!-- first -->
     <div
+      @mouseover="MainBannerHover = true"
+      @mouseleave="MainBannerHover = false"
       style="height: 460px"
       class="flex items-center justify-center bg-yellow1"
     >
@@ -20,11 +22,24 @@
             <span class="txt-mid-bold">디멜로에게 말해주세요</span>
           </div>
         </div>
-        <img
-          src="~/assets/imgs/banner/main.gif"
-          alt="함께공부하기"
-          draggable="false"
-        />
+        <div class="relative" style="width: 497px; height: 234px">
+          <img
+            src="~/assets/imgs/banner/main.jpg"
+            alt="함께공부하기"
+            style="width: 497px; height: 234px"
+            class="absolute top-0 left-0"
+            draggable="false"
+            :class="{ 'opacity-0': MainBannerHover }"
+          />
+          <img
+            src="~/assets/imgs/banner/main.gif"
+            alt="함께공부하기"
+            style="width: 497px; height: 234px"
+            class="absolute top-0 left-0"
+            draggable="false"
+            :class="{ 'opacity-0': !MainBannerHover }"
+          />
+        </div>
       </div>
     </div>
 
@@ -36,17 +51,30 @@
       <div class="grid grid-cols-3 gap-15">
         <NuxtLink to="/lecture">
           <div
+            @mouseover="LectureBannerHover = true"
+            @mouseleave="LectureBannerHover = false"
             class="flex flex-col items-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
             style="width: 276px; height: 400px"
           >
             <span class="mt-8 txt-mid-bold">솔직한 강의리뷰</span>
-            <img
-              src="~/assets/imgs/banner/lecture.gif"
-              alt="강의리뷰"
-              style="width: 200px; height: 200px"
-              class="mt-8"
-              draggable="false"
-            />
+            <div class="relative mt-8" style="width: 200px; height: 200px">
+              <img
+                src="~/assets/imgs/banner/lecture.png"
+                alt="강의리뷰"
+                style="width: 200px; height: 200px"
+                class="absolute top-0 left-0"
+                :class="{ 'opacity-0': LectureBannerHover }"
+                draggable="false"
+              />
+              <img
+                src="~/assets/imgs/banner/lecture.gif"
+                alt="강의리뷰"
+                style="width: 200px; height: 200px"
+                class="absolute top-0 left-0"
+                :class="{ 'opacity-0': !LectureBannerHover }"
+                draggable="false"
+              />
+            </div>
             <span class="mt-10 text-orange2"
               >개발, 데이터 과학, 디자인<br />
               인강/현장강의 찐리뷰</span
@@ -56,17 +84,30 @@
 
         <NuxtLink to="/community/study">
           <div
+            @mouseover="StudyBannerHover = true"
+            @mouseleave="StudyBannerHover = false"
             class="flex flex-col items-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
             style="width: 276px; height: 400px"
           >
             <span class="mt-8 txt-mid-bold">스터디 모집</span>
-            <img
-              src="~/assets/imgs/banner/study.gif"
-              alt="스터디모집"
-              style="width: 200px; height: 200px"
-              class="mt-8"
-              draggable="false"
-            />
+            <div class="relative mt-8" style="width: 200px; height: 200px">
+              <img
+                src="~/assets/imgs/banner/study.png"
+                alt="강의리뷰"
+                style="width: 200px; height: 200px"
+                class="absolute top-0 left-0"
+                :class="{ 'opacity-0': StudyBannerHover }"
+                draggable="false"
+              />
+              <img
+                src="~/assets/imgs/banner/study.gif"
+                alt="강의리뷰"
+                style="width: 200px; height: 200px"
+                class="absolute top-0 left-0"
+                :class="{ 'opacity-0': !StudyBannerHover }"
+                draggable="false"
+              />
+            </div>
             <span class="mt-10 text-orange2"
               >당신을 책상에 앉혀줄<br />
               스터디원이 대기중입니다</span
@@ -76,17 +117,30 @@
 
         <NuxtLink to="/community/sideproject">
           <div
+            @mouseover="ProjectBannerHover = true"
+            @mouseleave="ProjectBannerHover = false"
             class="flex flex-col items-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
             style="width: 276px; height: 400px"
           >
             <span class="mt-8 txt-mid-bold">사이드 프로젝트</span>
-            <img
-              src="~/assets/imgs/banner/project.gif"
-              alt="사이드프로젝트"
-              style="width: 200px; height: 200px"
-              class="mt-8"
-              draggable="false"
-            />
+            <div class="relative mt-8" style="width: 200px; height: 200px">
+              <img
+                src="~/assets/imgs/banner/project.png"
+                alt="강의리뷰"
+                style="width: 200px; height: 200px"
+                class="absolute top-0 left-0"
+                :class="{ 'opacity-0': ProjectBannerHover }"
+                draggable="false"
+              />
+              <img
+                src="~/assets/imgs/banner/project.gif"
+                alt="강의리뷰"
+                style="width: 200px; height: 200px"
+                class="absolute top-0 left-0"
+                :class="{ 'opacity-0': !ProjectBannerHover }"
+                draggable="false"
+              />
+            </div>
             <span class="mt-10 text-orange2"
               >아직도 토이 프로젝트해?<br />
               서비스 배포까지!</span
@@ -348,6 +402,10 @@ export default {
   layout: "home",
   data() {
     return {
+      MainBannerHover: false,
+      LectureBannerHover: false,
+      StudyBannerHover: false,
+      ProjectBannerHover: false,
       studyData: [
         {
           study_id: 5,
