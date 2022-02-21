@@ -399,6 +399,9 @@
 
 <script>
 export default {
+  middleware({ store }) {
+    store.commit("changeHeaerBgColor", "rgba(255, 224, 102, 1)");
+  },
   layout: "home",
   data() {
     return {
@@ -459,6 +462,24 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    scrollHandler() {
+      if (window.scrollY >= 0 && window.scrollY <= 150) {
+        this.$store.commit("changeHeaerBgColor", "rgba(255, 224, 102, 1)");
+      } else if (window.scrollY <= 460) {
+        this.$store.commit("changeHeaerBgColor", "rgba(255, 224, 102, 0.7)");
+      } else {
+        this.$store.commit("changeHeaerBgColor", "rgba(255, 255, 255, 0.7");
+      }
+    },
+  },
+  mounted() {
+    window.addEventListener("scroll", this.scrollHandler);
+  },
+  destroyed() {
+    this.$store.commit("changeHeaerBgColor", "rgba(255, 255, 255, 1)");
+    window.removeEventListener("scroll", this.scrollHandler);
   },
 };
 </script>

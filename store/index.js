@@ -11,9 +11,16 @@ export const state = () => ({
 
   // mypage layout
   cntCategoryIdx: 0,
+
+  // home layout
+  headerBgColor: "rgba(255, 255, 255, 1)",
 });
 
 export const mutations = {
+  // home layout
+  changeHeaerBgColor(state, value) {
+    state.headerBgColor = value;
+  },
   // mypage layout
   changeCntCategoryIdx(state, value) {
     state.cntCategoryIdx = value;
