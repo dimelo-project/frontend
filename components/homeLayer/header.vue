@@ -1,5 +1,13 @@
 <template>
-  <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray7">
+  <nav
+    class="fixed top-0 z-50 w-full transition duration-500 border-b bg-opacity-80 header-backdrop-filter"
+    :class="[
+      Number($store.state.headerBgColor.split(',')[1]) == '255'
+        ? 'border-gray7'
+        : 'border-yellow1',
+    ]"
+    :style="{ backgroundColor: $store.state.headerBgColor }"
+  >
     <div class="relative flex items-center mx-auto nav-content-wrapper-size">
       <!-- content--left -->
       <div class="absolute left-0 h-full">
@@ -368,5 +376,8 @@ export default {
 }
 .test {
   @apply border-2 border-orange1;
+}
+.header-backdrop-filter {
+  backdrop-filter: blur(5px);
 }
 </style>
