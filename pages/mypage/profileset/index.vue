@@ -172,12 +172,18 @@
       </div>
 
       <!-- buttons -->
-      <div class="flex justify-end mt-13">
+      <div class="flex justify-between mt-13">
+        <span class="text-red1"> *는 필수항목입니다.</span>
         <ButtonGeneral
           @click="changeProfileSetting"
           :width="200"
           :height="44"
-          class="ml-2 text-white bg-orange1 hover:bg-orange2 rounded-4px"
+          class="ml-2 border rounded-4px"
+          :class="[
+            canSubmit
+              ? 'text-white bg-orange1 hover:bg-orange2'
+              : 'border-gray2 text-gray2  pointer-events-none',
+          ]"
         >
           <span>프로필 수정</span>
         </ButtonGeneral>
@@ -319,6 +325,23 @@ export default {
     this.selectedMajor = this.$auth.user.job;
     this.selectedPeriod = this.$auth.user.career;
   },
+  computed: {
+    currentMajorField() {
+      return this.jobPosition[this.currentSelectedJobIndex]["major"];
+    },
+    canSubmit() {
+      if (
+        this.userNickName.length > 0 &&
+        !this.isNicknameMsgError &&
+        !!this.selectedMajor &&
+        !!this.selectedPeriod
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
   methods: {
     onChangeFileInput(event) {
       const file = event.target.files[0];
@@ -404,11 +427,6 @@ export default {
         console.error(err.response);
         alert("필수 항목을 모두 입력해주세요.");
       }
-    },
-  },
-  computed: {
-    currentMajorField() {
-      return this.jobPosition[this.currentSelectedJobIndex]["major"];
     },
   },
   beforeDestroy() {
