@@ -17,11 +17,12 @@
 
     <div class="mt-2">
       <InputGeneral
+        ref="currentpassword"
         :type="`password`"
         :value="currentPassword"
         :width="360"
         :height="44"
-        class="p-3 rounded-4px"
+        class="p-3 border rounded-4px border-gray2"
         :class="{ 'border-orange2': currentPassword.length > 0 }"
         @input="handleCurrentPassword"
       />
@@ -42,7 +43,7 @@
         :value="newPassword"
         :width="360"
         :height="44"
-        class="p-3 rounded-4px"
+        class="p-3 border rounded-4px border-gray2"
         :class="{ 'border-orange2': newPassword.length > 0 }"
         @input="handleNewPassword"
       />
@@ -68,7 +69,7 @@
         :value="newPasswordConfirm"
         :width="360"
         :height="44"
-        class="p-3 rounded-4px"
+        class="p-3 border rounded-4px border-gray2"
         :class="{ 'border-orange2': newPasswordConfirm.length > 0 }"
         @input="handleNewPasswordConfirm"
       />
@@ -83,7 +84,12 @@
       @click="changeUserPassword"
       :width="360"
       :height="44"
-      class="text-white bg-orange2 txt-base-bold rounded-4px"
+      class="border txt-base-bold rounded-4px"
+      :class="[
+        canSubmit
+          ? 'text-white bg-orange1 hover:bg-orange2'
+          : ' pointer-events-none border-gray2 bg-white text-gray2',
+      ]"
     >
       <span>비밀번호 변경하기</span>
     </ButtonGeneral>
@@ -93,7 +99,7 @@
       @click="$router.push('/mypage/profileset')"
       :width="360"
       :height="44"
-      class="mt-3 border text-orange2 border-orange2 txt-base-bold rounded-4px"
+      class="mt-3 border text-orange2 border-orange2 txt-base-bold rounded-4px hover:bg-orange2 hover:text-white"
     >
       <span>다음에 변경하기</span>
     </ButtonGeneral>
@@ -108,6 +114,7 @@ export default {
       // current password
       currentPassword: "",
       currentPasswordNotiMsg: "",
+      isCurrentPasswordMsgError: false,
       timeout: null,
       // new password
       newPassword: "",
@@ -116,7 +123,27 @@ export default {
       // new password confirm
       newPasswordConfirm: "",
       newPasswordConfirmNotiMsg: "",
+      isNewPasswordConfirmMsgError: false,
     };
+  },
+  computed: {
+    canSubmit() {
+      if (
+        this.currentPassword.length > 0 &&
+        !this.isCurrentPasswordMsgError &&
+        this.newPassword.length > 0 &&
+        !this.isNewPasswordMsgError &&
+        this.newPasswordConfirm.length > 0 &&
+        this.newPassword === this.newPasswordConfirm
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
+  mounted() {
+    this.$refs.currentpassword.$el.focus();
   },
   methods: {
     handleCurrentPassword(value) {
@@ -136,9 +163,14 @@ export default {
               password: this.currentPassword,
             }
           );
+
+          if (response) {
+            this.isCurrentPasswordMsgError = false;
+          }
         } catch (err) {
           console.log(err.response);
           this.currentPasswordNotiMsg = "비밀번호가 일치하지 않습니다.";
+          this.isCurrentPasswordMsgError = true;
         }
       }, 500);
     },
@@ -158,6 +190,8 @@ export default {
 
       if (this.newPassword !== this.newPasswordConfirm) {
         this.newPasswordConfirmNotiMsg = "비밀번호가 일치하지 않습니다.";
+      } else {
+        this.newPasswordConfirmNotiMsg = "";
       }
     },
     handleNewPasswordConfirm(value) {
@@ -166,6 +200,8 @@ export default {
 
       if (this.newPassword !== this.newPasswordConfirm) {
         this.newPasswordConfirmNotiMsg = "비밀번호가 일치하지 않습니다.";
+      } else {
+        this.newPasswordConfirmNotiMsg = "";
       }
     },
     async changeUserPassword() {
