@@ -21,7 +21,7 @@
               />
               <img
                 v-else
-                src="~assets/imgs/profile.png"
+                src="~assets/imgs/profile/default_user_profile.png"
                 alt="프로필 사진 설정"
                 class="object-cover rounded-full"
                 style="width: 60px; height: 60px"

@@ -30,7 +30,7 @@
               />
               <img
                 v-else
-                src="~assets/imgs/profile.png"
+                src="~assets/imgs/profile/default_user_profile.png"
                 alt="프로필 사진 설정"
                 draggable="false"
                 class="object-cover rounded-full"
