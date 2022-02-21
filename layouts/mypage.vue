@@ -3,7 +3,7 @@
     <HomeLayerHeader />
     <div class="flex justify-center text-black1">
       <div
-        style="width: 1090px; padding-top: 82px"
+        style="width: 1090px; padding-top: 81px"
         class="flex justify-between mt-14"
       >
         <!-- left side navigation -->
