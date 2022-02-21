@@ -33,31 +33,37 @@ export default {
       const score = Number(this.score);
 
       if (score > 4.7 && score <= 5.0) {
+        this.half = false;
         return 5;
       } else if (score > 4.2 && score <= 4.7) {
         this.half = true;
         return 4;
       } else if (score > 3.7 && score <= 4.2) {
+        this.half = false;
         return 4;
       } else if (score > 3.2 && score <= 3.7) {
         this.half = true;
         return 3;
       } else if (score > 2.7 && score <= 3.2) {
+        this.half = false;
         return 3;
       } else if (score > 2.2 && score <= 2.7) {
         this.half = true;
         return 2;
       } else if (score > 1.7 && score <= 2.2) {
+        this.half = false;
         return 2;
       } else if (score > 1.2 && score <= 1.7) {
         this.half = true;
         return 1;
       } else if (score > 0.7 && score <= 1.2) {
+        this.half = false;
         return 1;
       } else if (score > 0.0 && score <= 0.7) {
         this.half = true;
         return 0;
       } else {
+        this.half = false;
         return 0;
       }
     },
