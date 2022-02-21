@@ -55,13 +55,6 @@
               <span>비밀번호 변경하기</span>
             </ButtonGeneral>
           </NuxtLink>
-          <NuxtLink v-else to="/mypage/profileset/createpassword">
-            <ButtonGeneral
-              class="border border-orange2 text-orange2 px-4 py-1.5 rounded-8px ml-5 txt-base-bold hover:bg-orange2 hover:text-white"
-            >
-              <span>비밀번호 생성하기</span>
-            </ButtonGeneral>
-          </NuxtLink>
         </div>
 
         <!-- profile nickname -->
