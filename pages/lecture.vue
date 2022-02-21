@@ -293,6 +293,7 @@ export default {
         return;
       }
     });
+    // console.log("currentCategoryIndex", currentCategoryIndex);
 
     let lectureData, popularTechData, countResponse, currentPageNum;
 
@@ -357,12 +358,16 @@ export default {
         },
       });
 
+      let countResponseParam = {};
+
+      countResponseParam["categoryBig"] = categoryBig;
+      countResponseParam["category"] = category;
+      if (skill) {
+        countResponseParam["skill"] = skill;
+      }
+      console.log("countResponseParam", countResponseParam);
       countResponse = await $axios.$get("/api/courses/count", {
-        params: {
-          categoryBig,
-          category,
-          skill,
-        },
+        params: countResponseParam,
       });
     }
 
@@ -555,12 +560,16 @@ export default {
             }
           );
 
+          let countResponseParam = {};
+
+          countResponseParam["categoryBig"] = categoryBig;
+          countResponseParam["category"] = category;
+          if (skill) {
+            countResponseParam["skill"] = skill;
+          }
+
           countResponse = await this.$axios.$get("/api/courses/count", {
-            params: {
-              categoryBig,
-              category,
-              skill,
-            },
+            params: countResponseParam,
           });
         }
       } catch (err) {
@@ -655,18 +664,26 @@ export default {
         },
       });
     },
-    async getLectureData() {
+    getLectureData() {
+      let queryData = {};
+
+      queryData["categoryBig"] = this.currentCategoryName;
+      queryData["category"] = this.currentMajorName;
+      queryData["perPage"] = 17;
+      queryData["page"] = this.currentPageIndex + 1;
+      if (this.currentFilteringOptionName) {
+        queryData["sort"] = this.currentFilteringOptionName;
+      }
+      if (this.currentPopularKeyword) {
+        queryData["skill"] = this.currentPopularKeyword;
+      }
+      if (this.searchCategoryKeyword) {
+        queryData["searchCategoryKeyword"] = this.categorySearchInput;
+      }
+
       this.$router.push({
         path: "/lecture",
-        query: {
-          categoryBig: this.currentCategoryName,
-          category: this.currentMajorName,
-          perPage: 17,
-          page: this.currentPageIndex + 1,
-          sort: this.currentFilteringOptionName,
-          skill: this.currentPopularKeyword,
-          searchCategoryKeyword: this.categorySearchInput,
-        },
+        query: queryData,
       });
     },
     ScrollToTop() {
