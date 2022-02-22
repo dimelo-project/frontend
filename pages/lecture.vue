@@ -87,7 +87,7 @@
 
       <div
         v-if="lectureData.length === 0"
-        class="flex flex-col items-center mt-16"
+        class="flex flex-col items-center mt-16 mb-96"
       >
         <span class="txt-mid">검색 결과가 없습니다.</span>
         <span class="mt-2 txt-sub-bold text-orange2"
@@ -246,7 +246,7 @@
       </div>
 
       <!-- pagination buttons -->
-      <div class="flex justify-center my-16">
+      <div v-if="lectureData.length > 0" class="flex justify-center my-16">
         <PaginationGeneral
           :pageIdx="currentPageIndex"
           :pageNum="currentPageNum"
@@ -271,6 +271,7 @@
           :key="index"
           @click="clickPopularTech(tech.skill_skill)"
           class="py-2 pl-5 mb-2 cursor-pointer bg-gray3 rounded-4px"
+          style="width: 160px"
         >
           <span class="txt-sub">{{ tech.skill_skill }}</span>
         </div>
