@@ -61,7 +61,7 @@
             :height="22"
             class="bg-transparent border-none"
           />
-          <div @click="searchByCategoryInput">
+          <div @click="routerPushWithCategorySearch">
             <SvgSearchOutline
               class="ml-1 cursor-pointer"
               :width="20"
@@ -85,135 +85,148 @@
         </div>
       </div>
 
-      <!-- lecture cards -->
       <div
-        class="mt-16 mb-8"
-        v-for="(lecture, index) in lectureData"
-        :key="index"
+        v-if="lectureData.length === 0"
+        class="flex justify-center pt-40 pb-96"
       >
-        <div class="flex">
-          <!-- site logo image -->
-          <div class="" style="width: 69px; height: 69px">
-            <img
-              class="max-w-none"
-              :src="cardImageLogo(lecture['course_platform'])"
-              alt="강의사이트"
-            />
-          </div>
+        <span>검색 결과가 없습니다.</span>
+      </div>
 
-          <!-- Rank -->
-          <div
-            style="margin-left: 24px; margin-right: 24px"
-            :class="{ 'text-orange2': index <= 2 && currentPageIndex === 0 }"
-            class="txt-mid"
-          >
-            <span class=""> {{ 17 * currentPageIndex + index + 1 }} </span>
-          </div>
-
-          <!-- card body -->
-          <div class="w-full h-full">
-            <!-- first line -->
-            <div class="flex justify-between">
-              <!-- course title -->
-              <div style="width: 440px">
-                <NuxtLink :to="`/review/${lecture['course_id']}`">
-                  <span class="cursor-pointer txt-base-bold hover:underline">{{
-                    lecture["course_title"]
-                  }}</span>
-                </NuxtLink>
-              </div>
-              <!-- review star & score -->
-              <div class="flex items-center">
-                <StarRate :score="lecture['course_avg']" />
-
-                <span class="ml-1 txt-base-bold">{{
-                  lecture["course_avg"]
-                }}</span>
-                <span class="txt-mini">({{ lecture["num_review"] }})</span>
-              </div>
+      <div v-else>
+        <!-- lecture cards -->
+        <div
+          class="mt-16 mb-8"
+          v-for="(lecture, index) in lectureData"
+          :key="index"
+        >
+          <div class="flex">
+            <!-- site logo image -->
+            <div class="" style="width: 69px; height: 69px">
+              <img
+                class="max-w-none"
+                :src="cardImageLogo(lecture['course_platform'])"
+                alt="강의사이트"
+              />
             </div>
 
-            <!-- second line -->
-            <div class="flex justify-between mt-4 text-black1">
-              <div class="flex items-center">
-                <span
-                  class="mr-4 underline cursor-pointer txt-sub-bold text-orange2"
-                  @click="
-                    $router.push(`/tutorinfo/${lecture['instructor_id']}`)
-                  "
-                >
-                  {{ lecture["instructor_name"] }}
-                </span>
-                <span class="mr-1 text-gray1 txt-sub">{{
-                  lecture["course_platform"]
-                }}</span>
-                <span class="text-gray1 txt-sub">{{
-                  `${Number(lecture["course_price"]).toLocaleString()}원`
-                }}</span>
-                <a :href="lecture['course_siteUrl']" target="_blank">
-                  <span
-                    class="ml-1 underline cursor-pointer txt-sub text-gray1"
-                  >
-                    보러가기
-                  </span>
-                </a>
+            <!-- Rank -->
+            <div
+              style="margin-left: 24px; margin-right: 24px"
+              :class="{ 'text-orange2': index <= 2 && currentPageIndex === 0 }"
+              class="txt-mid"
+            >
+              <span class=""> {{ 17 * currentPageIndex + index + 1 }} </span>
+            </div>
+
+            <!-- card body -->
+            <div class="w-full h-full">
+              <!-- first line -->
+              <div class="flex justify-between">
+                <!-- course title -->
+                <div style="width: 440px">
+                  <NuxtLink :to="`/review/${lecture['course_id']}`">
+                    <span
+                      class="cursor-pointer txt-base-bold hover:underline"
+                      >{{ lecture["course_title"] }}</span
+                    >
+                  </NuxtLink>
+                </div>
+                <!-- review star & score -->
+                <div class="flex items-center">
+                  <StarRate :score="lecture['course_avg']" />
+
+                  <span class="ml-1 txt-base-bold">{{
+                    lecture["course_avg"]
+                  }}</span>
+                  <span class="txt-mini">({{ lecture["num_review"] }})</span>
+                </div>
               </div>
 
-              <div class="flex items-center">
-                <div
-                  v-if="
-                    $auth &&
-                    $auth.user &&
-                    lecture['course_liked'] &&
-                    lecture['course_liked'] === 'true'
-                  "
-                  @click="removeHeartToLecture(index, lecture['course_id'])"
-                >
-                  <SvgHeartOutline
-                    :color="`#ff6b6b`"
-                    :fill="`#ff6b6b`"
-                    class="cursor-pointer"
-                  />
-                </div>
-                <div
-                  v-if="
-                    $auth &&
-                    $auth.user &&
-                    lecture['course_liked'] &&
-                    lecture['course_liked'] === 'false'
-                  "
-                  @click="giveHeartToLecture(index, lecture['course_id'])"
-                >
-                  <SvgHeartOutline :color="`#868296`" class="cursor-pointer" />
+              <!-- second line -->
+              <div class="flex justify-between mt-4 text-black1">
+                <div class="flex items-center">
+                  <span
+                    class="mr-4 underline cursor-pointer txt-sub-bold text-orange2"
+                    @click="
+                      $router.push(`/tutorinfo/${lecture['instructor_id']}`)
+                    "
+                  >
+                    {{ lecture["instructor_name"] }}
+                  </span>
+                  <span class="mr-1 text-gray1 txt-sub">{{
+                    lecture["course_platform"]
+                  }}</span>
+                  <span class="text-gray1 txt-sub">{{
+                    `${Number(lecture["course_price"]).toLocaleString()}원`
+                  }}</span>
+                  <a :href="lecture['course_siteUrl']" target="_blank">
+                    <span
+                      class="ml-1 underline cursor-pointer txt-sub text-gray1"
+                    >
+                      보러가기
+                    </span>
+                  </a>
                 </div>
 
-                <div v-if="Number(lecture['num_review']) === 0">
-                  <ButtonGeneral
-                    :width="172"
-                    :height="32"
-                    class="ml-3 border pointer-events-none text-gray6 txt-base rounded-4px border-gray2"
+                <div class="flex items-center">
+                  <div
+                    v-if="
+                      $auth &&
+                      $auth.user &&
+                      lecture['course_liked'] &&
+                      lecture['course_liked'] === 'true'
+                    "
+                    @click="removeHeartToLecture(index, lecture['course_id'])"
                   >
-                    <span>아직 리뷰가 없습니다</span>
-                  </ButtonGeneral>
-                </div>
-                <div v-else>
-                  <NuxtLink :to="`review/${lecture['course_id']}`">
+                    <SvgHeartOutline
+                      :color="`#ff6b6b`"
+                      :fill="`#ff6b6b`"
+                      class="cursor-pointer"
+                    />
+                  </div>
+                  <div
+                    v-if="
+                      $auth &&
+                      $auth.user &&
+                      lecture['course_liked'] &&
+                      lecture['course_liked'] === 'false'
+                    "
+                    @click="giveHeartToLecture(index, lecture['course_id'])"
+                  >
+                    <SvgHeartOutline
+                      :color="`#868296`"
+                      class="cursor-pointer"
+                    />
+                  </div>
+
+                  <div v-if="Number(lecture['num_review']) === 0">
                     <ButtonGeneral
                       :width="172"
                       :height="32"
-                      class="ml-3 text-white txt-base rounded-4px bg-orange1"
+                      class="ml-3 border pointer-events-none text-gray6 txt-base rounded-4px border-gray2"
                     >
-                      <span>{{ lecture["num_review"] }}개의 리뷰 보기</span>
+                      <span>아직 리뷰가 없습니다</span>
                     </ButtonGeneral>
-                  </NuxtLink>
+                  </div>
+                  <div v-else>
+                    <NuxtLink :to="`review/${lecture['course_id']}`">
+                      <ButtonGeneral
+                        :width="172"
+                        :height="32"
+                        class="ml-3 text-white txt-base rounded-4px bg-orange1"
+                      >
+                        <span>{{ lecture["num_review"] }}개의 리뷰 보기</span>
+                      </ButtonGeneral>
+                    </NuxtLink>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- divider -->
-        <div class="mt-8 border-b border-gray5"></div>
+          <!-- divider -->
+          <div class="mt-8 border-b border-gray5"></div>
+        </div>
       </div>
 
       <!-- pagination buttons -->
@@ -490,93 +503,19 @@ export default {
         this.currentPopularKeyword = null;
       }
 
-      let countResponse;
-
-      try {
-        if (searchCategoryKeyword) {
-          // category search + category filtering
-          this.lectureData = await this.$axios.$post(
-            "/api/courses/category/search",
-            {
-              keyword: searchCategoryKeyword,
-            },
-            {
-              params: {
-                categoryBig,
-                category,
-                perPage,
-                page,
-                sort,
-                skill,
-              },
-            }
-          );
-
-          this.popularTechData = await this.$axios.$get(
-            "/api/courses/category/skills",
-            {
-              params: {
-                categoryBig,
-                category,
-              },
-            }
-          );
-
-          countResponse = await this.$axios.$post(
-            "/api/courses/category/search/count",
-            {
-              keyword: searchCategoryKeyword,
-            },
-            {
-              params: {
-                categoryBig,
-                category,
-                skill,
-              },
-            }
-          );
-        } else if (searchAllKeyword) {
-          // all search + category filtering
-        } else {
-          // only category filtering
-          this.lectureData = await this.$axios.$get("/api/courses", {
-            params: {
-              categoryBig,
-              category,
-              perPage,
-              page,
-              sort,
-              skill,
-            },
-          });
-
-          this.popularTechData = await this.$axios.$get(
-            "/api/courses/category/skills",
-            {
-              params: {
-                categoryBig,
-                category,
-              },
-            }
-          );
-
-          let countResponseParam = {};
-
-          countResponseParam["categoryBig"] = categoryBig;
-          countResponseParam["category"] = category;
-          if (skill) {
-            countResponseParam["skill"] = skill;
-          }
-
-          countResponse = await this.$axios.$get("/api/courses/count", {
-            params: countResponseParam,
-          });
-        }
-      } catch (err) {
-        console.log(err.response);
+      if (searchCategoryKeyword) {
+        // 카테고리에서 검색하는 경우
+        this.getLectureDataWithCategorySearch(to.query);
+        this.getPopularTechDataWithCategorySearch(to.query);
+        this.getNumOfCountDataWithCategorySearch(to.query);
+      } else if (searchAllKeyword) {
+        // 전체에서 검색하는 경우
+      } else {
+        // 단순 카테고리 필터링
+        this.getLectureDataGeneral(to.query);
+        this.getPopularTechDataGeneral(to.query);
+        this.getNumOfCountDataGeneral(to.query);
       }
-
-      this.currentPageNum = Math.ceil(Number(countResponse["num_course"]) / 17);
     },
   },
   computed: {
@@ -600,12 +539,14 @@ export default {
       this.currentCategoryIndex = categoryIdx;
       this.currentMajorIndex = 0;
       this.currentPopularKeyword = null;
+      this.categorySearchInput = "";
       this.getLectureData();
     },
     selectMajor(majorIdx) {
       this.currentMajorIndex = majorIdx;
       this.currentPopularKeyword = null;
       this.currentPageIndex = 0;
+      this.categorySearchInput = "";
       this.getLectureData();
     },
     handleCategorySearchInput(value) {
@@ -650,19 +591,189 @@ export default {
 
       return require(`assets/imgs/logo/lecturesite/${imgName}.png`);
     },
-    searchByCategoryInput() {
+    routerPushWithCategorySearch() {
+      this.currentPageIndex = 0;
+
       this.$router.push({
         path: "/lecture",
         query: {
           categoryBig: this.currentCategoryName,
           category: this.currentMajorName,
           perPage: 17,
-          page: this.currentPageIndex + 1,
+          page: 1,
           sort: this.currentFilteringOptionName,
           skill: this.currentPopularKeyword,
           searchCategoryKeyword: this.categorySearchInput,
         },
       });
+    },
+    async getLectureDataWithCategorySearch(query) {
+      const {
+        categoryBig,
+        category,
+        perPage,
+        page,
+        sort,
+        skill,
+        searchCategoryKeyword,
+      } = query;
+
+      try {
+        const lectureDataResponse = await this.$axios.$post(
+          "/api/courses/category/search",
+          {
+            keyword: searchCategoryKeyword,
+          },
+          {
+            params: {
+              categoryBig,
+              category,
+              perPage,
+              page,
+              sort,
+              skill,
+            },
+          }
+        );
+
+        if (lectureDataResponse) {
+          this.lectureData = lectureDataResponse;
+        }
+      } catch (err) {
+        if (err.response.data.statusCode === 404) {
+          this.lectureData = [];
+        }
+        console.error(err.response);
+      }
+    },
+    async getPopularTechDataWithCategorySearch(query) {
+      const {
+        categoryBig,
+        category,
+        perPage,
+        page,
+        sort,
+        skill,
+        searchCategoryKeyword,
+      } = query;
+
+      try {
+        const popularTechDataResponse = await this.$axios.$get(
+          "/api/courses/category/skills",
+          {
+            params: {
+              categoryBig,
+              category,
+              perPage,
+              page,
+              sort,
+              skill,
+              searchCategoryKeyword,
+            },
+          }
+        );
+
+        if (popularTechDataResponse) {
+          this.popularTechData = popularTechDataResponse;
+        }
+      } catch (err) {
+        console.error(err.response);
+      }
+    },
+    async getNumOfCountDataWithCategorySearch(query) {
+      const { categoryBig, category, skill, searchCategoryKeyword } = query;
+
+      try {
+        const countResponse = await this.$axios.$post(
+          "/api/courses/category/search/count",
+          {
+            keyword: searchCategoryKeyword,
+          },
+          {
+            params: {
+              categoryBig,
+              category,
+              skill,
+            },
+          }
+        );
+
+        if (countResponse) {
+          this.currentPageNum = Math.ceil(
+            Number(countResponse["num_course"]) / 17
+          );
+        }
+      } catch (err) {
+        console.error(err.response);
+      }
+    },
+    async getLectureDataGeneral(query) {
+      const { categoryBig, category, perPage, page, sort, skill } = query;
+
+      try {
+        const lectureDataResponse = await this.$axios.$get("/api/courses", {
+          params: {
+            categoryBig,
+            category,
+            perPage,
+            page,
+            sort,
+            skill,
+          },
+        });
+
+        if (lectureDataResponse) {
+          this.lectureData = lectureDataResponse;
+        }
+      } catch (err) {
+        console.error(err.response);
+      }
+    },
+    async getPopularTechDataGeneral(query) {
+      const { categoryBig, category, perPage, page, sort, skill } = query;
+
+      try {
+        const popularTechDataResponse = await this.$axios.$get(
+          "/api/courses/category/skills",
+          {
+            params: {
+              categoryBig,
+              category,
+              perPage,
+              page,
+              sort,
+              skill,
+            },
+          }
+        );
+
+        if (popularTechDataResponse) {
+          this.popularTechData = popularTechDataResponse;
+        }
+      } catch (err) {
+        console.error(err.response);
+      }
+    },
+    async getNumOfCountDataGeneral(query) {
+      const { categoryBig, category, skill } = query;
+
+      try {
+        const countResponse = await this.$axios.$get("/api/courses/count", {
+          params: {
+            categoryBig,
+            category,
+            skill,
+          },
+        });
+
+        if (countResponse) {
+          this.currentPageNum = Math.ceil(
+            Number(countResponse["num_course"]) / 17
+          );
+        }
+      } catch (err) {
+        console.error(err.response);
+      }
     },
     getLectureData() {
       let queryData = {};
