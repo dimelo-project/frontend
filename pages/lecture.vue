@@ -87,9 +87,25 @@
 
       <div
         v-if="lectureData.length === 0"
-        class="flex justify-center pt-40 pb-96"
+        class="flex flex-col items-center mt-16"
       >
-        <span>검색 결과가 없습니다.</span>
+        <span class="txt-mid">검색 결과가 없습니다.</span>
+        <span class="mt-2 txt-sub-bold text-orange2"
+          >카테고리를 이동하거나 기술 키워드로 검색해 보세요.</span
+        >
+        <span class="mt-6 text-center"
+          >리뷰를 쓰고 싶은데 강의가 없나요?<br />
+          필요한 강의를 알려주시면 등록할게요!</span
+        >
+
+        <ButtonGeneral
+          @click="$store.commit('lecture/changeIsAddLectureModalOpened', true)"
+          :width="240"
+          :height="44"
+          class="mt-8 text-white rounded-4px bg-orange1 hover:bg-orange2"
+        >
+          <span class="txt-base-bold">강의 등록 신청하고 리뷰 작성</span>
+        </ButtonGeneral>
       </div>
 
       <div v-else>
@@ -269,6 +285,19 @@
     >
       <ScrollToTop />
     </div>
+
+    <LectureAddNewLectureModal
+      :isModalOpened="$store.state.lecture.isAddLectureModalOpened"
+      @modalclosed="
+        $store.commit('lecture/changeIsAddLectureModalOpened', false)
+      "
+    />
+
+    <MultiSteps
+      :isModalOpened="$store.state.lecture.isCreateReviewModalOpened"
+      @modalClose="closeCreateReviewModal"
+      @reviewUpload="uploadReviewForNewLecture"
+    />
   </div>
 </template>
 
@@ -312,22 +341,34 @@ export default {
 
     if (searchCategoryKeyword) {
       // category search + category filtering
-      lectureData = await $axios.$post(
-        "/api/courses/category/search",
-        {
-          keyword: searchCategoryKeyword,
-        },
-        {
-          params: {
-            categoryBig,
-            category,
-            perPage,
-            page,
-            sort,
-            skill,
+      try {
+        lectureDataResponse = await $axios.$post(
+          "/api/courses/category/search",
+          {
+            keyword: searchCategoryKeyword,
           },
+          {
+            params: {
+              categoryBig,
+              category,
+              perPage,
+              page,
+              sort,
+              skill,
+            },
+          }
+        );
+
+        if (lectureDataResponse) {
+          lectureData = lectureDataResponse;
         }
-      );
+      } catch (err) {
+        if (err.response.data.statusCode === 404) {
+          lectureData = [];
+        } else {
+          console.log(err.response.data);
+        }
+      }
 
       popularTechData = await $axios.$get("/api/courses/category/skills", {
         params: {
@@ -643,7 +684,7 @@ export default {
         if (err.response.data.statusCode === 404) {
           this.lectureData = [];
         }
-        console.error(err.response);
+        console.error(err);
       }
     },
     async getPopularTechDataWithCategorySearch(query) {
@@ -829,6 +870,27 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    closeCreateReviewModal() {
+      this.$store.commit("lecture/changeIsCreateReviewModalOpened", false);
+      this.$store.commit("lecture/changeNewLectureUrl", "");
+    },
+    async uploadReviewForNewLecture() {
+      try {
+        const response = await this.$axios.$post("/api/reviews", {
+          q1: this.$store.state.q1score,
+          q2: this.$store.state.q2score,
+          q3: this.$store.state.q3score,
+          q4: this.$store.state.q4score,
+          pros: this.$store.state.q5pros,
+          cons: this.$store.state.q5cons,
+          siteUrl: this.$store.state.lecture.newLectureUrl,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      this.$store.commit("lecture/changeIsCreateReviewModalOpened", false);
+      this.$store.commit("lecture/changeNewLectureUrl", "");
     },
   },
   mounted() {
