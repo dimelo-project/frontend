@@ -1,6 +1,6 @@
 <template>
   <div class="flex txt-sub">
-    <button class="btn" style="width: 54px">이전</button>
+    <button v-if="pageNum > 10" class="btn" style="width: 54px">이전</button>
 
     <button class="btn" v-for="i in pageNum" :key="i">
       <div
@@ -23,7 +23,7 @@
       </div>
     </button>
 
-    <button class="btn" style="width: 54px">다음</button>
+    <button v-if="pageNum > 10" class="btn" style="width: 54px">다음</button>
   </div>
 </template>
 
