@@ -86,6 +86,9 @@ export default {
       this.$store.commit("changeQ5pros", "");
       this.$store.commit("changeQ5cons", "");
 
+      this.$store.commit("changeCurrentStep", 0);
+      this.$store.commit("changeProgressWidth", 33);
+
       this.$emit("modalClose");
     },
   },

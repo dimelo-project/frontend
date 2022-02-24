@@ -60,6 +60,12 @@ export const mutations = {
   changeQ5cons(state, value) {
     state.q5cons = value;
   },
+  changeCurrentStep(state, value) {
+    state.currentStep = value;
+  },
+  changeProgressWidth(state, value) {
+    state.progressWidth = value;
+  },
   showHeaderSearchInput(state) {
     state.isCurrentPageOnLecture = true;
   },
