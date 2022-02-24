@@ -8,7 +8,7 @@
       </div>
       <textarea
         class="w-full p-3 border outline-none txt-sub mt-1.5 resize-none rounded-8px"
-        style="height: 160px"
+        style="height: 100px"
         :placeholder="examplePlaceholder"
         :value="$store.state.q5pros"
         @input="inputPros"
@@ -22,7 +22,7 @@
       </div>
       <textarea
         class="w-full p-3 border outline-none txt-sub mt-1.5 resize-none rounded-8px"
-        style="height: 160px"
+        style="height: 100px"
         :placeholder="examplePlaceholder"
         :value="$store.state.q5cons"
         @input="inputCons"
@@ -72,8 +72,7 @@
 export default {
   data() {
     return {
-      examplePlaceholder: `작성예시: 실무와 연관이 깊고, 실용적이고 실무에서 쓰일법한 지식들을 골라서 강의해주신게 인상적이었습니다. 또한 강의를 함께 듣는 수강생끼리 협업이나 소통을 하도록 분위기를 만들어주셔서 공부할 때, 프로젝트 팀원 구할 때 도움이 많이 된 점이 좋았습니다.
-(*단순 좋다, 별로다 보다는 장단점을 상세하게 적은 후기일 수록 많은 도움이 됩니다.)`,
+      examplePlaceholder: `(*단순 좋다, 별로다 보다는 장단점을 상세하게 적은 후기일 수록 많은 도움이 됩니다.)`,
     };
   },
   computed: {
