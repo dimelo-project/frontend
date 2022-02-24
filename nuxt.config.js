@@ -1,4 +1,4 @@
-const MY_URL = "http://localhost:3000";
+console.log(process.env.deploy_mode, "@@@@@@@");
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -31,6 +31,7 @@ export default {
     "@nuxt/typescript-build",
     "@nuxtjs/tailwindcss",
     "@nuxtjs/style-resources",
+    "@nuxtjs/dotenv",
   ],
 
   styleResources: {
@@ -52,7 +53,10 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: MY_URL,
+    baseURL:
+      process.env.deploy_mode === "production"
+        ? "http://54.180.5.114:3000"
+        : "http://localhost:3000",
     credentials: true,
   },
 
