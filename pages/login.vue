@@ -132,10 +132,10 @@ export default {
       }
     },
     googlLogin() {
-      window.open("https://dimeloserverapi.site/auth/google", "_self");
+      window.open("https://dimeloserverapi.site/api/auth/google", "_self");
     },
     githubLogin() {
-      window.open("https://dimeloserverapi.site/auth/github", "_self");
+      window.open("https://dimeloserverapi.site/api/auth/github", "_self");
     },
   },
 };
