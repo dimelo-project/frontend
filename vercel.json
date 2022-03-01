@@ -7,26 +7,9 @@
     }
   ],
   "routes": [
-    { "src": "/", "dest": "/" },
     {
-      "src": "^/lecture/(.*)",
-      "dest": "/lecture"
-    },
-    {
-      "src": "^/mypage/bookmark",
-      "dest": "/mypage/bookmark"
-    },
-    {
-      "src": "^/mypage/myarticle",
-      "dest": "/mypage/myarticle"
-    },
-    {
-      "src": "^/mypage/mycomment",
-      "dest": "/mypage/mycomment"
-    },
-    {
-      "src": "^/mypage/myreview",
-      "dest": "/mypage/myreview"
+      "src": "/[^.]+",
+      "dest": "/"
     }
   ]
 }
