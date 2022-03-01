@@ -6,10 +6,5 @@
       "use": "@nuxtjs/vercel-builder"
     }
   ],
-  "routes": [
-    {
-      "src": "/[^.]+",
-      "dest": "/"
-    }
-  ]
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
