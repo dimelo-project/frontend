@@ -55,6 +55,9 @@ export default {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: "https://dimeloserverapi.site",
     credentials: true,
+    common: {
+      "Access-Control-Allow-Origin": "*",
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -80,17 +83,6 @@ export default {
         tokenRequired: false,
         tokenType: false,
       },
-    },
-  },
-
-  axios: {
-    proxy: true,
-  },
-
-  proxy: {
-    "/": {
-      target: "dimelo.io/",
-      changeOrigin: true,
     },
   },
 };
