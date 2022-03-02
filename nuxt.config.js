@@ -78,6 +78,7 @@ export default {
   //   middleware: ["auth"],
   // },
   auth: {
+    cookie: true,
     strategies: {
       local: {
         endpoints: {
