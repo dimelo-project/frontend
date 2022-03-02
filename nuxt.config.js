@@ -98,7 +98,7 @@ export default {
         // name: 'SHOP_TOKEN'
       },
       user: {
-        // property: 'body.data.customer',
+        property: "body.data",
         autoFetch: false,
       },
       endpoints: {
