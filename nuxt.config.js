@@ -1,5 +1,3 @@
-console.log(process.env.deploy_mode, "@@@@@@@");
-
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -54,10 +52,14 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    // baseURL: "https://dimeloserverapi.site",
+    baseURL: "https://dimeloserverapi.site",
     credentials: true,
-    common: {
-      "Access-Control-Allow-Origin": "*",
+    // common: {
+    //   "Access-Control-Allow-Origin": "*",
+    // },
+    requestInterceptor: (config, { stroe }) => {
+      config.headers.common["Access-Control-Allow-Origin"] = "*";
+      return config;
     },
   },
 
@@ -65,9 +67,9 @@ export default {
   build: {},
 
   // dev port
-  server: {
-    port: 8000,
-  },
+  // server: {
+  //   port: 8000,
+  // },
 
   // nuxt/auth
   // router: {
@@ -88,7 +90,7 @@ export default {
   },
 
   proxy: {
-    "/api/*": {
+    "/api/": {
       target: "https://dimeloserverapi.site",
     },
   },
