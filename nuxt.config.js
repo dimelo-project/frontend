@@ -89,7 +89,7 @@ export default {
 
   proxy: {
     "/": {
-      target: "https://dimeloserverapi.site/",
+      target: "dimelo.io/",
       changeOrigin: true,
     },
   },
