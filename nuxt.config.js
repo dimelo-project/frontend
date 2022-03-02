@@ -97,10 +97,10 @@ export default {
       cookie: {
         name: "connect.sid",
       },
-      user: {
-        property: "body.data",
-        autoFetch: false,
-      },
+      // user: {
+      //   property: "body.data",
+      //   autoFetch: false,
+      // },
       endpoints: {
         login: { url: "/api/auth/login", method: "post" },
         logout: { url: "/api/auth/logout", method: "post" },
