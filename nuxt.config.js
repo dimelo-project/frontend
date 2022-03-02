@@ -58,7 +58,8 @@ export default {
     //   "Access-Control-Allow-Origin": "*",
     // },
     requestInterceptor: (config, { stroe }) => {
-      config.headers.common["Access-Control-Allow-Origin"] = "*";
+      config.headers.common["Access-Control-Allow-Origin"] =
+        "https://dimelo.io";
       return config;
     },
   },
