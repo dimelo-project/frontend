@@ -20,7 +20,7 @@ export default {
   css: ["@assets/scss/global.pcss"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ["~/plugins/axios.js"],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -80,6 +80,17 @@ export default {
         tokenRequired: false,
         tokenType: false,
       },
+    },
+  },
+
+  axios: {
+    proxy: true,
+  },
+
+  proxy: {
+    "/": {
+      target: "https://dimeloserverapi.site/",
+      changeOrigin: true,
     },
   },
 };
