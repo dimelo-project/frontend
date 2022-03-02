@@ -53,7 +53,7 @@ export default {
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL:
-      "https://agile-beach-11445.herokuapp.com/http://dimeloserverapi.site",
+      "https://agile-beach-11445.herokuapp.com/https://dimeloserverapi.site",
     credentials: true,
     // common: {
     //   "Access-Control-Allow-Origin": "*",
