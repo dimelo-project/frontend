@@ -95,7 +95,7 @@ export default {
   strategies: {
     cookie: {
       cookie: {
-        // name: 'SHOP_TOKEN'
+        name: "connect.sid",
       },
       user: {
         property: "body.data",
