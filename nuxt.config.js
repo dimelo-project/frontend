@@ -60,6 +60,7 @@ export default {
     requestInterceptor: (config, { stroe }) => {
       config.headers.common["Access-Control-Allow-Origin"] =
         "https://dimelo.io";
+      config.withCredentials = true;
       return config;
     },
   },
