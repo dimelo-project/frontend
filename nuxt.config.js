@@ -52,8 +52,8 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL:
-      "https://agile-beach-11445.herokuapp.com/https://dimeloserverapi.site",
+    // baseURL:
+    //   "https://agile-beach-11445.herokuapp.com/https://dimeloserverapi.site",
     credentials: true,
     // common: {
     //   "Access-Control-Allow-Origin": "*",
@@ -110,9 +110,9 @@ export default {
     },
   },
 
-  // proxy: {
-  //   "/api/": {
-  //     target: "https://dimeloserverapi.site",
-  //   },
-  // },
+  proxy: {
+    "/": {
+      target: "https://dimeloserverapi.site",
+    },
+  },
 };
