@@ -77,17 +77,34 @@ export default {
   // router: {
   //   middleware: ["auth"],
   // },
-  auth: {
-    cookie: true,
-    strategies: {
-      local: {
-        endpoints: {
-          login: { url: "/api/auth/login", method: "post" },
-          logout: { url: "/api/auth/logout", method: "post" },
-          user: { url: "/api/users/me", method: "get", propertyName: false },
-        },
-        tokenRequired: false,
-        tokenType: false,
+  // auth: {
+  //   cookie: true,
+  //   strategies: {
+  //     local: {
+  //       endpoints: {
+  //         login: { url: "/api/auth/login", method: "post" },
+  //         logout: { url: "/api/auth/logout", method: "post" },
+  //         user: { url: "/api/users/me", method: "get", propertyName: false },
+  //       },
+  //       tokenRequired: false,
+  //       tokenType: false,
+  //     },
+  //   },
+  // },
+
+  strategies: {
+    cookie: {
+      cookie: {
+        // name: 'SHOP_TOKEN'
+      },
+      user: {
+        // property: 'body.data.customer',
+        autoFetch: false,
+      },
+      endpoints: {
+        login: { url: "/api/auth/login", method: "post" },
+        logout: { url: "/api/auth/logout", method: "post" },
+        user: { url: "/api/users/me", method: "get", propertyName: false },
       },
     },
   },
