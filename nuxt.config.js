@@ -59,7 +59,6 @@ export default {
     // },
     requestInterceptor: (config, { stroe }) => {
       config.headers.common["Access-Control-Allow-Origin"] = "*";
-      config.headers.
       return config;
     },
   },
@@ -83,7 +82,7 @@ export default {
           login: { url: "/api/auth/login", method: "post" },
           logout: { url: "/api/auth/logout", method: "post" },
           user: { url: "/api/users/me", method: "get", propertyName: false },
-          withCredentials: true 
+          withCredentials: true,
         },
         tokenRequired: false,
         tokenType: false,
