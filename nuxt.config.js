@@ -52,15 +52,14 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    // baseURL:
-    //   "https://agile-beach-11445.herokuapp.com/https://dimeloserverapi.site",
+    baseURL: "https://dimeloserverapi.site",
     credentials: true,
     // common: {
     //   "Access-Control-Allow-Origin": "*",
     // },
     requestInterceptor: (config, { stroe }) => {
       config.headers.common["Access-Control-Allow-Origin"] =
-        "https://dimelo.io";
+        "https://dimeloserverapi.site";
       config.withCredentials = true;
       return config;
     },
@@ -78,41 +77,41 @@ export default {
   // router: {
   //   middleware: ["auth"],
   // },
-  // auth: {
-  //   cookie: true,
-  //   strategies: {
-  //     local: {
-  //       endpoints: {
-  //         login: { url: "/api/auth/login", method: "post" },
-  //         logout: { url: "/api/auth/logout", method: "post" },
-  //         user: { url: "/api/users/me", method: "get", propertyName: false },
-  //       },
-  //       tokenRequired: false,
-  //       tokenType: false,
-  //     },
-  //   },
+  auth: {
+    cookie: true,
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: "/api/auth/login", method: "post" },
+          logout: { url: "/api/auth/logout", method: "post" },
+          user: { url: "/api/users/me", method: "get", propertyName: false },
+        },
+        tokenRequired: false,
+        tokenType: false,
+      },
+    },
+  },
+
+  // strategies: {
+  //   cookie: {
+  //     cookie: {
+  //       name: "connect.sid",
+  // },
+  // user: {
+  //   property: "body.data",
+  //   autoFetch: false,
+  // },
+  // endpoints: {
+  //   login: { url: "/api/auth/login", method: "post" },
+  //   logout: { url: "/api/auth/logout", method: "post" },
+  //   user: { url: "/api/users/me", method: "get", propertyName: false },
+  // },
+  // },
   // },
 
-  strategies: {
-    cookie: {
-      cookie: {
-        name: "connect.sid",
-      },
-      // user: {
-      //   property: "body.data",
-      //   autoFetch: false,
-      // },
-      endpoints: {
-        login: { url: "/api/auth/login", method: "post" },
-        logout: { url: "/api/auth/logout", method: "post" },
-        user: { url: "/api/users/me", method: "get", propertyName: false },
-      },
-    },
-  },
-
-  proxy: {
-    "/": {
-      target: "https://dimeloserverapi.site",
-    },
-  },
+  // proxy: {
+  //   "/": {
+  //     target: "https://dimeloserverapi.site",
+  //   },
+  // },
 };
