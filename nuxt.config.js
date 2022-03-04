@@ -112,16 +112,18 @@ export default {
     strategies: {
       cookie: {
         cookie: {
-          name: "connect.sid",
+          // name: "connect.sid",
         },
-        user: {
-          property: "body.data",
-          autoFetch: false,
-        },
-        endpoints: {
-          login: { url: "/api/auth/login", method: "post" },
-          logout: { url: "/api/auth/logout", method: "post" },
-          user: { url: "/api/users/me", method: "get", propertyName: false },
+        // user: {
+        //   property: "body.data",
+        //   autoFetch: false,
+        // },
+        local: {
+          endpoints: {
+            login: { url: "/api/auth/login", method: "post" },
+            logout: { url: "/api/auth/logout", method: "post" },
+            user: { url: "/api/users/me", method: "get", propertyName: false },
+          },
         },
       },
     },
