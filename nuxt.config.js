@@ -77,36 +77,36 @@ export default {
   // router: {
   //   middleware: ["auth"],
   // },
-  auth: {
-    strategies: {
-      local: {
-        endpoints: {
-          login: { url: "/api/auth/login", method: "post" },
-          logout: { url: "/api/auth/logout", method: "post" },
-          user: { url: "/api/users/me", method: "get", propertyName: false },
-        },
-        tokenRequired: false,
-        tokenType: "",
+  // auth: {
+  //   strategies: {
+  //     local: {
+  //       endpoints: {
+  //         login: { url: "/api/auth/login", method: "post" },
+  //         logout: { url: "/api/auth/logout", method: "post" },
+  //         user: { url: "/api/users/me", method: "get", propertyName: false },
+  //       },
+  //       tokenRequired: false,
+  //       tokenType: "",
+  //     },
+  //   },
+  // },
+
+  strategies: {
+    cookie: {
+      cookie: {
+        name: "connect.sid",
+      },
+      user: {
+        property: "body.data",
+        autoFetch: false,
+      },
+      endpoints: {
+        login: { url: "/api/auth/login", method: "post" },
+        logout: { url: "/api/auth/logout", method: "post" },
+        user: { url: "/api/users/me", method: "get", propertyName: false },
       },
     },
   },
-
-  // strategies: {
-  //   cookie: {
-  //     cookie: {
-  //       name: "connect.sid",
-  // },
-  // user: {
-  //   property: "body.data",
-  //   autoFetch: false,
-  // },
-  // endpoints: {
-  //   login: { url: "/api/auth/login", method: "post" },
-  //   logout: { url: "/api/auth/logout", method: "post" },
-  //   user: { url: "/api/users/me", method: "get", propertyName: false },
-  // },
-  // },
-  // },
 
   // proxy: {
   //   "/": {
