@@ -91,19 +91,21 @@ export default {
   //   },
   // },
 
-  strategies: {
-    cookie: {
+  auth: {
+    strategies: {
       cookie: {
-        name: "connect.sid",
-      },
-      // user: {
-      //   property: "body.data",
-      //   autoFetch: false,
-      // },
-      endpoints: {
-        login: { url: "/api/auth/login", method: "post" },
-        logout: { url: "/api/auth/logout", method: "post" },
-        me: { url: "/api/users/me", method: "get", propertyName: false },
+        cookie: {
+          name: "connect.sid",
+        },
+        user: {
+          property: "body.data",
+          autoFetch: false,
+        },
+        endpoints: {
+          login: { url: "/api/auth/login", method: "post" },
+          logout: { url: "/api/auth/logout", method: "post" },
+          user: { url: "/api/users/me", method: "get", propertyName: false },
+        },
       },
     },
   },
