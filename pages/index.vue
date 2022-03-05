@@ -411,8 +411,9 @@ export default {
           store.commit("auth/SET", { key: "user", value: userData });
           store.commit("auth/SET", { key: "loggedIn", value: true });
         }
+        console.log(userData);
       } catch (err) {
-        // console.log(err);
+        console.log(err);
       }
     }
   },
