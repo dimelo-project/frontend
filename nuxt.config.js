@@ -1,3 +1,6 @@
+
+console.log("@@@@@@@@@", process.env.baseURL);
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -46,13 +49,16 @@ export default {
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
     "@nuxtjs/auth-next",
-    "@nuxtjs/proxy",
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: "https://api.dimelo.io",
+    // baseURL: "https://api.dimelo.io",
+    // baseURL: "http://localhost:3000",
+    baseURL: process.env.baseURL
+      ? process.env.baseURL
+      : "http://localhost:3000",
     credentials: true,
     // common: {
     //   "Access-Control-Allow-Origin": "*",
@@ -77,21 +83,22 @@ export default {
   // router: {
   //   middleware: ["auth"],
   // },
-  // auth: {
-  //   strategies: {
-  //     local: {
-  //       endpoints: {
-  //         login: { url: "/api/auth/login", method: "post" },
-  //         logout: { url: "/api/auth/logout", method: "post" },
-  //         user: { url: "/api/users/me", method: "get", propertyName: false },
-  //       },
-  //       tokenRequired: false,
-  //       tokenType: "",
-  //     },
-  //   },
-  // },
 
   auth: {
+    localStorage: {
+      // prefix: 'auth.'
+    },
+    cookie: {
+      // prefix: 'auth.',
+      // options: {
+      //   sameSite: 'lax',
+      // }
+    },
+    redirect: {
+      // login: "/user/login",
+      // logout: "/user/login",
+      // home: "/"
+    },
     strategies: {
       cookie: {
         cookie: {
@@ -106,10 +113,19 @@ export default {
         },
       },
       local: {
+        token: {
+          maxAge: false,
+          required: false,
+          type: false,
+        },
+        user: {
+          property: false,
+          autoFetch: true,
+        },
         endpoints: {
           login: { url: "/api/auth/login", method: "post" },
           logout: { url: "/api/auth/logout", method: "post" },
-          user: { url: "/api/users/me", method: "get", propertyName: false },
+          user: { url: "/api/users/me", method: "get" },
         },
       },
     },
