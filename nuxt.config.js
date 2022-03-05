@@ -1,5 +1,3 @@
-console.log(process.env.deploy_mode, "@@@@@@@");
-
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -47,13 +45,14 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
-    "@nuxtjs/auth",
+    "@nuxtjs/auth-next",
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: "https://dimeloserverapi.site",
+    // baseURL: "https://api.dimelo.io",
+    baseURL: "http://localhost:3000",
     credentials: true,
   },
 
@@ -69,16 +68,38 @@ export default {
   // router: {
   //   middleware: ["auth"],
   // },
+
   auth: {
+    localStorage: {
+      // prefix: 'auth.'
+    },
+    cookie: {
+      // prefix: 'auth.',
+      // options: {
+      //   sameSite: 'lax',
+      // }
+    },
+    redirect: {
+      // login: "/user/login",
+      // logout: "/user/login",
+      // home: "/"
+    },
     strategies: {
       local: {
+        token: {
+          maxAge: false,
+          required: false,
+          type: false,
+        },
+        user: {
+          property: false,
+          autoFetch: true,
+        },
         endpoints: {
           login: { url: "/api/auth/login", method: "post" },
           logout: { url: "/api/auth/logout", method: "post" },
-          user: { url: "/api/users/me", method: "get", propertyName: false },
+          user: { url: "/api/users/me", method: "get" },
         },
-        tokenRequired: false,
-        tokenType: false,
       },
     },
   },
