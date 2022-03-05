@@ -1,3 +1,5 @@
+console.log("@@@@@@@@@", process.env.baseURL);
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -53,7 +55,9 @@ export default {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     // baseURL: "https://api.dimelo.io",
     // baseURL: "http://localhost:3000",
-    baseURL: process.NODE_ENV ? process.NODE_ENV : "http://localhost:3000",
+    baseURL: process.env.baseURL
+      ? process.env.baseURL
+      : "http://localhost:3000",
     credentials: true,
   },
 
