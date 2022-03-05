@@ -1,3 +1,4 @@
+
 console.log("@@@@@@@@@", process.env.baseURL);
 
 export default {
@@ -59,15 +60,24 @@ export default {
       ? process.env.baseURL
       : "http://localhost:3000",
     credentials: true,
+    // common: {
+    //   "Access-Control-Allow-Origin": "*",
+    // },
+    requestInterceptor: (config, { stroe }) => {
+      config.headers.common["Access-Control-Allow-Origin"] =
+        "https://api.dimelo.io";
+      config.withCredentials = true;
+      return config;
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 
   // dev port
-  server: {
-    port: 8000,
-  },
+  // server: {
+  //   port: 8000,
+  // },
 
   // nuxt/auth
   // router: {
@@ -90,6 +100,18 @@ export default {
       // home: "/"
     },
     strategies: {
+      cookie: {
+        cookie: {
+          // (optional) If set, we check this cookie existence for loggedIn check
+        },
+        endpoints: {
+          // (optional) If set, we send a get request to this endpoint before login
+          csrf: {
+            url: "",
+          },
+          user: { url: "/api/users/me", method: "get" },
+        },
+      },
       local: {
         token: {
           maxAge: false,
@@ -108,4 +130,31 @@ export default {
       },
     },
   },
+
+  // auth: {
+  //   strategies: {
+  //     cookie: {
+  //       cookie: {
+  //         // name: "connect.sid",
+  //       },
+  //       // user: {
+  //       //   property: "body.data",
+  //       //   autoFetch: false,
+  //       // },
+  //       local: {
+  //         endpoints: {
+  //           login: { url: "/api/auth/login", method: "post" },
+  //           logout: { url: "/api/auth/logout", method: "post" },
+  //           user: { url: "/api/users/me", method: "get", propertyName: false },
+  //         },
+  //       },
+  //     },
+  //   },
+  // },
+
+  // proxy: {
+  //   "/": {
+  //     target: "https://api.dimelo.io",
+  //   },
+  // },
 };
