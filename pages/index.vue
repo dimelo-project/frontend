@@ -399,8 +399,22 @@
 
 <script>
 export default {
-  middleware({ store }) {
+  async middleware({ store, $axios }) {
     store.commit("changeHeaerBgColor", "rgba(255, 224, 102, 1)");
+    if (!(store && store.state && store.state.user)) {
+      let userData = {};
+
+      try {
+        userData = await $axios.$get("/api/users/me");
+
+        if (userData) {
+          store.commit("auth/SET", { key: "user", value: userData });
+          store.commit("auth/SET", { key: "loggedIn", value: true });
+        }
+      } catch (err) {
+        // console.log(err);
+      }
+    }
   },
   layout: "home",
   data() {
