@@ -1,4 +1,3 @@
-
 console.log("@@@@@@@@@", process.env.baseURL);
 
 export default {
@@ -75,9 +74,9 @@ export default {
   build: {},
 
   // dev port
-  // server: {
-  //   port: 8000,
-  // },
+  server: {
+    port: 8000,
+  },
 
   // nuxt/auth
   // router: {
