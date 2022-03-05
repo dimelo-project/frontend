@@ -108,7 +108,7 @@ export default {
           csrf: {
             url: "",
           },
-          user: { url: "/api/users/me", method: "get" },
+          // user: { url: "/api/users/me", method: "get" },
         },
       },
       local: {
