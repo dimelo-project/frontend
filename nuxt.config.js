@@ -130,30 +130,10 @@ export default {
     },
   },
 
-  // auth: {
-  //   strategies: {
-  //     cookie: {
-  //       cookie: {
-  //         // name: "connect.sid",
-  //       },
-  //       // user: {
-  //       //   property: "body.data",
-  //       //   autoFetch: false,
-  //       // },
-  //       local: {
-  //         endpoints: {
-  //           login: { url: "/api/auth/login", method: "post" },
-  //           logout: { url: "/api/auth/logout", method: "post" },
-  //           user: { url: "/api/users/me", method: "get", propertyName: false },
-  //         },
-  //       },
-  //     },
-  //   },
-  // },
-
-  // proxy: {
-  //   "/": {
-  //     target: "https://api.dimelo.io",
-  //   },
-  // },
+  vue: {
+    config: {
+      productionTip: true,
+      devtools: true,
+    },
+  },
 };
