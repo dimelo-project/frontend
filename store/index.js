@@ -79,8 +79,9 @@ export const actions = {
     let auth = null;
     if (req.headers.cookie) {
       try {
-        const userData = await this.$axios.get("/api/users/me");
-        auth = userData;
+        const res = await this.$axios.get("/api/users/me");
+        // console.log("@@@@@@@", res.data);
+        auth = res.data;
       } catch (err) {
         auth = null;
       }
