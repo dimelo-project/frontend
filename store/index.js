@@ -73,19 +73,3 @@ export const mutations = {
     state.isCurrentPageOnLecture = false;
   },
 };
-
-export const actions = {
-  async nuxtServerInit({ commit }, { req }) {
-    let auth = null;
-    if (req.headers.cookie) {
-      try {
-        const res = await this.$axios.get("/api/users/me");
-        // console.log("@@@@@@@", res.data);
-        auth = res.data;
-      } catch (err) {
-        auth = null;
-      }
-    }
-    this.$auth.setUser(auth);
-  },
-};
