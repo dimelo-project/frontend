@@ -79,12 +79,12 @@ export const actions = {
     let auth = null;
     if (req.headers.cookie) {
       try {
-        const userData = await this.$axios.post("/api/auths/me");
+        const userData = await this.$axios.get("/api/users/me");
         auth = userData;
       } catch (err) {
         auth = null;
       }
     }
-    commit("SET_AUTH", auth);
+    this.$auth.setUser(auth);
   },
 };
