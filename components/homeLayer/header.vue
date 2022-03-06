@@ -211,7 +211,7 @@
       <!-- contents--right -->
       <div class="absolute right-0">
         <!-- after logIn -->
-        <div class="flex" v-if="$auth.loggedIn" style="height: 80px">
+        <div class="flex" v-if="$auth.user" style="height: 80px">
           <!-- profile--image -->
           <div class="h-full ml-6">
             <div
