@@ -273,7 +273,7 @@ export default {
       selectedPeriod: "",
     };
   },
-  mounted() {
+  async mounted() {
     document.addEventListener("click", this.close);
 
     if (!(this.$auth && this.$auth.user)) {
