@@ -503,6 +503,7 @@ export default {
           this.$store.commit("auth/SET", { key: "loggedIn", value: true });
         }
         // console.log(userData);
+        this.$auth.$storage.setUniversal("user", userData);
       } catch (err) {
         console.log(err);
       }
