@@ -492,21 +492,21 @@ export default {
   async mounted() {
     window.addEventListener("scroll", this.scrollHandler);
 
-    // if (!(this.$auth && this.$auth.user)) {
-    //   let userData = {};
+    if (!(this.$auth && this.$auth.user)) {
+      let userData = {};
 
-    //   try {
-    //     userData = await this.$axios.$get("/api/users/me");
+      try {
+        userData = await this.$axios.$get("/api/users/me");
 
-    //     if (userData) {
-    //       this.$store.commit("auth/SET", { key: "user", value: userData });
-    //       this.$store.commit("auth/SET", { key: "loggedIn", value: true });
-    //     }
-    //     console.log(userData);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // }
+        if (userData) {
+          this.$store.commit("auth/SET", { key: "user", value: userData });
+          this.$store.commit("auth/SET", { key: "loggedIn", value: true });
+        }
+        // console.log(userData);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   },
   destroyed() {
     this.$store.commit("changeHeaerBgColor", "rgba(255, 255, 255, 1)");

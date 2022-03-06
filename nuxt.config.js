@@ -58,7 +58,7 @@ export default {
     baseURL: process.env.baseURL
       ? process.env.baseURL
       : "http://localhost:3000",
-    credentials: include,
+    credentials: true,
     // common: {
     //   "Access-Control-Allow-Origin": "*",
     // },
