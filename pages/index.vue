@@ -498,8 +498,9 @@ export default {
       try {
         userData = await this.$axios.$get("/api/users/me");
 
+        console.log(userData);
         if (userData) {
-          this.$auth.setUser(userData.data);
+          this.$auth.setUser(userData);
         }
       } catch (err) {
         console.log(err);
