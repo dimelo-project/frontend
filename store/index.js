@@ -87,6 +87,5 @@ export const actions = {
       }
     }
     this.$auth.setUser(auth);
-    commit("auth/SET", { key: "loggedIn", value: true });
   },
 };
