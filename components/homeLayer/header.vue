@@ -364,6 +364,10 @@ export default {
   methods: {
     async onLogout() {
       await this.$auth.logout();
+
+      if (this.$router.currentRoute.path !== "/") {
+        this.$router.push("/");
+      }
     },
   },
 };
