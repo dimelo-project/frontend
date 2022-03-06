@@ -499,8 +499,8 @@ export default {
         userData = await this.$axios.$get("/api/users/me");
 
         if (userData) {
-          store.commit("auth/SET", { key: "user", value: userData });
-          store.commit("auth/SET", { key: "loggedIn", value: true });
+          this.$store.commit("auth/SET", { key: "user", value: userData });
+          this.$store.commit("auth/SET", { key: "loggedIn", value: true });
         }
         console.log(userData);
       } catch (err) {
