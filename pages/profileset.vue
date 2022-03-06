@@ -275,6 +275,22 @@ export default {
   },
   mounted() {
     document.addEventListener("click", this.close);
+
+    if (!(this.$auth && this.$auth.user)) {
+      let userData = {};
+
+      try {
+        userData = await this.$axios.$get("/api/users/me");
+
+        if (userData) {
+          this.$store.commit("auth/SET", { key: "user", value: userData });
+          this.$store.commit("auth/SET", { key: "loggedIn", value: true });
+        }
+        console.log(userData);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   },
   methods: {
     handleUserNickname(value) {
