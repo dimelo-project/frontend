@@ -102,6 +102,7 @@ export default {
       cookie: {
         cookie: {
           // (optional) If set, we check this cookie existence for loggedIn check
+          name: "connect.sid",
         },
         endpoints: {
           // (optional) If set, we send a get request to this endpoint before login
