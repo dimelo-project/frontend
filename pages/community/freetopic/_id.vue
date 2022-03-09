@@ -52,7 +52,7 @@
           v-if="
             $auth &&
             $auth.user &&
-            $auth.user.user_nickname === articleData['nickname']
+            $auth.user.nickname === articleData['user_nickname']
           "
         >
           <span
