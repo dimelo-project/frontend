@@ -17,33 +17,54 @@
         </div>
       </div>
       <!-- author info & created date -->
-      <div class="flex items-center mt-5">
-        <!-- profile image -->
-        <div
-          v-if="!articleData['user_imageUrl']"
-          class="bg-gray-700 rounded-full w-9 h-9"
-        ></div>
-        <img
-          v-else
-          style="width: 36px; height: 36px"
-          :src="articleData['user_imageUrl']"
-          class="object-cover rounded-full"
-          alt="프로필이미지"
-        />
-        <!-- nickname -->
-        <span class="ml-2 txt-base-bold">
-          {{ articleData["user_nickname"] }}
-        </span>
-        <!-- career duration -->
-        <span class="ml-1.5">
-          {{ articleData["user_job"] }} {{ articleData["user_career"] }}
-        </span>
-        <!-- created date -->
-        <div class="ml-6 text-gray6">
-          <span>{{ articleData["talk_createdAt"].split(" ")[0] }}</span>
-          <span class="ml-1">
-            {{ articleData["talk_createdAt"].split(" ")[1] }}
+      <div class="flex items-center justify-between mt-5">
+        <div class="flex items-center">
+          <!-- profile image -->
+          <div
+            v-if="!articleData['user_imageUrl']"
+            class="bg-gray-700 rounded-full w-9 h-9"
+          ></div>
+          <img
+            v-else
+            style="width: 36px; height: 36px"
+            :src="articleData['user_imageUrl']"
+            class="object-cover rounded-full"
+            alt="프로필이미지"
+          />
+          <!-- nickname -->
+          <span class="ml-2 txt-base-bold">
+            {{ articleData["user_nickname"] }}
           </span>
+          <!-- career duration -->
+          <span class="ml-1.5">
+            {{ articleData["user_job"] }} {{ articleData["user_career"] }}
+          </span>
+          <!-- created date -->
+          <div class="ml-6 text-gray6">
+            <span>{{ articleData["talk_createdAt"].split(" ")[0] }}</span>
+            <span class="ml-1">
+              {{ articleData["talk_createdAt"].split(" ")[1] }}
+            </span>
+          </div>
+        </div>
+
+        <div
+          v-if="
+            $auth &&
+            $auth.user &&
+            $auth.user.user_nickname === articleData['nickname']
+          "
+        >
+          <span
+            @click="clickUpdateArticleBtn"
+            class="underline cursor-pointer text-gray1 txt-sub"
+            >수정</span
+          >
+          <span
+            class="ml-2 underline cursor-pointer text-gray1 txt-sub"
+            @click="clickDeleteArticleBtn"
+            >삭제</span
+          >
         </div>
       </div>
       <!-- divider -->
@@ -148,6 +169,20 @@
         </ButtonGeneral>
       </div>
     </div>
+
+    <!-- update article modal -->
+    <communityFreetopicUpdateArticleModal
+      :isModalOpened="isUpdateArticleModalOpened"
+      @modalclosed="isUpdateArticleModalOpened = false"
+      :prevArticleContent="articleData"
+      @updateArticle="updateArticle"
+    />
+    <!-- delete article modal -->
+    <communityFreetopicDeleteArticleModal
+      :isModalOpened="isDeleteArticleModalOpened"
+      @modalclosed="isDeleteArticleModalOpened = false"
+      :prevArticleContent="articleData"
+    />
   </div>
 </template>
 
@@ -173,6 +208,8 @@ export default {
       commentEditMode: false,
       selectedCommentDataIdx: null,
       selectedCommentId: null,
+      isUpdateArticleModalOpened: false,
+      isDeleteArticleModalOpened: false,
     };
   },
   methods: {
@@ -254,6 +291,16 @@ export default {
       } catch (err) {
         console.err(err.response);
       }
+    },
+    clickUpdateArticleBtn() {
+      this.isUpdateArticleModalOpened = true;
+    },
+    updateArticle(newArticleData) {
+      this.articleData["talk_title"] = newArticleData.talk_title;
+      this.articleData["talk_markup"] = newArticleData.talk_markup;
+    },
+    clickDeleteArticleBtn() {
+      this.isDeleteArticleModalOpened = true;
     },
   },
 };
