@@ -97,6 +97,18 @@
         />
       </div>
     </div>
+
+    <!-- scroll to top button -->
+    <transition name="fade">
+      <div
+        v-if="isUserScrolling"
+        class="fixed flex justify-end invisible xl:visible"
+        style="left: calc(50% - 545px + 87px); bottom: 100px"
+        @click="ScrollToTop"
+      >
+        <ScrollToTop />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -204,6 +216,7 @@ export default {
       freetopicSearchInput: "",
       // pagination
       pageIdx: 0,
+      isUserScrolling: false,
     };
   },
   watch: {
@@ -385,6 +398,27 @@ export default {
       this.totalPageNum = Math.ceil(Number(response["num_talk"]) / 16);
       console.log("totalPageNum", this.totalPageNum);
     },
+    ScrollToTop() {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    },
+    scrollHandler() {
+      console.log(window.scrollY);
+      if (window.scrollY > 500) {
+        this.isUserScrolling = true;
+      } else {
+        this.isUserScrolling = false;
+      }
+    },
+  },
+  mounted() {
+    window.addEventListener("scroll", this.scrollHandler);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.scrollHandler);
   },
 };
 </script>
@@ -400,5 +434,13 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -218,6 +218,19 @@
           </div>
         </div>
       </div>
+
+      <!-- scroll to top button -->
+      <!-- scroll to top button -->
+      <transition name="fade">
+        <div
+          v-if="isUserScrolling"
+          class="fixed flex justify-end invisible xl:visible"
+          style="left: calc(50% - 545px + 87px); bottom: 100px"
+          @click="ScrollToTop"
+        >
+          <ScrollToTop />
+        </div>
+      </transition>
     </div>
   </keep-alive>
 </template>
@@ -480,7 +493,9 @@ export default {
     };
   },
   data() {
-    return {};
+    return {
+      isUserScrolling: false,
+    };
   },
   watch: {
     async $route(to, from) {
@@ -602,6 +617,27 @@ export default {
         console.error(err.response);
       }
     },
+    ScrollToTop() {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    },
+    scrollHandler() {
+      console.log(window.scrollY);
+      if (window.scrollY > 500) {
+        this.isUserScrolling = true;
+      } else {
+        this.isUserScrolling = false;
+      }
+    },
+  },
+  mounted() {
+    window.addEventListener("scroll", this.scrollHandler);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.scrollHandler);
   },
 };
 </script>
@@ -609,5 +645,13 @@ export default {
 <style lang="postcss" scoped>
 .hover-boxshadow:hover {
   box-shadow: 0px 2px 20px rgba(25, 25, 25, 0.05);
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
