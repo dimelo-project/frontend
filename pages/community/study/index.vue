@@ -164,6 +164,7 @@
               :pageIdx="pageIdx"
               :pageNum="totalPageNum"
               class="my-16"
+              @click="clickPaginationBtn"
             />
           </div>
         </div>
@@ -398,7 +399,7 @@ export default {
   },
   watch: {
     async $route(to, from) {
-      const { ongoing, skills } = to.query;
+      const { ongoing, skills, perPage, page } = to.query;
 
       // 최종 param data 생성
       let paramData = {};
@@ -408,8 +409,8 @@ export default {
       if (skills) {
         paramData["skills"] = skills;
       }
-      paramData["perPage"] = 16;
-      paramData["page"] = 1;
+      paramData["perPage"] = perPage;
+      paramData["page"] = page;
 
       // param에 맞는 study data 요청
       let response = await this.$axios.$get("/api/studies", {
@@ -422,6 +423,26 @@ export default {
         }
       });
       this.studyData = response;
+
+      // page개수 가져오기
+      let getPageNumParamData = {};
+      if (ongoing) {
+        getPageNumParamData["ongoing"] = ongoing;
+      }
+      if (skills) {
+        getPageNumParamData["skills"] = skills;
+      }
+      const totalPageNumResponse = await this.$axios.$get(
+        `/api/studies/count`,
+        {
+          params: getPageNumParamData,
+        }
+      );
+      if (totalPageNumResponse) {
+        this.totalPageNum = Math.ceil(
+          Number(totalPageNumResponse["num_study"]) / 16
+        );
+      }
 
       //data처리
       if (ongoing) {
@@ -482,6 +503,11 @@ export default {
       this.cntActivationStatus = name;
       this.routerPushWithNewQuery();
     },
+    clickPaginationBtn(selectedPageIdx) {
+      this.pageIdx = selectedPageIdx;
+      this.ScrollToTop();
+      this.routerPushWithNewQuery();
+    },
     ScrollToTop() {
       window.scroll({
         top: 0,
@@ -490,7 +516,7 @@ export default {
       });
     },
     scrollHandler() {
-      console.log(window.scrollY);
+      // console.log(window.scrollY);
       if (window.scrollY > 500) {
         this.isUserScrolling = true;
       } else {
