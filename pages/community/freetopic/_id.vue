@@ -225,6 +225,10 @@ export default {
       );
     },
     async uploadComment() {
+      if (this.userComment === "") {
+        return;
+      }
+
       const response = await this.$axios.$post(
         `/api/talks/${this.$route.params.id}/comments`,
         {
