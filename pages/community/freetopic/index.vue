@@ -266,6 +266,7 @@ export default {
     },
     clickPaginationBtn(selectedPageIdx) {
       this.pageIdx = selectedPageIdx;
+      this.ScrollToTop();
       this.routerPushNewQuery();
     },
     routerPushNewQuery() {
