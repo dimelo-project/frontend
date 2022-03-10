@@ -279,13 +279,16 @@
     </div>
 
     <!-- scroll to top button -->
-    <div
-      class="fixed flex justify-end invisible xl:visible"
-      style="left: calc(50% - 534px - 100px); bottom: 100px"
-      @click="ScrollToTop"
-    >
-      <ScrollToTop />
-    </div>
+    <transition name="fade">
+      <div
+        v-if="isUserScrolling"
+        class="fixed flex justify-end invisible xl:visible"
+        style="left: calc(50% - 534px - 100px); bottom: 100px"
+        @click="ScrollToTop"
+      >
+        <ScrollToTop />
+      </div>
+    </transition>
 
     <LectureAddNewLectureModal
       :isModalOpened="$store.state.lecture.isAddLectureModalOpened"
@@ -509,6 +512,7 @@ export default {
         },
       ],
       popularTechData: [],
+      isUserScrolling: false,
     };
   },
   watch: {
@@ -893,11 +897,23 @@ export default {
       this.$store.commit("lecture/changeIsCreateReviewModalOpened", false);
       this.$store.commit("lecture/changeNewLectureUrl", "");
     },
+    scrollHandler() {
+      console.log(window.scrollY);
+      if (window.scrollY > 500) {
+        this.isUserScrolling = true;
+      } else {
+        this.isUserScrolling = false;
+      }
+    },
   },
   mounted() {
+    window.addEventListener("scroll", this.scrollHandler);
+
     this.$store.commit("showHeaderSearchInput");
   },
   destroyed() {
+    window.removeEventListener("scroll", this.scrollHandler);
+
     this.$store.commit("hideHeaderSearchInput");
   },
 };
@@ -906,5 +922,13 @@ export default {
 <style lang="postcss" scoped>
 .test {
   /* @apply border border-orange2; */
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
