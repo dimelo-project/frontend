@@ -186,7 +186,9 @@ export default {
     }
     totalPageNum = Math.ceil(Number(pageCountResponse.data["num_talk"]) / 16);
 
-    return { freeTopicData, currentMenuIdx, totalPageNum };
+    let pageIdx = Number(page) - 1;
+
+    return { freeTopicData, currentMenuIdx, totalPageNum, pageIdx };
   },
   data() {
     return {
@@ -225,6 +227,7 @@ export default {
 
       this.getFreeTopicData();
       this.getTotalPageNum();
+      this.pageIdx = Number(page) - 1;
     },
   },
   methods: {
