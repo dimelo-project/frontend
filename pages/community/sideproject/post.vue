@@ -7,24 +7,6 @@
 
       <div class="mt-4 border-t border-gray2"></div>
 
-      <!-- 모집상태 -->
-      <div class="mt-6">
-        <span class="txt-base-bold">모집상태</span>
-      </div>
-
-      <div class="flex mt-2">
-        <ChipGeneral
-          @click="clickCategoryMenu(idx)"
-          v-for="(menu, idx) in categoryMenu"
-          :key="idx"
-          :chipText="menu.name"
-          class="p-2 mr-2 transition-colors border outline-none border-gray2 rounded-8px txt-sub"
-          :class="{
-            'bg-yellow1 border-yellow1': idx === selectedCategoryMenuIdx,
-          }"
-        />
-      </div>
-
       <!-- 제목 -->
       <div class="mt-6">
         <span class="txt-base-bold">제목</span>
@@ -60,7 +42,15 @@
           @click="togglePositionBtn(position.id)"
           :key="position.id"
           class="flex items-center justify-center p-2 mr-2 transition-colors border cursor-pointer border-gray2 rounded-4px txt-sub hover:bg-gray3"
-          :class="{ 'bg-yellow1': position.selected }"
+          :class="{
+            'bg-yellow1': position.selected,
+            ' pointer-events-none bg-gray10 cursor-not-allowed':
+              (positionMenu[5].selected === true && position.id !== 5) ||
+              (positionMenu.filter((elem, idx) => {
+                if (idx !== 5) return elem.selected === true;
+              }).length > 0 &&
+                position.id === 5),
+          }"
         >
           {{ position.name }}
         </div>
@@ -129,39 +119,7 @@
         </div>
       </div>
 
-      <div class="mt-6 mb-2">
-        <span class="txt-base-bold">모집인원</span>
-      </div>
-
-      <div
-        @click="showParticpantDropDown"
-        style="width: 70px; height: 36px"
-        class="flex items-center justify-center border cursor-pointer border-gray2 rounded-4px"
-      >
-        <span class="ml-1 txt-sub"> {{ selectedParticpantNum }} 명 </span>
-        <div class="ml-1">
-          <SvgChevronDownOutline
-            :class="{ 'rotate-180': this.participantDropDown }"
-            class="duration-700 transform"
-          />
-        </div>
-      </div>
-      <div
-        v-if="participantDropDown"
-        style="width: 70px; height: 216px"
-        class="overflow-y-scroll border border-gray2 rounded-4px"
-      >
-        <div
-          v-for="i in 15"
-          @click="selectParticpantNum(i)"
-          :key="i"
-          style="height: 36px"
-          class="flex items-center cursor-pointer hover:bg-gray3"
-        >
-          <span class="ml-2 txt-sub"> {{ i }} 명</span>
-        </div>
-      </div>
-
+      <!-- 내용 -->
       <div class="mt-6 mb-2">
         <span class="txt-base-bold">내용</span>
       </div>
@@ -449,8 +407,6 @@ export default {
         },
       ],
       techDropDown: false,
-      participantDropDown: false,
-      selectedParticpantNum: 1,
       categoryMenu: [
         {
           id: 0,
@@ -461,7 +417,6 @@ export default {
           name: "모집완료",
         },
       ],
-      selectedCategoryMenuIdx: 0,
       positionMenu: [
         {
           id: 0,
@@ -496,7 +451,7 @@ export default {
         {
           id: 5,
           name: "협의 후 결정",
-          pName: "협의",
+          pName: null,
           selected: false,
         },
       ],
@@ -519,10 +474,12 @@ export default {
   },
   methods: {
     togglePositionBtn(idx) {
+      if (idx === 5) {
+        for (let i = 0; i <= 4; i++) {
+          this.positionMenu[i]["selected"] = false;
+        }
+      }
       this.positionMenu[idx]["selected"] = !this.positionMenu[idx]["selected"];
-    },
-    clickCategoryMenu(idx) {
-      this.selectedCategoryMenuIdx = idx;
     },
     handleInput(value) {
       if (value.length > this.titleMaxLength) {
@@ -546,12 +503,13 @@ export default {
         title: this.titleInput,
         content: textData,
         markup: htmlData,
-        ongoing: this.categoryMenu[this.selectedCategoryMenuIdx].name,
-        participant: this.selectedParticpantNum,
-        positions: this.positionMenu
-          .filter((elem) => elem.selected === true)
-          .map((elem) => elem.pName)
-          .join(","),
+        positions:
+          this.positionMenu[5].selected === true
+            ? null
+            : this.positionMenu
+                .filter((elem) => elem.selected === true)
+                .map((elem) => elem.pName)
+                .join(","),
         skills: this.selecetedTechStacks
           .map((elem) => {
             return elem.pName;
@@ -559,6 +517,7 @@ export default {
           .join(),
       };
 
+      // console.log(data);
       try {
         const response = await this.$axios.$post(`/api/projects`, data);
 
@@ -585,13 +544,6 @@ export default {
     },
     showAvailableTechStack() {
       this.techDropDown = !this.techDropDown;
-    },
-    showParticpantDropDown() {
-      this.participantDropDown = !this.participantDropDown;
-    },
-    selectParticpantNum(number) {
-      this.selectedParticpantNum = Number(number);
-      this.participantDropDown = false;
     },
   },
 };
