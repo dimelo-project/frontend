@@ -63,20 +63,29 @@
       </div>
       <!-- divider -->
       <div class="mt-5 border border-gray2"></div>
-      <!-- number of people -->
-      <div
-        v-if="articleData['project_position']"
-        class="flex items-center mt-7"
-      >
+      <!-- 모집 포지션 -->
+      <div class="flex items-center mt-7">
         <span class="mr-5 txt-base-bold text-gray1">모집 포지션</span>
-        <ChipGeneral
-          v-for="(position, idx) in articleData['project_position'].split(',')"
-          :key="idx"
-          :height="40"
-          :borderRadius="`rounded-4px`"
-          :chipText="position"
-          class="px-3 py-2 mr-3 pointer-events-none bg-gray3"
-        />
+        <div v-if="articleData['project_position']" class="flex">
+          <ChipGeneral
+            v-for="(position, idx) in articleData['project_position'].split(
+              ','
+            )"
+            :key="idx"
+            :height="40"
+            :borderRadius="`rounded-4px`"
+            :chipText="position"
+            class="px-3 py-2 mr-3 pointer-events-none bg-gray3"
+          />
+        </div>
+        <div v-else class="flex items-center">
+          <ChipGeneral
+            :height="40"
+            :borderRadius="`rounded-4px`"
+            :chipText="`협의 후 결정`"
+            class="px-3 py-2 mr-3 pointer-events-none bg-gray3"
+          />
+        </div>
       </div>
       <!-- selected tech stacks -->
       <div class="flex items-center mt-8">
