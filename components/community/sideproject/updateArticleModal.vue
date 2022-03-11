@@ -503,13 +503,17 @@ export default {
 
     this.titleInput = this.prevArticleContent.project_title;
 
-    this.prevArticleContent.project_position.split(",").forEach((pName) => {
-      this.positionMenu.forEach((position) => {
-        if (position.pName === pName) {
-          position.selected = true;
-        }
+    if (this.prevArticleContent.project_position) {
+      this.prevArticleContent.project_position.split(",").forEach((pName) => {
+        this.positionMenu.forEach((position) => {
+          if (position.pName === pName) {
+            position.selected = true;
+          }
+        });
       });
-    });
+    } else {
+      this.positionMenu[5].selected = true;
+    }
 
     this.prevArticleContent.project_skill.split(",").forEach((pName) => {
       this.availableTeckStacks.forEach((stack) => {
@@ -572,13 +576,22 @@ export default {
       this.selecetedTechStacks = [];
       this.selectedHashTable = [];
 
-      this.prevArticleContent.project_position.split(",").forEach((pName) => {
-        this.positionMenu.forEach((position) => {
-          if (position.pName === pName) {
-            position.selected = true;
-          }
+      if (this.prevArticleContent.project_position) {
+        this.prevArticleContent.project_position.split(",").forEach((pName) => {
+          this.positionMenu.forEach((position) => {
+            if (position.pName === pName) {
+              position.selected = true;
+            } else {
+              position.selected = false;
+            }
+          });
         });
-      });
+      } else {
+        for (let i = 0; i <= 4; i++) {
+          this.positionMenu[i].selected = false;
+        }
+        this.positionMenu[5].selected = true;
+      }
 
       this.prevArticleContent.project_skill.split(",").forEach((pName) => {
         this.availableTeckStacks.forEach((stack) => {
