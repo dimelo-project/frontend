@@ -15,29 +15,50 @@
         </h3>
       </div>
       <!-- author info & created date -->
-      <div class="flex items-center mt-5">
-        <!-- profile image -->
-        <img
-          v-if="articleData['user_imageUrl']"
-          :src="articleData['user_imageUrl']"
-          alt="프로필사진"
-          style="width: 36px; height: 36px"
-          draggable="false"
-          class="rounded-full"
-        />
-        <div v-else class="bg-gray-700 rounded-full w-9 h-9"></div>
-        <!-- nickname -->
-        <span class="ml-2 txt-base-bold">{{
-          articleData["user_nickname"]
-        }}</span>
-        <!-- career duration -->
-        <span class="ml-1.5">{{ articleData["user_career"] }}</span>
-        <!-- created date -->
-        <div class="ml-6 text-gray6">
-          <span>{{ articleData["project_createdAt"].split(" ")[0] }}</span>
-          <span class="ml-1">{{
-            articleData["project_createdAt"].split(" ")[1]
+      <div class="flex items-center justify-between mt-5">
+        <div class="flex items-center">
+          <!-- profile image -->
+          <img
+            v-if="articleData['user_imageUrl']"
+            :src="articleData['user_imageUrl']"
+            alt="프로필사진"
+            style="width: 36px; height: 36px"
+            draggable="false"
+            class="rounded-full"
+          />
+          <div v-else class="bg-gray-700 rounded-full w-9 h-9"></div>
+          <!-- nickname -->
+          <span class="ml-2 txt-base-bold">{{
+            articleData["user_nickname"]
           }}</span>
+          <!-- career duration -->
+          <span class="ml-1.5">{{ articleData["user_career"] }}</span>
+          <!-- created date -->
+          <div class="ml-6 text-gray6">
+            <span>{{ articleData["project_createdAt"].split(" ")[0] }}</span>
+            <span class="ml-1">{{
+              articleData["project_createdAt"].split(" ")[1]
+            }}</span>
+          </div>
+        </div>
+
+        <div
+          v-if="
+            $auth &&
+            $auth.user &&
+            $auth.user.nickname === articleData['user_nickname']
+          "
+        >
+          <span
+            @click="clickUpdateArticleBtn"
+            class="underline cursor-pointer text-gray1 txt-sub"
+            >수정</span
+          >
+          <span
+            class="ml-2 underline cursor-pointer text-gray1 txt-sub"
+            @click="clickDeleteArticleBtn"
+            >삭제</span
+          >
         </div>
       </div>
       <!-- divider -->
@@ -172,6 +193,20 @@
         </ButtonGeneral>
       </div>
     </div>
+
+    <!-- update article modal -->
+    <communitySideprojectUpdateArticleModal
+      :isModalOpened="isUpdateArticleModalOpened"
+      @modalclosed="isUpdateArticleModalOpened = false"
+      :prevArticleContent="articleData"
+      @updateArticle="updateArticle"
+    />
+    <!-- delete article modal -->
+    <communitySideprojectDeleteArticleModal
+      :isModalOpened="isDeleteArticleModalOpened"
+      @modalclosed="isDeleteArticleModalOpened = false"
+      :prevArticleContent="articleData"
+    />
   </div>
 </template>
 
@@ -200,6 +235,8 @@ export default {
       commentEditMode: false,
       selectedCommentDataIdx: null,
       selectedCommentId: null,
+      isUpdateArticleModalOpened: false,
+      isDeleteArticleModalOpened: false,
     };
   },
   methods: {
@@ -250,6 +287,23 @@ export default {
     cancelCommentEdit() {
       this.userComment = "";
       this.commentEditMode = false;
+    },
+    clickUpdateArticleBtn() {
+      this.isUpdateArticleModalOpened = true;
+    },
+    clickDeleteArticleBtn() {
+      this.isDeleteArticleModalOpened = true;
+    },
+    updateArticle(newArticleData) {
+      this.articleData = Object.assign({}, this.articleData, {
+        project_ongoing: newArticleData.ongoing,
+        project_title: newArticleData.title,
+        project_markup: newArticleData.markup,
+        project_position: newArticleData.positions,
+        project_skill: newArticleData.skills,
+      });
+
+      console.log("myNewData", this.articleData);
     },
     async updateComment() {
       try {
