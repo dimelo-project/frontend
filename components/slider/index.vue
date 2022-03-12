@@ -63,7 +63,7 @@
 
                 <div class="flex items-center">
                   <ButtonGeneral
-                    class="ml-3 text-white bg-orange2 rounded-4px"
+                    class="ml-3 text-white bg-orange1 rounded-4px hover:bg-orange2"
                     style="width: 172px; height: 32px"
                   >
                     <NuxtLink :to="`/review/${lecture['course_id']}`">

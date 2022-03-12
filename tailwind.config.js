@@ -22,6 +22,7 @@ module.exports = {
         gray8: "#B1B2BA",
         gray9: "#3F3F3F",
         gray10: "#B7C1CA",
+        gray11: "#E0E4E5",
         black1: "#191919",
       },
       spacing: {

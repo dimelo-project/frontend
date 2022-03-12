@@ -2,42 +2,38 @@
   <div class="select-none">
     <!-- first -->
     <div
-      @mouseover="MainBannerHover = true"
-      @mouseleave="MainBannerHover = false"
-      style="height: 460px"
-      class="flex items-center justify-center bg-yellow1"
+      style=""
+      class="flex items-center justify-center pt-10 pb-24 bg-yellow1"
     >
-      <div style="width: 1110px; height: 234px" class="flex justify-between">
+      <div
+        style="width: 1150px; height: 314px"
+        class="flex items-center justify-between"
+      >
         <div class="">
           <div>
-            <span class="txt-heading2" style="font-size: 36px"
-              >당신의 경험,<br />
-              옆사람에게 말해주세요</span
-            >
+            <!-- prettier-ignore -->
+            <span style="font-size: 36px;font-weight: 700">
+              당신의 경험,<br />
+              옆사람에게 말해주세요
+            </span>
           </div>
           <div class="mt-11">
-            <span class="txt-heading3">IT 수강평 공유 & 팀 빌딩 커뮤니티</span>
+            <span style="font-size: 28px; font-weight: 400"
+              >IT 수강평 공유 & 팀 빌딩 커뮤니티</span
+            >
           </div>
           <div class="mt-2">
-            <span class="txt-mid-bold">디멜로에게 말해주세요</span>
+            <span class="txt-mid-bold">디멜로</span
+            ><span class="txt-mid">에게 말해주세요</span>
           </div>
         </div>
-        <div class="relative" style="width: 497px; height: 234px">
-          <img
-            src="~/assets/imgs/banner/main.jpg"
-            alt="함께공부하기"
-            style="width: 497px; height: 234px"
-            class="absolute top-0 left-0"
-            draggable="false"
-            :class="{ 'opacity-0': MainBannerHover }"
-          />
+        <div class="relative" style="width: 666px; height: 314px">
           <img
             src="~/assets/imgs/banner/main.gif"
             alt="함께공부하기"
-            style="width: 497px; height: 234px"
+            style="width: 666px; height: 314px"
             class="absolute top-0 left-0"
             draggable="false"
-            :class="{ 'opacity-0': !MainBannerHover }"
           />
         </div>
       </div>
@@ -53,10 +49,10 @@
           <div
             @mouseover="LectureBannerHover = true"
             @mouseleave="LectureBannerHover = false"
-            class="flex flex-col items-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
+            class="flex flex-col items-center justify-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
             style="width: 276px; height: 400px"
           >
-            <span class="mt-8 txt-mid-bold">솔직한 강의리뷰</span>
+            <span class="txt-mid-bold">솔직한 강의리뷰</span>
             <div class="relative mt-8" style="width: 200px; height: 200px">
               <img
                 src="~/assets/imgs/banner/lecture.png"
@@ -75,7 +71,7 @@
                 draggable="false"
               />
             </div>
-            <span class="mt-10 text-orange2"
+            <span class="mt-10 text-center text-orange2"
               >개발, 데이터 과학, 디자인<br />
               인강/현장강의 찐리뷰</span
             >
@@ -86,10 +82,10 @@
           <div
             @mouseover="StudyBannerHover = true"
             @mouseleave="StudyBannerHover = false"
-            class="flex flex-col items-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
+            class="flex flex-col items-center justify-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
             style="width: 276px; height: 400px"
           >
-            <span class="mt-8 txt-mid-bold">스터디 모집</span>
+            <span class="txt-mid-bold">스터디 모집</span>
             <div class="relative mt-8" style="width: 200px; height: 200px">
               <img
                 src="~/assets/imgs/banner/study.png"
@@ -108,7 +104,7 @@
                 draggable="false"
               />
             </div>
-            <span class="mt-10 text-orange2"
+            <span class="mt-10 text-center text-orange2"
               >당신을 책상에 앉혀줄<br />
               스터디원이 대기중입니다</span
             >
@@ -119,10 +115,10 @@
           <div
             @mouseover="ProjectBannerHover = true"
             @mouseleave="ProjectBannerHover = false"
-            class="flex flex-col items-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
+            class="flex flex-col items-center justify-center transition duration-300 bg-white cursor-pointer rounded-8px hover:ring-2 hover:ring-yellow1 hover:ring-inset1"
             style="width: 276px; height: 400px"
           >
-            <span class="mt-8 txt-mid-bold">사이드 프로젝트</span>
+            <span class="txt-mid-bold">사이드 프로젝트</span>
             <div class="relative mt-8" style="width: 200px; height: 200px">
               <img
                 src="~/assets/imgs/banner/project.png"
@@ -141,7 +137,7 @@
                 draggable="false"
               />
             </div>
-            <span class="mt-10 text-orange2"
+            <span class="mt-10 text-center text-orange2"
               >아직도 토이 프로젝트해?<br />
               서비스 배포까지!</span
             >
@@ -153,7 +149,7 @@
     <!-- third -->
     <div style="height: 539px" class="flex items-center justify-center">
       <div style="width: 1170px" class="flex justify-between">
-        <div class="txt-heading3">
+        <div class="" style="font-size: 28px; font-weight: 400">
           <span>
             개발·데이터·디자인<br />
             원고료 없이 작성된<br />
@@ -174,11 +170,21 @@
       class="flex items-center justify-center bg-gray4"
     >
       <div style="width: 1170px" class="flex justify-between">
-        <div class="txt-heading3">
-          <span>
-            탈주 안 할<br />
-            스터디원 모집중
-          </span>
+        <div>
+          <div style="font-size: 28px; font-weight: 400">
+            <span>
+              탈주 안 할<br />
+              스터디원 모집중
+            </span>
+          </div>
+
+          <NuxtLink to="/community/study">
+            <div class="mt-4">
+              <span class="pb-1 border-b-1px border-orange2">
+                <span class="txt-base-bold text-orange2">더보기</span>
+              </span>
+            </div>
+          </NuxtLink>
         </div>
 
         <!-- card -->
@@ -256,12 +262,22 @@
       class="flex items-center justify-center bg-gray4"
     >
       <div style="width: 1170px" class="flex justify-between">
-        <div class="txt-heading3">
-          <span>
-            당신을 기다리고<br />
-            있을지도 모르는<br />
-            프로젝트
-          </span>
+        <div>
+          <div style="font-size: 28px; font-weight: 400">
+            <span>
+              당신을 기다리고<br />
+              있을지도 모르는<br />
+              프로젝트
+            </span>
+          </div>
+
+          <NuxtLink to="/community/sideproject">
+            <div class="mt-4">
+              <span class="pb-1 border-b-1px border-orange2">
+                <span class="txt-base-bold text-orange2">더보기</span>
+              </span>
+            </div>
+          </NuxtLink>
         </div>
 
         <!-- card -->
@@ -420,7 +436,6 @@ export default {
   layout: "home",
   data() {
     return {
-      MainBannerHover: false,
       LectureBannerHover: false,
       StudyBannerHover: false,
       ProjectBannerHover: false,

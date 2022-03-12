@@ -58,7 +58,7 @@
                 class="absolute pt-3 bg-transparent -left-1/4"
                 style="top: 80px"
               >
-                <div class="w-40 p-6 bg-white border rounded-md border-gray1">
+                <div class="w-40 p-6 bg-white border rounded-md border-gray11">
                   <div class="py-1">
                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                     <div>
@@ -153,7 +153,7 @@
                 style="top: 80px"
               >
                 <div
-                  class="w-full p-6 bg-white border rounded-md border-gray1"
+                  class="w-full p-6 bg-white border rounded-md border-gray11"
                   style="width: 155px"
                 >
                   <div class="py-1">
@@ -241,11 +241,11 @@
 
                 <div
                   v-if="isProfileBtnOpened"
-                  class="absolute w-56 pt-3 bg-transparent"
-                  style="top: 80px; left: 0px"
+                  class="absolute w-56 pt-3 bg-transparent -left-full"
+                  style="top: 80px"
                 >
                   <div
-                    class="w-full p-6 bg-white border rounded-md border-gray1"
+                    class="w-full p-6 bg-white border rounded-md border-gray11"
                     style="width: 214px"
                   >
                     <!-- user nickname -->
