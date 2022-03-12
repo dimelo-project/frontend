@@ -42,14 +42,14 @@
 
           <!-- tech stack logo chips -->
           <div class="flex flex-wrap mt-4">
-            <!-- reset button -->
+            <!-- 초기화 버튼 -->
             <ChipGeneral
               :borderRadius="`rounded-4px`"
               :chipText="`초기화`"
               class="hover:bg-gray3 hover:text-black1 hover:border-gray3 border border-gray2 px-2.5 py-2.5 mr-1 mb-3 bg-black1 text-white transition-colors"
               @click="clickResetChip"
             />
-            <!-- tech buttons -->
+            <!-- 기술 버튼들  -->
             <ChipGeneral
               v-for="(stack, index) in techStacks"
               :key="index"
@@ -64,11 +64,16 @@
               }"
               class="hover:text-black1 border border-gray2 px-2.5 py-2.5 mr-1 mb-3 text-gray1 transition-colors"
             />
-            <!-- ET CETERA button -->
+            <!-- 기타 버튼 -->
             <ChipGeneral
               :borderRadius="`rounded-4px`"
-              :chipText="`기타`"
-              class="border border-gray2 px-2.5 py-2.5 mr-1 mb-3 text-gray1 transition-colors"
+              :chipText="etcMenu.chipName"
+              @click="clickEtcChip"
+              :class="{
+                'bg-yellow1 text-black1 ': etcMenu.selected,
+                'hover:bg-gray3 hover:border-gray3 ': !etcMenu.selected,
+              }"
+              class="hover:text-black1 border border-gray2 px-2.5 py-2.5 mr-1 mb-3 text-gray1 transition-colors"
             />
           </div>
         </div>
@@ -453,11 +458,24 @@ export default {
         selected: false,
       },
     ];
+
+    let etcMenu = {
+      chipName: "기타",
+      techName: "etc",
+      selected: false,
+    };
+
     let skillsArr = [];
     if (skills) {
       skillsArr = skills.split(",");
       while (skillsArr.length > 0) {
         let elem = skillsArr.pop();
+
+        if (elem === "etc") {
+          etcMenu.selected = true;
+          continue;
+        }
+
         for (let i = 0; i < techStacks.length; i++) {
           if (elem === techStacks[i]["techName"]) {
             techStacks[i]["selected"] = true;
@@ -506,6 +524,7 @@ export default {
       ativationStatus,
       positionsData,
       techStacks,
+      etcMenu,
       cntActivationStatus,
       pageIdx,
       totalPageNum,
@@ -585,6 +604,9 @@ export default {
         elem.selected = false;
       });
 
+      // etcMenu selected false로 초기화
+      this.etcMenu.selected = false;
+
       // tech query에 따른 선택된 skill 설정
       if (skills) {
         let skillsArr = [];
@@ -592,6 +614,11 @@ export default {
         skillsArr = skills.split(",");
         while (skillsArr.length > 0) {
           let elem = skillsArr.pop();
+
+          if (elem === "etc") {
+            this.etcMenu.selected = true;
+            continue;
+          }
 
           for (let i = 0; i < this.techStacks.length; i++) {
             if (elem === this.techStacks[i]["techName"]) {
@@ -644,6 +671,15 @@ export default {
         .map((elem) => elem.techName)
         .join(",");
 
+      // 기타 버튼 활성화시 skill에 etc 추가
+      if (this.etcMenu.selected) {
+        if (selectedSkills === "") {
+          selectedSkills = "etc";
+        } else {
+          selectedSkills = selectedSkills.concat(",etc");
+        }
+      }
+
       // 최종 query data 생성
       let queryData = {};
       if (this.cntActivationStatus !== "전체") {
@@ -673,6 +709,11 @@ export default {
     clickTechChip(index) {
       this.pageIdx = 0;
       this.techStacks[index]["selected"] = !this.techStacks[index]["selected"];
+      this.routerPushWithNewQuery();
+    },
+    clickEtcChip() {
+      this.pageIdx = 0;
+      this.etcMenu["selected"] = !this.etcMenu["selected"];
       this.routerPushWithNewQuery();
     },
     clickResetChip() {

@@ -494,7 +494,7 @@ export default {
         {
           id: 5,
           name: "협의 후 결정",
-          pName: "협의",
+          pName: null,
           selected: false,
         },
       ],
