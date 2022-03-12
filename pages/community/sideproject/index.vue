@@ -212,6 +212,7 @@
               <PaginationGeneral
                 :pageIdx="pageIdx"
                 :pageNum="totalPageNum"
+                @click="clickPaginationBtn"
                 class="my-16"
               />
             </div>
@@ -219,7 +220,6 @@
         </div>
       </div>
 
-      <!-- scroll to top button -->
       <!-- scroll to top button -->
       <transition name="fade">
         <div
@@ -247,7 +247,7 @@ export default {
     }
   },
   async asyncData({ $axios, query }) {
-    const { ongoing, positions, skills, page } = query;
+    const { ongoing, positions, skills, page, perPage } = query;
 
     // 최종 param data 생성
     let paramData = {};
@@ -260,7 +260,7 @@ export default {
     if (skills) {
       paramData["skills"] = skills;
     }
-    paramData["perPage"] = 16;
+    paramData["perPage"] = perPage;
     paramData["page"] = page;
 
     // param에 맞는 project data 요청
@@ -298,6 +298,7 @@ export default {
       },
     ];
 
+    // 현재 선택된 포지션 표시하기
     let positionsData = [
       {
         name: "프론트엔드 개발자",
@@ -339,6 +340,7 @@ export default {
       }
     }
 
+    // 현재 선택된 기술스택 표시하기
     let techStacks = [
       {
         chipName: "JavaScript",
@@ -465,6 +467,7 @@ export default {
       }
     }
 
+    // 현재 모집여부 가져오기
     let cntActivationStatus;
     if (ongoing) {
       cntActivationStatus = ongoing;
@@ -472,13 +475,29 @@ export default {
       cntActivationStatus = "전체";
     }
 
+    // 현재 페이지 가져오기
     let pageIdx = page - 1;
 
+    // 최종 count param data 생성
+    let countParamData = {};
+    if (ongoing) {
+      countParamData["ongoing"] = ongoing;
+    }
+    if (positions) {
+      countParamData["positions"] = positions;
+    }
+    if (skills) {
+      countParamData["skills"] = skills;
+    }
+
+    // 전체 페이지 수 가져오기
     let totalPageNum;
-    const totalPageNumResponse = await $axios.$get(`/api/projects/count`);
+    const totalPageNumResponse = await $axios.$get(`/api/projects/count`, {
+      params: countParamData,
+    });
     if (totalPageNumResponse) {
       totalPageNum = Math.ceil(
-        Number(totalPageNumResponse["num_project"]) / 16
+        Number(totalPageNumResponse["num_project"]) / perPage
       );
     }
 
@@ -499,7 +518,7 @@ export default {
   },
   watch: {
     async $route(to, from) {
-      const { ongoing, positions, skills } = to.query;
+      const { ongoing, positions, skills, page, perPage } = to.query;
 
       // 최종 param data 생성
       let paramData = {};
@@ -512,8 +531,8 @@ export default {
       if (skills) {
         paramData["skills"] = skills;
       }
-      paramData["perPage"] = 16;
-      paramData["page"] = 1;
+      paramData["perPage"] = perPage;
+      paramData["page"] = page;
 
       // param에 맞는 project data 요청
       let response = await this.$axios.$get("/api/projects", {
@@ -549,6 +568,32 @@ export default {
         this.techStacks.forEach((elem) => {
           elem.selected = false;
         });
+      }
+
+      // count param data 생성
+      let countParamData = {};
+      if (ongoing) {
+        countParamData["ongoing"] = ongoing;
+      }
+      if (positions) {
+        countParamData["positions"] = positions;
+      }
+      if (skills) {
+        countParamData["skills"] = skills;
+      }
+      countParamData["perPage"] = perPage;
+
+      // 페이지 개수 가져오기
+      const totalPageNumResponse = await this.$axios.$get(
+        `/api/projects/count`,
+        {
+          params: countParamData,
+        }
+      );
+      if (totalPageNumResponse) {
+        this.totalPageNum = Math.ceil(
+          Number(totalPageNumResponse["num_project"]) / perPage
+        );
       }
     },
   },
@@ -610,6 +655,11 @@ export default {
       this.cntActivationStatus = name;
       this.routerPushWithNewQuery();
     },
+    clickPaginationBtn(selectedPageIdx) {
+      this.pageIdx = selectedPageIdx;
+      this.routerPushWithNewQuery();
+      this.ScrollToTop();
+    },
     requireTechLogoImg(skill) {
       try {
         return require(`~/assets/imgs/logo/tech/${skill}.png`);
@@ -625,7 +675,7 @@ export default {
       });
     },
     scrollHandler() {
-      console.log(window.scrollY);
+      // console.log(window.scrollY);
       if (window.scrollY > 500) {
         this.isUserScrolling = true;
       } else {
