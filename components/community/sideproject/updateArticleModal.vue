@@ -67,7 +67,15 @@
             @click="togglePositionBtn(position.id)"
             :key="position.id"
             class="flex items-center justify-center p-2 mr-2 transition-colors border cursor-pointer border-gray2 rounded-4px txt-sub hover:bg-gray3"
-            :class="{ 'bg-yellow1': position.selected }"
+            :class="{
+              'bg-yellow1': position.selected,
+              ' pointer-events-none bg-gray10 cursor-not-allowed':
+                (positionMenu[5].selected === true && position.id !== 5) ||
+                (positionMenu.filter((elem, idx) => {
+                  if (idx !== 5) return elem.selected === true;
+                }).length > 0 &&
+                  position.id === 5),
+            }"
           >
             {{ position.name }}
           </div>
@@ -576,13 +584,18 @@ export default {
       this.selecetedTechStacks = [];
       this.selectedHashTable = [];
 
+      // position selected 모두 false로 초기화
+      this.positionMenu.forEach((position) => {
+        position.selected = false;
+      });
+
+      // 원래 선택되었던 position 값 기반으로 selected 설정
       if (this.prevArticleContent.project_position) {
         this.prevArticleContent.project_position.split(",").forEach((pName) => {
           this.positionMenu.forEach((position) => {
             if (position.pName === pName) {
               position.selected = true;
-            } else {
-              position.selected = false;
+              return;
             }
           });
         });
