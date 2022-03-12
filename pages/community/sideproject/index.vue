@@ -558,17 +558,52 @@ export default {
         this.cntActivationStatus = "전체";
       }
 
-      if (!positions) {
-        this.positionsData.forEach((elem) => {
-          elem.selected = false;
-        });
+      // position selected false로 모두 초기화
+      this.positionsData.forEach((elem) => {
+        elem.selected = false;
+      });
+
+      // position query에 따른 선택된 position 설정
+      if (positions) {
+        let positionArr = [];
+
+        positionArr = positions.split(",");
+        while (positionArr.length > 0) {
+          let elem = positionArr.pop();
+
+          for (let i = 0; i < this.positionsData.length; i++) {
+            if (elem === this.positionsData[i]["posName"]) {
+              this.positionsData[i]["selected"] = true;
+              continue;
+            }
+          }
+        }
       }
 
-      if (!skills) {
-        this.techStacks.forEach((elem) => {
-          elem.selected = false;
-        });
+      // tech selected false로 모두 초기화
+      this.techStacks.forEach((elem) => {
+        elem.selected = false;
+      });
+
+      // tech query에 따른 선택된 skill 설정
+      if (skills) {
+        let skillsArr = [];
+
+        skillsArr = skills.split(",");
+        while (skillsArr.length > 0) {
+          let elem = skillsArr.pop();
+
+          for (let i = 0; i < this.techStacks.length; i++) {
+            if (elem === this.techStacks[i]["techName"]) {
+              this.techStacks[i]["selected"] = true;
+              continue;
+            }
+          }
+        }
       }
+
+      // page query에 따른 pageIdx 설정
+      this.pageIdx = page - 1;
 
       // count param data 생성
       let countParamData = {};
