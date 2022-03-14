@@ -54,7 +54,7 @@
       </div>
     </div>
     <!-- divider -->
-    <div class="border border-gray2"></div>
+    <div class="border-b border-gray2"></div>
     <!-- wrap -->
     <div class="flex justify-center">
       <div style="width: 990px" class="flex justify-between test">
@@ -139,13 +139,13 @@
               :key="reviewDataIdx"
             >
               <!-- divider -->
-              <div class="mt-4 border border-gray2"></div>
+              <div class="mt-4 border-b border-gray2"></div>
               <!-- card data -->
               <div class="flex mt-4">
                 <!-- user profile & user review rate -->
                 <div class="flex flex-col flex-shrink-0">
                   <!-- user profile -->
-                  <div class="flex">
+                  <div class="flex" style="width: 200px">
                     <img
                       v-if="review['user_imageUrl']"
                       :src="review['user_imageUrl']"
@@ -278,14 +278,14 @@
               style="width: 200px"
             >
               <div class="flex items-start">
-                <img
-                  src="~/assets/imgs/icon/info.png"
-                  alt="강의"
-                  style="width: 24px; height: 24px"
-                />
+                <svgInfo />
                 <div class="flex flex-col ml-2">
-                  <span>{{ courseData["course_platform"] }}</span>
-                  <span>{{ courseData["course_price"].toLocaleString() }}</span>
+                  <span class="txt-sub-bold">{{
+                    courseData["course_platform"]
+                  }}</span>
+                  <span class="txt-sub"
+                    >{{ courseData["course_price"].toLocaleString() }}원</span
+                  >
                 </div>
               </div>
               <a :href="courseData['course_siteUrl']" target="_blank">
