@@ -299,7 +299,7 @@
             <!-- create review button -->
             <ButtonGeneral
               :color="`orange1`"
-              class="text-white px-9 py-2.5 mt-7 txt-base-bold rounded-4px bg-orange2"
+              class="text-white px-9 py-2.5 mt-7 txt-base-bold rounded-4px bg-orange1 hover:bg-orange2"
               @click="openReviewModal('create')"
             >
               <span>리뷰 작성</span>

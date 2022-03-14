@@ -221,9 +221,19 @@
 
                   <div v-if="Number(lecture['num_review']) === 0">
                     <ButtonGeneral
+                      @click="
+                        $store.commit(
+                          'lecture/changeIsAskToBeFirstReviewerModalOpened',
+                          true
+                        );
+                        $store.commit(
+                          'lecture/changeSelectedCourseIdx',
+                          lecture['course_id']
+                        );
+                      "
                       :width="172"
                       :height="32"
-                      class="ml-3 border pointer-events-none text-gray6 txt-base rounded-4px border-gray2"
+                      class="ml-3 border text-gray6 txt-base rounded-4px border-gray2"
                     >
                       <span>아직 리뷰가 없습니다</span>
                     </ButtonGeneral>
@@ -233,7 +243,7 @@
                       <ButtonGeneral
                         :width="172"
                         :height="32"
-                        class="ml-3 text-white txt-base rounded-4px bg-orange1"
+                        class="ml-3 text-white txt-base rounded-4px bg-orange1 hover:bg-orange2"
                       >
                         <span>{{ lecture["num_review"] }}개의 리뷰 보기</span>
                       </ButtonGeneral>
@@ -302,6 +312,7 @@
       </div>
     </transition>
 
+    <!-- 새로운 강의 추가해서 리뷰 생성할때 열리는 모달 -->
     <LectureAddNewLectureModal
       :isModalOpened="$store.state.lecture.isAddLectureModalOpened"
       @modalclosed="
@@ -309,6 +320,10 @@
       "
     />
 
+    <!-- "아직 리뷰가 없습니다" 버튼 클릭시 열리는 모달 -->
+    <LectureAskToBeFirstReviewerModal />
+
+    <!-- 리뷰 작성 모달 -->
     <MultiSteps
       :isModalOpened="$store.state.lecture.isCreateReviewModalOpened"
       @modalClose="closeCreateReviewModal"
@@ -910,7 +925,7 @@ export default {
       this.$store.commit("lecture/changeNewLectureUrl", "");
     },
     scrollHandler() {
-      console.log(window.scrollY);
+      // console.log(window.scrollY);
       if (window.scrollY > 500) {
         this.isUserScrolling = true;
       } else {
