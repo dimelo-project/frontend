@@ -128,7 +128,11 @@
             <!-- Rank -->
             <div
               style="margin-left: 24px; margin-right: 24px"
-              :class="{ 'text-orange2': index <= 2 && currentPageIndex === 0 }"
+              :class="[
+                index <= 2 && currentPageIndex === 0
+                  ? 'text-orange2'
+                  : 'text-gray1',
+              ]"
               class="txt-mid"
             >
               <span class=""> {{ 17 * currentPageIndex + index + 1 }} </span>
@@ -257,7 +261,10 @@
 
     <!-- right side, popular keyword tabs -->
     <div class="relative" style="width: 174px; margin-left: 108px">
-      <div class="sticky" style="top: 185px">
+      <div
+        class="2xl:sticky 2xl:top-44 lg:absolute lg:top-16"
+        style="top: 185px"
+      >
         <div class="flex mb-6">
           <p class="txt-mid-bold">기술 키워드</p>
           <img
@@ -270,7 +277,12 @@
           v-for="(tech, index) in popularTechData"
           :key="index"
           @click="clickPopularTech(tech.skill_skill)"
-          class="py-2 pl-5 mb-2 cursor-pointer bg-gray3 rounded-4px"
+          :class="[
+            tech.skill_skill === currentPopularKeyword
+              ? 'bg-yellow1'
+              : 'bg-gray3',
+          ]"
+          class="py-2 pl-5 mb-2 cursor-pointer rounded-4px hover:bg-yellow1"
           style="width: 160px"
         >
           <span class="txt-sub">{{ tech.skill_skill }}</span>
