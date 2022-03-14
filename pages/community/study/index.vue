@@ -139,12 +139,12 @@
                     />
                   </div>
                   <!-- divider -->
-                  <div class="mt-16 border border-gray2"></div>
+                  <div class="mt-16 border-t border-gray2"></div>
                   <!-- nickname & date & number of comments -->
                   <div class="flex justify-between mt-4">
                     <div class="text-gray6">
                       <span>{{ study.user_nickname }}</span>
-                      <span>{{ study.project_createdAt }}</span>
+                      <span class="ml-3">{{ study.study_createdAt }}</span>
                     </div>
                     <div class="text-gray1">
                       <span>댓글 {{ study.num_comment }}</span>

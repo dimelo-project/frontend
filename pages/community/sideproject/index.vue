@@ -193,12 +193,14 @@
                       />
                     </div>
                     <!-- divider -->
-                    <div class="mt-10 border border-gray2"></div>
+                    <div class="mt-10 border-t border-gray2"></div>
                     <!-- nickname & date & number of comments -->
                     <div class="flex justify-between mt-4">
                       <div class="text-gray6">
                         <span>{{ project.user_nickname }}</span>
-                        <span>{{ project.project_createdAt }}</span>
+                        <span class="ml-3">{{
+                          project.project_createdAt
+                        }}</span>
                       </div>
                       <div class="text-gray1">
                         <span>댓글 {{ project.num_comment }}</span>
