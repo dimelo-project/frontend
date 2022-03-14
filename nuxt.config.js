@@ -3,7 +3,7 @@ console.log("@@@@@@@@@", process.env.baseURL);
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: "frontend",
+    title: "dimelo",
     htmlAttrs: {
       lang: "en",
     },
