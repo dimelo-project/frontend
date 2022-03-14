@@ -4,12 +4,15 @@
     <div class="mt-10">
       <div class="flex justify-between">
         <span class="txt-sub-bold">강의 장점</span>
-        <span class="txt-mini text-gray1">0자/1000자</span>
+        <span class="txt-mini text-gray1"
+          >{{ $store.state.q5pros.length }}자/1000자</span
+        >
       </div>
       <textarea
-        class="w-full p-3 border outline-none txt-sub mt-1.5 resize-none rounded-8px"
+        class="w-full p-3 border outline-none txt-sub mt-1.5 resize-none rounded-8px border-gray2"
         style="height: 100px"
         :placeholder="examplePlaceholder"
+        :maxlength="maxlength"
         :value="$store.state.q5pros"
         @input="inputPros"
       ></textarea>
@@ -18,12 +21,15 @@
     <div class="mt-3">
       <div class="flex justify-between">
         <span class="txt-sub-bold">강의 단점</span>
-        <span class="txt-mini text-gray1">0자/1000자</span>
+        <span class="txt-mini text-gray1"
+          >{{ $store.state.q5cons.length }}자/1000자</span
+        >
       </div>
       <textarea
-        class="w-full p-3 border outline-none txt-sub mt-1.5 resize-none rounded-8px"
+        class="w-full p-3 border outline-none txt-sub mt-1.5 resize-none rounded-8px border-gray2"
         style="height: 100px"
         :placeholder="examplePlaceholder"
+        :maxlength="maxlength"
         :value="$store.state.q5cons"
         @input="inputCons"
       ></textarea>
@@ -38,7 +44,7 @@
       </p>
     </div>
 
-    <div class="flex justify-center mt-11">
+    <div class="flex justify-center mt-5">
       <ButtonGeneral
         :width="88"
         class="flex-shrink-0 border py-5px txt-sub-bold border-orange2 text-orange2 rounded-8px"
@@ -73,6 +79,7 @@ export default {
   data() {
     return {
       examplePlaceholder: `(*단순 좋다, 별로다 보다는 장단점을 상세하게 적은 후기일 수록 많은 도움이 됩니다.)`,
+      maxlength: 1000,
     };
   },
   computed: {
@@ -85,10 +92,22 @@ export default {
   },
   methods: {
     inputPros(event) {
-      this.$store.commit("changeQ5pros", event.target.value);
+      const value = event.target.value;
+
+      if (value.length > this.maxlength) {
+        this.$store.commit("changeQ5pros", value.slice(0, this.maxlength));
+      } else {
+        this.$store.commit("changeQ5pros", value);
+      }
     },
     inputCons(event) {
-      this.$store.commit("changeQ5cons", event.target.value);
+      const value = event.target.value;
+
+      if (value.length > this.maxlength) {
+        this.$store.commit("changeQ5cons", value.slice(0, this.maxlength));
+      } else {
+        this.$store.commit("changeQ5cons", value);
+      }
     },
   },
 };
