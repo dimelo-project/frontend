@@ -40,17 +40,22 @@
         </div>
       </div>
       <!-- divider -->
-      <div class="mt-5 border border-gray2"></div>
+      <div class="mt-5 border-t border-gray2"></div>
       <!-- number of people -->
       <div class="flex mt-7">
-        <span class="txt-base-bold text-gray1">모집 인원</span>
+        <div style="width: 68px">
+          <span class="txt-base-bold text-gray1">모집 인원</span>
+        </div>
         <span class="ml-5">{{ articleData["study_participant"] }}명</span>
       </div>
       <!-- selected tech stacks -->
-      <div class="flex items-start mt-8">
-        <span class="flex-shrink-0 mr-5 txt-base-bold text-gray1"
-          >사용 기술</span
+      <div class="flex mt-8">
+        <div
+          class="flex items-center flex-shrink-0 mr-5 txt-base-bold text-gray1"
+          style="height: 40px; width: 68px"
         >
+          <span>사용 기술</span>
+        </div>
         <div class="flex flex-wrap" style="width: 700px">
           <ChipGeneral
             v-for="(skill, idx) in articleData['study_skill'].split(',')"

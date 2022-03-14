@@ -31,7 +31,9 @@
       <!-- Search Box -->
       <SearchGeneral
         class="flex items-center w-full p-4 mt-10 bg-white border rounded-8px"
-        :class="{ ' border-orange2': freetopicSearchInput.length > 0 }"
+        :class="[
+          freetopicSearchInput.length > 0 ? ' border-orange2' : ' border-gray2',
+        ]"
         style="height: 56px"
       >
         <div @click="searchByUserInput">
@@ -80,7 +82,7 @@
               <span class="ml-5">{{ topic["talk_createdAt"] }}</span>
             </div>
 
-            <div class="mt-2 text-gray6">
+            <div class="mt-2 text-gray1">
               <span>댓글 {{ topic["num_comment"] }}</span>
             </div>
           </nuxt-link>
@@ -410,7 +412,7 @@ export default {
       });
     },
     scrollHandler() {
-      console.log(window.scrollY);
+      // console.log(window.scrollY);
       if (window.scrollY > 500) {
         this.isUserScrolling = true;
       } else {

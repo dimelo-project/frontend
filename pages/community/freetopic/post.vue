@@ -17,7 +17,7 @@
           v-for="(menu, idx) in categoryMenu"
           :key="idx"
           :chipText="menu.name"
-          class="p-2 mr-2 transition-colors border outline-none border-gray2 rounded-8px txt-sub"
+          class="p-2 mr-2 transition-colors border outline-none border-gray2 rounded-4px txt-sub"
           :class="{
             'bg-yellow1 border-yellow1': idx === selectedCategoryMenuIdx,
           }"

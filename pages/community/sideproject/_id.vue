@@ -62,10 +62,12 @@
         </div>
       </div>
       <!-- divider -->
-      <div class="mt-5 border border-gray2"></div>
+      <div class="mt-5 border-t border-gray2"></div>
       <!-- 모집 포지션 -->
       <div class="flex items-center mt-7">
-        <span class="mr-5 txt-base-bold text-gray1">모집 포지션</span>
+        <div style="width: 82px" class="mr-5">
+          <span class="txt-base-bold text-gray1">모집 포지션</span>
+        </div>
         <div v-if="articleData['project_position']" class="flex">
           <ChipGeneral
             v-for="(position, idx) in articleData['project_position'].split(
@@ -88,19 +90,26 @@
         </div>
       </div>
       <!-- selected tech stacks -->
-      <div class="flex items-center mt-8">
-        <span class="mr-8 txt-base-bold text-gray1">사용 기술</span>
-        <ChipGeneral
-          v-for="(skill, idx) in articleData['project_skill'].split(',')"
-          :key="idx"
-          :height="40"
-          :borderRadius="`rounded-4px`"
-          :chipText="skill"
-          class="px-3 py-2 mr-3 pointer-events-none bg-gray3"
-        />
+      <div class="flex mt-8">
+        <div
+          class="flex items-center flex-shrink-0 mr-5 txt-base-bold text-gray1"
+          style="height: 40px; width: 82px"
+        >
+          <span>사용 기술</span>
+        </div>
+        <div class="flex flex-wrap" style="width: 700px">
+          <ChipGeneral
+            v-for="(skill, idx) in articleData['project_skill'].split(',')"
+            :key="idx"
+            :height="40"
+            :borderRadius="`rounded-4px`"
+            :chipText="skill"
+            class="px-3 py-2 mb-2 mr-3 pointer-events-none bg-gray3"
+          />
+        </div>
       </div>
       <!-- divider -->
-      <div class="mt-5 border border-gray2"></div>
+      <div class="mt-5 border-t border-gray2"></div>
       <!-- content body -->
       <div class="mt-9">
         <p
@@ -112,7 +121,7 @@
         </p> -->
       </div>
       <!-- divider -->
-      <div class="mt-9"></div>
+      <div class="border-t mt-9 border-gray2"></div>
       <!-- number of comments -->
       <div class="mt-7">
         <span class="txt-mid-bold">댓글 {{ allCommentData.length }}</span>
