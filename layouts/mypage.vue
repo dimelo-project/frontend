@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  middleware: "auth",
+  middleware: "authenticated",
   data() {
     return {
       value: "",
