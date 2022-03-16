@@ -84,6 +84,7 @@ export default {
   // },
 
   auth: {
+    redirect: false,
     localStorage: {
       // prefix: 'auth.'
     },
@@ -92,11 +93,6 @@ export default {
       // options: {
       //   sameSite: 'lax',
       // }
-    },
-    redirect: {
-      // login: "/user/login",
-      // logout: "/user/login",
-      // home: "/"
     },
     strategies: {
       cookie: {
