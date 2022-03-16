@@ -527,6 +527,11 @@ export default {
       }
     },
     async giveHelpedToReview(reviewDataIdx, review_id) {
+      if (!this.$store.getters["authentication/isUserLoggedIn"]) {
+        this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
       try {
         const response = await this.$axios.$post(
           `/api/reviews/help/${review_id}`
@@ -541,6 +546,11 @@ export default {
       }
     },
     async removeHelpedToReview(reviewDataIdx, review_id) {
+      if (!this.$store.getters["authentication/isUserLoggedIn"]) {
+        this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
       try {
         const response = await this.$axios.$delete(
           `/api/reviews/help/${review_id}`
@@ -555,6 +565,11 @@ export default {
       }
     },
     async toggleHeartToLecture() {
+      if (!this.$store.getters["authentication/isUserLoggedIn"]) {
+        this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
       if (this.courseData["course_liked"] === "false") {
         const response = await this.$axios.$post(
           `/api/courses/likes/${this.$route.params.id}`
@@ -586,6 +601,11 @@ export default {
       };
     },
     async openReviewModal(mode, review_id) {
+      if (!this.$store.getters["authentication/isUserLoggedIn"]) {
+        this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
       this.isModalOpened = !this.isModalOpened;
       this.reviewMode = mode;
       if (mode === "update" && review_id) {

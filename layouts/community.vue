@@ -1,6 +1,7 @@
 <template>
   <div class="select-none">
     <HomeLayerHeader />
+    <LoginModal />
     <div class="flex justify-center text-black1">
       <div style="width: 1090px" class="flex">
         <!-- left side navigation -->

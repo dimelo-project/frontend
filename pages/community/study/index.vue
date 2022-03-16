@@ -65,15 +65,14 @@
             </span>
           </div>
 
-          <NuxtLink to="/community/study/post">
-            <ButtonGeneral
-              :width="145"
-              :height="44"
-              class="font-bold text-white bg-orange1 hover:bg-orange2 txt-base py-2.5 rounded-8px"
-            >
-              <span>스터디 모집하기</span>
-            </ButtonGeneral>
-          </NuxtLink>
+          <ButtonGeneral
+            @click="goToWriteNewStudyArticle"
+            :width="145"
+            :height="44"
+            class="font-bold text-white bg-orange1 hover:bg-orange2 txt-base py-2.5 rounded-8px"
+          >
+            <span>스터디 모집하기</span>
+          </ButtonGeneral>
         </div>
 
         <!-- cards list -->
@@ -522,6 +521,14 @@ export default {
       } else {
         this.isUserScrolling = false;
       }
+    },
+    goToWriteNewStudyArticle() {
+      if (!this.$store.getters["authentication/isUserLoggedIn"]) {
+        this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
+      this.$router.push("/community/study/post");
     },
   },
   mounted() {

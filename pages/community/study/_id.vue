@@ -209,6 +209,11 @@ export default {
       );
     },
     async uploadComment() {
+      if (!this.$store.getters["authentication/isUserLoggedIn"]) {
+        this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
       if (this.userComment === "") {
         return;
       }
