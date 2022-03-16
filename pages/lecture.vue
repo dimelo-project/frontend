@@ -99,7 +99,7 @@
         >
 
         <ButtonGeneral
-          @click="$store.commit('lecture/changeIsAddLectureModalOpened', true)"
+          @click="goToWriteNewLectureReview"
           :width="240"
           :height="44"
           class="mt-8 text-white rounded-4px bg-orange1 hover:bg-orange2"
@@ -931,6 +931,14 @@ export default {
       } else {
         this.isUserScrolling = false;
       }
+    },
+    goToWriteNewLectureReview() {
+      if (!this.$store.getters["authentication/isUserLoggedIn"]) {
+        this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
+      this.$store.commit("lecture/changeIsAddLectureModalOpened", true);
     },
   },
   mounted() {

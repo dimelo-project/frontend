@@ -16,15 +16,14 @@
         </div>
 
         <div>
-          <NuxtLink to="/community/freetopic/post">
-            <ButtonGeneral
-              :width="88"
-              :height="44"
-              class="font-bold text-white rounded-8px txt-base bg-orange1 hover:bg-orange2"
-            >
-              <span>글쓰기</span>
-            </ButtonGeneral></NuxtLink
+          <ButtonGeneral
+            @click="goToWriteNewFreeTopic"
+            :width="88"
+            :height="44"
+            class="font-bold text-white rounded-8px txt-base bg-orange1 hover:bg-orange2"
           >
+            <span>글쓰기</span>
+          </ButtonGeneral>
         </div>
       </div>
 
@@ -418,6 +417,14 @@ export default {
       } else {
         this.isUserScrolling = false;
       }
+    },
+    goToWriteNewFreeTopic() {
+      if (!this.$store.getters["authentication/isUserLoggedIn"]) {
+        this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
+      this.$router.push("/community/freetopic/post");
     },
   },
   mounted() {

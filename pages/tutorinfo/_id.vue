@@ -490,6 +490,11 @@ export default {
       }
     },
     async giveHeartToLecture(lectureIdx, course_id) {
+      if (!this.$store.getters["authentication/isUserLoggedIn"]) {
+        this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
       try {
         // console.log("give heart idx", lectureIdx);
         const response = await this.$axios.$post(
@@ -516,6 +521,11 @@ export default {
       }
     },
     async giveHelpedToReview(reviewDataIdx, review_id) {
+      if (!this.$store.getters["authentication/isUserLoggedIn"]) {
+        this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
       try {
         const response = await this.$axios.$post(
           `/api/reviews/help/${review_id}`
