@@ -15,28 +15,49 @@
         </h3>
       </div>
       <!-- author info & created date -->
-      <div class="flex items-center mt-5">
-        <!-- profile image -->
-        <img
-          v-if="articleData['user_imageUrl']"
-          :src="articleData['user_imageUrl']"
-          alt="프로필사진"
-          style="width: 36px; height: 36px"
-          class="rounded-full"
-        />
-        <div v-else class="bg-gray-700 rounded-full w-9 h-9"></div>
-        <!-- nickname -->
-        <span class="ml-2 txt-base-bold">{{
-          articleData["user_nickname"]
-        }}</span>
-        <!-- career duration -->
-        <span class="ml-1.5">{{ articleData["user_career"] }}</span>
-        <!-- created date -->
-        <div class="ml-6 text-gray6">
-          <span>{{ articleData["study_createdAt"].split(" ")[0] }}</span>
-          <span class="ml-1">{{
-            articleData["study_createdAt"].split(" ")[1]
+      <div class="flex items-center justify-between mt-5">
+        <div class="flex items-center">
+          <!-- profile image -->
+          <img
+            v-if="articleData['user_imageUrl']"
+            :src="articleData['user_imageUrl']"
+            alt="프로필사진"
+            style="width: 36px; height: 36px"
+            class="object-cover rounded-full"
+          />
+          <div v-else class="bg-gray-700 rounded-full w-9 h-9"></div>
+          <!-- nickname -->
+          <span class="ml-2 txt-base-bold">{{
+            articleData["user_nickname"]
           }}</span>
+          <!-- career duration -->
+          <span class="ml-1.5">{{ articleData["user_career"] }}</span>
+          <!-- created date -->
+          <div class="ml-6 text-gray6">
+            <span>{{ articleData["study_createdAt"].split(" ")[0] }}</span>
+            <span class="ml-1">{{
+              articleData["study_createdAt"].split(" ")[1]
+            }}</span>
+          </div>
+        </div>
+
+        <div
+          v-if="
+            $auth &&
+            $auth.user &&
+            $auth.user.nickname === articleData['user_nickname']
+          "
+        >
+          <span
+            @click="clickUpdateArticleBtn"
+            class="underline cursor-pointer text-gray1 txt-sub"
+            >수정</span
+          >
+          <span
+            class="ml-2 underline cursor-pointer text-gray1 txt-sub"
+            @click="clickDeleteArticleBtn"
+            >삭제</span
+          >
         </div>
       </div>
       <!-- divider -->
@@ -91,7 +112,7 @@
             :src="comment['user_imageUrl']"
             alt="프로필사진"
             style="width: 36px; height: 36px"
-            class="rounded-full"
+            class="object-cover rounded-full"
           />
           <div v-else class="bg-gray-300 rounded-full w-9 h-9"></div>
           <!-- commentor nickname -->
@@ -165,6 +186,20 @@
         </ButtonGeneral>
       </div>
     </div>
+
+    <!-- update article modal -->
+    <communityStudyUpdateArticleModal
+      :isModalOpened="isUpdateArticleModalOpened"
+      @modalclosed="isUpdateArticleModalOpened = false"
+      :prevArticleContent="articleData"
+      @updateArticle="updateArticle"
+    />
+    <!-- delete article modal -->
+    <communityStudyDeleteArticleModal
+      :isModalOpened="isDeleteArticleModalOpened"
+      @modalclosed="isDeleteArticleModalOpened = false"
+      :prevArticleContent="articleData"
+    />
   </div>
 </template>
 
@@ -194,6 +229,8 @@ export default {
       commentEditMode: false,
       selectedCommentDataIdx: null,
       selectedCommentId: null,
+      isUpdateArticleModalOpened: false,
+      isDeleteArticleModalOpened: false,
     };
   },
   methods: {
@@ -270,6 +307,15 @@ export default {
       } catch (err) {
         console.err(err.response);
       }
+    },
+    async updateArticle() {
+      await this.$nuxt.refresh();
+    },
+    clickUpdateArticleBtn() {
+      this.isUpdateArticleModalOpened = true;
+    },
+    clickDeleteArticleBtn() {
+      this.isDeleteArticleModalOpened = true;
     },
   },
 };
