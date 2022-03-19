@@ -124,6 +124,10 @@ export default {
             password: this.login.userPassword,
           },
         });
+        
+        if (response) {
+          this.$router.push('/')
+        }
         // console.log(response.data);
         // console.log(this.$auth);
       } catch (err) {
