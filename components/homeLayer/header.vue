@@ -250,15 +250,13 @@
                   >
                     <!-- user nickname -->
                     <div class="">
-                      <NuxtLink to="/">
+                      <NuxtLink to="/mypage/profileset">
                         <p class="font-bold">
                           <span v-if="$auth.user.nickname">
                             {{ $auth.user.nickname }}
                           </span>
                           <span v-else>
-                            <NuxtLink to="/mypage/profileset">
-                              이름을 설정해주세요!
-                            </NuxtLink>
+                            이름을 설정해주세요!
                           </span>
                         </p>
                       </NuxtLink>
