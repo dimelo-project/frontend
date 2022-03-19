@@ -27,7 +27,9 @@
         <span>작성한 게시글이 없습니다.</span>
       </div>
 
-      <div v-for="(article, idx) in articleData" :key="idx" class="mt-6">
+      <div v-for="(article, idx) in articleData" :key="idx" class="mt-6 ">
+        
+        <nuxtLink :to="`/community/study/${article.talk_id}`">
         <!-- tag & title -->
         <div class="flex items-center">
           <div
@@ -58,14 +60,16 @@
 
         <!-- divider -->
         <div class="mt-6 border-t border-gray2"></div>
+        </nuxtLink>
       </div>
     </div>
     <div v-else-if="$route.query.category === 'study'">
-      <div v-if="articleData.length === 0" class="mt-10 text-center txt-base">
+      <div v-if="articleData.length === 0" class="mt-10 text-center txt-base ">
         <span>작성한 게시글이 없습니다.</span>
       </div>
-
-      <div v-for="(article, idx) in articleData" :key="idx" class="mt-6">
+      
+      <div v-for="(article, idx) in articleData" :key="idx" class="mt-6 ">
+        <nuxtLink :to="`/community/study/${article.study_id}`">
         <!-- tag & title -->
         <div class="flex items-center">
           <div
@@ -96,6 +100,7 @@
 
         <!-- divider -->
         <div class="mt-6 border-t border-gray2"></div>
+        </nuxtLink>
       </div>
     </div>
     <div v-else-if="$route.query.category === 'project'">
@@ -104,6 +109,8 @@
       </div>
 
       <div v-for="(article, idx) in articleData" :key="idx" class="mt-6">
+        
+        <nuxtLink :to="`/community/study/${article.project_id}`">
         <!-- tag & title -->
         <div class="flex items-center">
           <div
@@ -134,6 +141,7 @@
 
         <!-- divider -->
         <div class="mt-6 border-t border-gray2"></div>
+        </nuxtLink>
       </div>
     </div>
   </div>
