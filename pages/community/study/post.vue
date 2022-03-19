@@ -8,23 +8,6 @@
       <div class="mt-4 border-t border-gray2"></div>
 
       <div class="mt-6">
-        <span class="txt-base-bold">카테고리</span>
-      </div>
-
-      <div class="flex mt-2">
-        <ChipGeneral
-          @click="clickCategoryMenu(idx)"
-          v-for="(menu, idx) in categoryMenu"
-          :key="idx"
-          :chipText="menu.name"
-          class="p-2 mr-2 transition-colors border outline-none border-gray2 rounded-8px txt-sub"
-          :class="{
-            'bg-yellow1 border-yellow1': idx === selectedCategoryMenuIdx,
-          }"
-        />
-      </div>
-
-      <div class="mt-6">
         <span class="txt-base-bold">제목</span>
       </div>
 
@@ -118,7 +101,9 @@
         style="width: 70px; height: 36px"
         class="flex items-center justify-center border cursor-pointer border-gray2 rounded-4px"
       >
-        <span class="ml-1 txt-sub"> {{ selectedParticpantNum }} 명 </span>
+        <span v-if="selectedParticpantNum" class="ml-1 txt-sub"> {{ selectedParticpantNum }} 명 </span>
+        
+          <span v-else class="ml-1 txt-sub">미정</span>
         <div class="ml-1">
           <SvgChevronDownOutline
             :class="{ 'rotate-180': this.participantDropDown }"
@@ -131,6 +116,13 @@
         style="width: 70px; height: 216px"
         class="overflow-y-scroll border border-gray2 rounded-4px"
       >
+          <div
+            @click="selectParticpantNum('미정')"
+            style="height: 36px"
+            class="flex items-center cursor-pointer hover:bg-gray3"
+          >
+            <span class="ml-2 txt-sub"> 미정</span>
+          </div>
         <div
           v-for="i in 15"
           @click="selectParticpantNum(i)"
@@ -460,9 +452,6 @@ export default {
     });
   },
   methods: {
-    clickCategoryMenu(idx) {
-      this.selectedCategoryMenuIdx = idx;
-    },
     handleInput(value) {
       if (value.length > this.titleMaxLength) {
         this.titleInput = value.slice(0, this.titleMaxLength);
@@ -485,7 +474,7 @@ export default {
         title: this.titleInput,
         content: textData,
         markup: htmlData,
-        ongoing: this.categoryMenu[this.selectedCategoryMenuIdx].name,
+        ongoing: '모집중',
         participant: this.selectedParticpantNum,
         skills: this.selecetedTechStacks
           .map((elem) => {
@@ -524,8 +513,12 @@ export default {
     showParticpantDropDown() {
       this.participantDropDown = !this.participantDropDown;
     },
-    selectParticpantNum(number) {
-      this.selectedParticpantNum = Number(number);
+    selectParticpantNum(selectedParticipantValue) {
+      if (!selectedParticipantValue) {
+        this.selectedParticpantNum = null;
+      } else {
+        this.selectedParticpantNum = Number(selectedParticipantValue);
+      }
       this.participantDropDown = false;
     },
   },
