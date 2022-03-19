@@ -111,7 +111,11 @@
                     <ChipGeneral
                       :height="34"
                       :borderRadius="`rounded-8px`"
-                      :chipText="`${study.study_participant}명`"
+                      :chipText="
+                        study.study_participant
+                        ? `${study.study_participant}명`
+                        : '인원 미정'
+                      "
                       class="bg-gray3 text-gray1 py-1.5 px-3 ml-2"
                     />
                   </div>

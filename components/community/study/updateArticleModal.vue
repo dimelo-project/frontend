@@ -131,7 +131,9 @@
           style="width: 70px; height: 36px"
           class="flex items-center justify-center border cursor-pointer border-gray2 rounded-4px"
         >
-          <span class="ml-1 txt-sub"> {{ selectedParticpantNum }} 명 </span>
+          
+          <span v-if="selectedParticpantNum" class="ml-1 txt-sub"> {{ selectedParticpantNum }} 명 </span>
+          <span v-else class="ml-1 txt-sub">미정</span>
           <div class="ml-1">
             <SvgChevronDownOutline
               :class="{ 'rotate-180': this.participantDropDown }"
@@ -144,6 +146,13 @@
           style="width: 70px; height: 216px"
           class="overflow-y-scroll border border-gray2 rounded-4px"
         >
+          <div
+            @click="selectParticpantNum('미정')"
+            style="height: 36px"
+            class="flex items-center cursor-pointer hover:bg-gray3"
+          >
+            <span class="ml-2 txt-sub"> 미정</span>
+          </div>
           <div
             v-for="i in 15"
             @click="selectParticpantNum(i)"
@@ -532,8 +541,12 @@ export default {
     showParticpantDropDown() {
       this.participantDropDown = !this.participantDropDown;
     },
-    selectParticpantNum(number) {
-      this.selectedParticpantNum = Number(number);
+    selectParticpantNum(selectedParticipantValue) {
+      if (!selectedParticipantValue) {
+        this.selectedParticpantNum = null;
+      } else {
+        this.selectedParticpantNum = Number(selectedParticipantValue);
+      }
       this.participantDropDown = false;
     },
     cancelPost() {
