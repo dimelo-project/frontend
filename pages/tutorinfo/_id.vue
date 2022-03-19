@@ -361,10 +361,10 @@ export default {
         question: "전달력",
       },
       {
-        question: "업데이트 반영",
+        question: "가성비",
       },
       {
-        question: "가성비",
+        question: "업데이트 반영",
       },
     ];
     questionList.forEach((elem, idx) => {
