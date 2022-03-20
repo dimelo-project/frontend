@@ -1,5 +1,3 @@
-console.log("@@@@@@@@@", process.env.baseURL);
-
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -20,7 +18,7 @@ export default {
   css: ["@assets/scss/global.pcss"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ["~/plugins/utils.js"],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

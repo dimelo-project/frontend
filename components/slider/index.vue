@@ -23,7 +23,7 @@
             <div class="bg-gray1 rounded-8px" style="width: 69px; height: 69px">
               <img
                 class="max-w-none"
-                :src="cardImageLogo(lecture['course_platform'])"
+                :src="$getLectureBrandLogo(lecture['course_platform'])"
                 alt="강의사이트"
               />
             </div>
@@ -460,32 +460,6 @@ export default {
       const len = this.slides.length;
       this.current = (this.current + (dir % len) + len) % len;
     },
-    cardImageLogo(siteName) {
-      let imgName = "";
-
-      if (siteName === "탈잉") {
-        imgName = "taling";
-      } else if (siteName === "인프런") {
-        imgName = "inflearn";
-      } else if (siteName === "유데미") {
-        imgName = "udemy";
-      } else if (siteName === "클래스101") {
-        imgName = "class101";
-      } else if (siteName === "리메인") {
-        imgName = "remain";
-      } else if (siteName === "패스트캠퍼스") {
-        imgName = "fastcampus";
-      } else if (siteName === "프로그래머스") {
-        imgName = "programmers";
-      } else if (siteName === "코드잇") {
-        imgName = "codeit";
-      } else {
-        imgName = "etc";
-      }
-
-      return require(`assets/imgs/logo/lecturesite/${imgName}.png`);
-    },
-
     autoNext() {
       this.time = setInterval(() => {
         this.slide(1);
