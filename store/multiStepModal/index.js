@@ -1,15 +1,20 @@
 export const state = () => ({
   isModalOpened: false,
-
+  // 리뷰 모달 모드 (읽기모드, 수정모드)
   reviewMode: "",
-
+  // 리뷰id, 리뷰가 속한 강의id
+  course_id: null,
+  review_id: null,
+  // 리뷰 점수값
   q1score: null,
   q2score: null,
   q3score: null,
   q4score: null,
   q5pros: "",
   q5cons: "",
+  // 리뷰 모달 현재 단계
   currentStep: 0,
+  // 리뷰 모달 프로그레스바 진척도
   progressWidth: 33,
 });
 
@@ -20,8 +25,16 @@ export const mutations = {
   changeReviewMode(state, payload) {
     state.reviewMode = payload;
   },
+  changeCourseId(state, idx) {
+    state.course_id = idx;
+  },
+  changeReviewId(state, idx) {
+    state.review_id = idx;
+  },
   initAllData(state) {
     state.reviewMode = "";
+    state.course_id = null;
+    state.review_id = null;
     state.q1score = null;
     state.q2score = null;
     state.q3score = null;
