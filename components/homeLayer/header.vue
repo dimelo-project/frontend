@@ -193,21 +193,6 @@
         </div>
       </div>
 
-      <!-- content--middle -->
-      <div
-        v-if="$store.state.isCurrentPageOnLecture"
-        class="absolute block pb-1 -translate-x-1/2 border-black left-1/2 lg:flex lg:items-center lg:justify-between"
-        style="width: 420px; border-bottom: 1px solid"
-      >
-        <input
-          type="text"
-          name="serch"
-          placeholder="강의, 강사명으로 검색해 보세요."
-          class="w-full placeholder-black bg-transparent border-none outline-none"
-        />
-        <svgSearchOutline />
-      </div>
-
       <!-- contents--right -->
       <div class="absolute right-0">
         <!-- after logIn -->
@@ -255,9 +240,7 @@
                           <span v-if="$auth.user.nickname">
                             {{ $auth.user.nickname }}
                           </span>
-                          <span v-else>
-                            이름을 설정해주세요!
-                          </span>
+                          <span v-else> 이름을 설정해주세요! </span>
                         </p>
                       </NuxtLink>
                     </div>

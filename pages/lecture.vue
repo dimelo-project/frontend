@@ -918,13 +918,9 @@ export default {
   },
   mounted() {
     window.addEventListener("scroll", this.scrollHandler);
-
-    this.$store.commit("showHeaderSearchInput");
   },
   destroyed() {
     window.removeEventListener("scroll", this.scrollHandler);
-
-    this.$store.commit("hideHeaderSearchInput");
   },
 };
 </script>
