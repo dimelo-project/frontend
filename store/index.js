@@ -1,5 +1,4 @@
 export const state = () => ({
-  isCurrentPageOnLecture: false,
   q1score: null,
   q2score: null,
   q3score: null,
@@ -65,12 +64,6 @@ export const mutations = {
   },
   changeProgressWidth(state, value) {
     state.progressWidth = value;
-  },
-  showHeaderSearchInput(state) {
-    state.isCurrentPageOnLecture = true;
-  },
-  hideHeaderSearchInput(state) {
-    state.isCurrentPageOnLecture = false;
   },
 };
 
