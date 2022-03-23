@@ -836,7 +836,7 @@ export default {
       if (this.currentPopularKeyword) {
         queryData["skill"] = this.currentPopularKeyword;
       }
-      if (this.searchCategoryKeyword) {
+      if (this.categorySearchInput) {
         queryData["searchCategoryKeyword"] = this.categorySearchInput;
       }
 
