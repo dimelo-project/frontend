@@ -266,7 +266,14 @@
                   v-if="
                     $auth && $auth.user && review['user_id'] === $auth.user.id
                   "
-                  @click=""
+                  @click="
+                    openReviewModal(
+                      'update',
+                      reviewDataIdx,
+                      review['review_id'],
+                      review['course_id']
+                    )
+                  "
                   class="underline cursor-pointer txt-sub text-gray1"
                 >
                   수정
@@ -274,6 +281,13 @@
                 <span
                   v-if="
                     $auth && $auth.user && review['user_id'] === $auth.user.id
+                  "
+                  @click="
+                    openAlertModal(
+                      reviewDataIdx,
+                      review['review_id'],
+                      review['course_id']
+                    )
                   "
                   class="ml-4 underline cursor-pointer txt-sub text-gray1"
                 >
@@ -335,6 +349,37 @@
         />
       </div>
     </div>
+
+    <MultiSteps @reviewUpload="uploadReview" />
+
+    <!-- Alert Modal -->
+    <AlertModal :isModalOpened="isAlertModalOpened">
+      <div
+        class="flex items-center justify-center w-full h-full border-0 select-none"
+      >
+        <div class="text-center">
+          <span class="txt-mid">삭제하시겠습니까?</span>
+          <div class="flex mt-11">
+            <ButtonGeneral
+              @click="isAlertModalOpened = false"
+              :width="145"
+              :height="44"
+              class="border border-orange2 text-orange2 rounded-4px hover:bg-orange2 hover:text-white"
+            >
+              <span class="txt-base-bold"> 취소 </span>
+            </ButtonGeneral>
+            <ButtonGeneral
+              @click="deleteMyReview()"
+              :width="145"
+              :height="44"
+              class="ml-4 text-white bg-orange1 rounded-4px hover:bg-orange2"
+            >
+              <span class="txt-base-bold"> 삭제 </span>
+            </ButtonGeneral>
+          </div>
+        </div>
+      </div>
+    </AlertModal>
   </div>
 </template>
 
@@ -401,7 +446,7 @@ export default {
         },
       }
     );
-    // console.log("tutorReviewData", tutorReviewData);
+    console.log("tutorReviewData", tutorReviewData);
 
     return {
       tutorInfoData,
@@ -444,6 +489,12 @@ export default {
         },
       ],
       selectedFilteringMenuIdx: 0,
+      isAlertModalOpened: false,
+      selectedReivew: {
+        reviewDataIdx: null,
+        course_id: null,
+        review_id: null,
+      },
     };
   },
   methods: {
@@ -588,6 +639,109 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    async openReviewModal(mode, reviewDataIdx, review_id, course_id) {
+      if (!this.$store.getters["authentication/isUserLoggedIn"]) {
+        this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
+      this.selectedReivew = {
+        reviewDataIdx,
+        course_id,
+        review_id,
+      };
+
+      this.$store.commit("multiStepModal/initAllData");
+
+      this.$store.commit("multiStepModal/changeIsModalOpened", true);
+      this.$store.commit("multiStepModal/changeReviewMode", mode);
+      this.$store.commit("multiStepModal/changeCourseId", course_id);
+      this.$store.commit("multiStepModal/changeReviewId", review_id);
+
+      if (
+        this.$store.state.multiStepModal.reviewMode === "update" &&
+        review_id
+      ) {
+        const getReviewDataResponse = await this.$axios.$get(
+          `/api/reviews/courses/${course_id}/${review_id}`
+        );
+
+        const { q1, q2, q3, q4, pros, cons } = getReviewDataResponse;
+
+        this.$store.commit("multiStepModal/changeQ1score", q1);
+        this.$store.commit("multiStepModal/changeQ2score", q2);
+        this.$store.commit("multiStepModal/changeQ3score", q3);
+        this.$store.commit("multiStepModal/changeQ4score", q4);
+        this.$store.commit("multiStepModal/changeQ5pros", pros);
+        this.$store.commit("multiStepModal/changeQ5cons", cons);
+      }
+    },
+    async uploadReview() {
+      // console.log("upload");
+      if (this.$store.state.multiStepModal.reviewMode === "update") {
+        try {
+          const updateReviewResponse = await this.$axios.$patch(
+            `/api/reviews/courses/${this.$store.state.multiStepModal.course_id}/${this.$store.state.multiStepModal.review_id}`,
+            {
+              q1: this.$store.state.multiStepModal.q1score,
+              q2: this.$store.state.multiStepModal.q2score,
+              q3: this.$store.state.multiStepModal.q3score,
+              q4: this.$store.state.multiStepModal.q4score,
+              pros: this.$store.state.multiStepModal.q5pros,
+              cons: this.$store.state.multiStepModal.q5cons,
+            }
+          );
+
+          if (updateReviewResponse) {
+            const { avg, pros, cons } = updateReviewResponse;
+
+            this.tutorReviewData.splice(
+              this.selectedReivew.reviewDataIdx,
+              1,
+              Object.assign(
+                {},
+                this.tutorReviewData[this.selectedReivew.reviewDataIdx],
+                {
+                  review_avg: String(avg),
+                  review_pros: pros,
+                  review_cons: cons,
+                }
+              )
+            );
+          }
+        } catch (err) {
+          console.error(err.response);
+        }
+      }
+
+      this.$store.commit("multiStepModal/changeIsModalOpened", false);
+    },
+    openAlertModal(reviewDataIdx, review_id, course_id) {
+      this.isAlertModalOpened = true;
+      this.selectedReivew = {
+        reviewDataIdx,
+        course_id,
+        review_id,
+      };
+    },
+    async deleteMyReview() {
+      const { reviewDataIdx, course_id, review_id } = this.selectedReivew;
+
+      try {
+        const response = await this.$axios.delete(
+          `/api/reviews/courses/${course_id}/${review_id}`
+        );
+        console.log(response);
+
+        this.tutorReviewData.splice(reviewDataIdx, 1);
+        if (this.totalNumOfTutorReview["num_review"] > 0) {
+          this.totalNumOfTutorReview["num_review"] -= 1;
+        }
+      } catch (err) {
+        console.log(err.response);
+      }
+      this.isAlertModalOpened = false;
     },
   },
 };

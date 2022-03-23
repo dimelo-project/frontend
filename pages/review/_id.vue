@@ -330,10 +330,7 @@
     </div>
 
     <!-- Create Review Modal -->
-    <MultiSteps
-      @modalClose="isModalOpened = false"
-      @reviewUpload="uploadReview"
-    />
+    <MultiSteps @reviewUpload="uploadReview" />
 
     <!-- Alert Modal -->
     <AlertModal :isModalOpened="isAlertModalOpened">
