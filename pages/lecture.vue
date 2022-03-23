@@ -48,14 +48,12 @@
       <!-- search & filtering buttons -->
       <div class="flex items-center justify-between mt-4">
         <SearchGeneral
-          :value="categorySearchInput"
-          @input="handleCategorySearchInput"
-          :placeholder="`카테고리 내 검색`"
           class="flex items-center rounded-4px txt-sub bg-gray4 py-1.5 px-2 border-gray2 border"
           style="width: 276px; height: 32px"
         >
           <InputGeneral
             v-model="categorySearchInput"
+            @keyup.enter="routerPushWithCategorySearch"
             :placeholder="`카테고리 내 검색`"
             :type="`text`"
             :height="22"
@@ -354,11 +352,10 @@ export default {
       page,
       sort,
       skill,
-      searchAllKeyword,
       searchCategoryKeyword,
     } = query;
 
-    let currentCategoryIndex;
+    let currentCategoryIndex, categorySearchInput, currentPopularKeyword;
 
     ["개발", "데이터 과학", "디자인"].forEach((elem, idx) => {
       if (elem === categoryBig) {
@@ -368,10 +365,25 @@ export default {
     });
     // console.log("currentCategoryIndex", currentCategoryIndex);
 
-    let lectureData, popularTechData, countResponse, currentPageNum;
+    if (searchCategoryKeyword) {
+      categorySearchInput = searchCategoryKeyword;
+    } else {
+      categorySearchInput = "";
+    }
+
+    if (skill) {
+      currentPopularKeyword = skill;
+    }
+
+    let lectureData,
+      lectureDataResponse,
+      popularTechData,
+      countResponse,
+      currentPageNum;
 
     if (searchCategoryKeyword) {
       // category search + category filtering
+
       try {
         lectureDataResponse = await $axios.$post(
           "/api/courses/category/search",
@@ -421,8 +433,6 @@ export default {
           },
         }
       );
-    } else if (searchAllKeyword) {
-      // all search + category filtering
     } else {
       // only category filtering
       lectureData = await $axios.$get("/api/courses", {
@@ -465,6 +475,8 @@ export default {
       popularTechData,
       currentPageNum,
       currentCategoryIndex,
+      categorySearchInput,
+      currentPopularKeyword,
     };
   },
   data() {
@@ -552,7 +564,6 @@ export default {
         page,
         sort,
         skill,
-        searchAllKeyword,
         searchCategoryKeyword,
       } = to.query;
 
@@ -562,6 +573,12 @@ export default {
           return;
         }
       });
+
+      if (searchCategoryKeyword) {
+        this.categorySearchInput = searchCategoryKeyword;
+      } else {
+        this.categorySearchInput = "";
+      }
 
       this.categories[this.currentCategoryIndex]["majors"].forEach(
         (elem, idx) => {
@@ -580,9 +597,7 @@ export default {
         // 카테고리에서 검색하는 경우
         this.getLectureDataWithCategorySearch(to.query);
         this.getPopularTechDataWithCategorySearch(to.query);
-        this.getNumOfCountDataWithCategorySearch(to.query);
-      } else if (searchAllKeyword) {
-        // 전체에서 검색하는 경우
+        this.getNumOfCountDataWithCategorySearch(to.query); // 전체에서 검색하는 경우
       } else {
         // 단순 카테고리 필터링
         this.getLectureDataGeneral(to.query);
@@ -642,18 +657,20 @@ export default {
     routerPushWithCategorySearch() {
       this.currentPageIndex = 0;
 
-      this.$router.push({
-        path: "/lecture",
-        query: {
-          categoryBig: this.currentCategoryName,
-          category: this.currentMajorName,
-          perPage: 17,
-          page: 1,
-          sort: this.currentFilteringOptionName,
-          skill: this.currentPopularKeyword,
-          searchCategoryKeyword: this.categorySearchInput,
-        },
-      });
+      if (this.categorySearchInput) {
+        this.$router.push({
+          path: "/lecture",
+          query: {
+            categoryBig: this.currentCategoryName,
+            category: this.currentMajorName,
+            perPage: 17,
+            page: 1,
+            sort: this.currentFilteringOptionName,
+            skill: this.currentPopularKeyword,
+            searchCategoryKeyword: this.categorySearchInput,
+          },
+        });
+      }
     },
     async getLectureDataWithCategorySearch(query) {
       const {
