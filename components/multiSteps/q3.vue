@@ -24,12 +24,12 @@
             :key="i"
             class="flex items-center justify-center transition-colors border rounded-full cursor-pointer border-gray2 hover:bg-yellow1 hover:text-white"
             :class="[
-              i === $store.state.q3score
+              i === $store.state.multiStepModal.q3score
                 ? 'bg-orange2 text-white'
                 : 'bg-gray4 text-gray1',
             ]"
             style="width: 56px; height: 56px"
-            @click="$store.commit('changeQ3score', i)"
+            @click="$store.commit('multiStepModal/changeQ3score', i)"
           >
             <span class="txt-mid-bold">{{ i }}</span>
           </div>
@@ -39,7 +39,7 @@
           <ButtonGeneral
             :width="88"
             class="border py-5px border-orange2 text-orange2 txt-sub-bold rounded-8px"
-            @click="$store.commit('previous')"
+            @click="$store.commit('multiStepModal/previous')"
           >
             <SvgLeftArrow class="mr-2" :color="`#F3732B`" />
             <span>이전</span>
@@ -52,7 +52,7 @@
                 ? ' border-orange2  text-orange2'
                 : 'border-gray2 pointer-events-none text-gray2',
             ]"
-            @click="$store.commit('next')"
+            @click="$store.commit('multiStepModal/next')"
           >
             <span>다음</span>
             <SvgRightArrow
@@ -70,7 +70,7 @@
 export default {
   computed: {
     nextBtnActive() {
-      return this.$store.state.q3score ? true : false;
+      return this.$store.state.multiStepModal.q3score ? true : false;
     },
   },
 };

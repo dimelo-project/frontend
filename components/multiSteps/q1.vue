@@ -36,12 +36,12 @@
             :key="i"
             class="flex items-center justify-center transition-colors border rounded-full cursor-pointer border-gray2 hover:bg-yellow1 hover:text-white"
             :class="[
-              i === $store.state.q1score
+              i === $store.state.multiStepModal.q1score
                 ? 'bg-orange2 text-white'
                 : 'bg-gray4 text-gray1',
             ]"
             style="width: 56px; height: 56px"
-            @click="$store.commit('changeQ1score', i)"
+            @click="$store.commit('multiStepModal/changeQ1score', i)"
           >
             <span class="txt-mid-bold">{{ i }}</span>
           </div>
@@ -50,7 +50,7 @@
         <div class="flex justify-center mt-11">
           <ButtonGeneral
             :width="88"
-            @click="$store.commit('next')"
+            @click="$store.commit('multiStepModal/next')"
             class="border py-5px rounded-8px txt-sub-bold"
             :class="[
               nextBtnActive
@@ -74,7 +74,7 @@
 export default {
   computed: {
     nextBtnActive() {
-      return this.$store.state.q1score ? true : false;
+      return this.$store.state.multiStepModal.q1score ? true : false;
     },
   },
 };

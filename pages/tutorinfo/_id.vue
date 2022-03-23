@@ -133,7 +133,7 @@
                   <SvgHeartOutline :color="`#868296`" class="cursor-pointer" />
                 </div>
                 <ButtonGeneral
-                  class="ml-3 text-white bg-orange2 rounded-4px"
+                  class="ml-3 text-white bg-orange1 hover:bg-orange2 rounded-4px"
                   style="width: 172px; height: 32px"
                 >
                   <NuxtLink :to="`/review/${lecture['course_id']}`">
@@ -266,6 +266,7 @@
                   v-if="
                     $auth && $auth.user && review['user_id'] === $auth.user.id
                   "
+                  @click=""
                   class="underline cursor-pointer txt-sub text-gray1"
                 >
                   수정
