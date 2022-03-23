@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="isModalOpened"
+    v-if="$store.state.multiStepModal.isModalOpened"
     class="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-opacity-75 bg-gray9"
   >
     <div class="relative">
@@ -16,17 +16,15 @@
         class="py-10 bg-white opacity-100 px-13 rounded-8px"
         style="width: 640px"
       >
-        <div v-if="!submitted">
-          <!-- step progress bar -->
-          <div class="flex justify-center mt-1">
-            <StepProgressBar />
-          </div>
-          <!-- dynamic component here -->
-          <component
-            v-bind:is="steps[$store.state.currentStep].component"
-            @reviewUpload="$emit('reviewUpload')"
-          />
+        <!-- step progress bar -->
+        <div class="flex justify-center mt-1">
+          <StepProgressBar />
         </div>
+        <!-- dynamic component here -->
+        <component
+          v-bind:is="steps[$store.state.multiStepModal.currentStep].component"
+          @reviewUpload="$emit('reviewUpload')"
+        />
       </div>
     </div>
   </div>
@@ -40,12 +38,6 @@ import q4 from "./q4";
 import q5 from "./q5";
 
 export default {
-  props: {
-    isModalOpened: {
-      type: Boolean,
-      default: () => false,
-    },
-  },
   data() {
     return {
       currentStep: 0,
@@ -75,21 +67,18 @@ export default {
     };
   },
   methods: {
-    submit() {
-      this.submitted = true;
-    },
     closeModal() {
-      this.$store.commit("changeQ1score", "");
-      this.$store.commit("changeQ2score", "");
-      this.$store.commit("changeQ3score", "");
-      this.$store.commit("changeQ4score", "");
-      this.$store.commit("changeQ5pros", "");
-      this.$store.commit("changeQ5cons", "");
+      this.$store.commit("multiStepModal/changeQ1score", "");
+      this.$store.commit("multiStepModal/changeQ2score", "");
+      this.$store.commit("multiStepModal/changeQ3score", "");
+      this.$store.commit("multiStepModal/changeQ4score", "");
+      this.$store.commit("multiStepModal/changeQ5pros", "");
+      this.$store.commit("multiStepModal/changeQ5cons", "");
 
-      this.$store.commit("changeCurrentStep", 0);
-      this.$store.commit("changeProgressWidth", 33);
+      this.$store.commit("multiStepModal/changeCurrentStep", 0);
+      this.$store.commit("multiStepModal/changeProgressWidth", 33);
 
-      this.$emit("modalClose");
+      this.$store.commit("multiStepModal/changeIsModalOpened", false);
     },
   },
 };

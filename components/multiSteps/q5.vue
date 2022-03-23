@@ -5,7 +5,7 @@
       <div class="flex justify-between">
         <span class="txt-sub-bold">강의 장점</span>
         <span class="txt-mini text-gray1"
-          >{{ $store.state.q5pros.length }}자/1000자</span
+          >{{ $store.state.multiStepModal.q5pros.length }}자/1000자</span
         >
       </div>
       <textarea
@@ -13,7 +13,7 @@
         style="height: 100px"
         :placeholder="examplePlaceholder"
         :maxlength="maxlength"
-        :value="$store.state.q5pros"
+        :value="$store.state.multiStepModal.q5pros"
         @input="inputPros"
       ></textarea>
     </div>
@@ -22,7 +22,7 @@
       <div class="flex justify-between">
         <span class="txt-sub-bold">강의 단점</span>
         <span class="txt-mini text-gray1"
-          >{{ $store.state.q5cons.length }}자/1000자</span
+          >{{ $store.state.multiStepModal.q5cons.length }}자/1000자</span
         >
       </div>
       <textarea
@@ -30,7 +30,7 @@
         style="height: 100px"
         :placeholder="examplePlaceholder"
         :maxlength="maxlength"
-        :value="$store.state.q5cons"
+        :value="$store.state.multiStepModal.q5cons"
         @input="inputCons"
       ></textarea>
     </div>
@@ -48,8 +48,10 @@
       <ButtonGeneral
         :width="88"
         class="flex-shrink-0 border py-5px txt-sub-bold border-orange2 text-orange2 rounded-8px"
-        @click="$store.commit('previous')"
-        @input="$store.commit('changeQ5cons', event.target.value)"
+        @click="$store.commit('multiStepModal/previous')"
+        @input="
+          $store.commit('multiStepModal/changeQ5cons', event.target.value)
+        "
       >
         <SvgLeftArrow class="mr-2" :color="`#F3732B`" />
         <span class="text-orange2">이전</span>
@@ -85,8 +87,8 @@ export default {
   computed: {
     submitBtnActive() {
       return (
-        this.$store.state.q5cons.length > 0 &&
-        this.$store.state.q5pros.length > 0
+        this.$store.state.multiStepModal.q5cons.length > 0 &&
+        this.$store.state.multiStepModal.q5pros.length > 0
       );
     },
   },
@@ -95,18 +97,24 @@ export default {
       const value = event.target.value;
 
       if (value.length > this.maxlength) {
-        this.$store.commit("changeQ5pros", value.slice(0, this.maxlength));
+        this.$store.commit(
+          "multiStepModal/changeQ5pros",
+          value.slice(0, this.maxlength)
+        );
       } else {
-        this.$store.commit("changeQ5pros", value);
+        this.$store.commit("multiStepModal/changeQ5pros", value);
       }
     },
     inputCons(event) {
       const value = event.target.value;
 
       if (value.length > this.maxlength) {
-        this.$store.commit("changeQ5cons", value.slice(0, this.maxlength));
+        this.$store.commit(
+          "multiStepModal/changeQ5cons",
+          value.slice(0, this.maxlength)
+        );
       } else {
-        this.$store.commit("changeQ5cons", value);
+        this.$store.commit("multiStepModal/changeQ5cons", value);
       }
     },
   },

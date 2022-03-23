@@ -150,8 +150,8 @@
                       v-if="review['user_imageUrl']"
                       :src="review['user_imageUrl']"
                       alt=""
-                      class="object-contain rounded-full"
                       style="width: 48px; height: 48px"
+                      class="object-cover rounded-full"
                     />
                     <div
                       v-else
@@ -331,7 +331,6 @@
 
     <!-- Create Review Modal -->
     <MultiSteps
-      :isModalOpened="isModalOpened"
       @modalClose="isModalOpened = false"
       @reviewUpload="uploadReview"
     />
@@ -580,10 +579,14 @@ export default {
         this.$store.commit("loginModal/changeIsLoginModalOpened", true);
         return;
       }
+      this.$store.commit("multiStepModal/initAllData");
 
-      this.isModalOpened = !this.isModalOpened;
-      this.reviewMode = mode;
-      if (mode === "update" && review_id) {
+      this.$store.commit("multiStepModal/changeIsModalOpened", true);
+      this.$store.commit("multiStepModal/changeReviewMode", mode);
+      if (
+        this.$store.state.multiStepModal.reviewMode === "update" &&
+        review_id
+      ) {
         this.updateReviewIdx = review_id;
 
         const getReviewDataResponse = await this.$axios.$get(
@@ -592,27 +595,27 @@ export default {
 
         const { q1, q2, q3, q4, pros, cons } = getReviewDataResponse;
 
-        this.$store.commit("changeQ1score", q1);
-        this.$store.commit("changeQ2score", q2);
-        this.$store.commit("changeQ3score", q3);
-        this.$store.commit("changeQ4score", q4);
-        this.$store.commit("changeQ5pros", pros);
-        this.$store.commit("changeQ5cons", cons);
+        this.$store.commit("multiStepModal/changeQ1score", q1);
+        this.$store.commit("multiStepModal/changeQ2score", q2);
+        this.$store.commit("multiStepModal/changeQ3score", q3);
+        this.$store.commit("multiStepModal/changeQ4score", q4);
+        this.$store.commit("multiStepModal/changeQ5pros", pros);
+        this.$store.commit("multiStepModal/changeQ5cons", cons);
       }
     },
     async uploadReview() {
-      if (this.reviewMode === "create") {
+      if (this.$store.state.multiStepModal.reviewMode === "create") {
         try {
           console.log("create!!!");
           const response = await this.$axios.$post(
             `/api/reviews/courses/${this.$route.params.id}`,
             {
-              q1: this.$store.state.q1score,
-              q2: this.$store.state.q2score,
-              q3: this.$store.state.q3score,
-              q4: this.$store.state.q4score,
-              pros: this.$store.state.q5pros,
-              cons: this.$store.state.q5cons,
+              q1: this.$store.state.multiStepModal.q1score,
+              q2: this.$store.state.multiStepModal.q2score,
+              q3: this.$store.state.multiStepModal.q3score,
+              q4: this.$store.state.multiStepModal.q4score,
+              pros: this.$store.state.multiStepModal.q5pros,
+              cons: this.$store.state.multiStepModal.q5cons,
             }
           );
 
@@ -623,19 +626,19 @@ export default {
         } catch (err) {
           console.error(err.response);
         }
-      } else if (this.reviewMode === "update") {
+      } else if (this.$store.state.multiStepModal.reviewMode === "update") {
         try {
           console.log("update!");
 
           const updateReviewResponse = await this.$axios.$patch(
             `/api/reviews/courses/${this.$route.params.id}/${this.updateReviewIdx}`,
             {
-              q1: this.$store.state.q1score,
-              q2: this.$store.state.q2score,
-              q3: this.$store.state.q3score,
-              q4: this.$store.state.q4score,
-              pros: this.$store.state.q5pros,
-              cons: this.$store.state.q5cons,
+              q1: this.$store.state.multiStepModal.q1score,
+              q2: this.$store.state.multiStepModal.q2score,
+              q3: this.$store.state.multiStepModal.q3score,
+              q4: this.$store.state.multiStepModal.q4score,
+              pros: this.$store.state.multiStepModal.q5pros,
+              cons: this.$store.state.multiStepModal.q5cons,
             }
           );
 
@@ -647,7 +650,7 @@ export default {
         }
       }
 
-      this.isModalOpened = false;
+      this.$store.commit("multiStepModal/changeIsModalOpened", false);
       this.reviewMode = null;
     },
     async getAllMyReview() {
