@@ -139,7 +139,7 @@
                           'text-green3 bg-green2':
                             project.project_ongoing === '모집중',
                           'text-white bg-gray8':
-                            project.project_ongoing === '모집 완료',
+                            project.project_ongoing === '모집완료',
                         }"
                       />
                     </div>

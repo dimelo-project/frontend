@@ -24,7 +24,7 @@
             alt="프로필사진"
             style="width: 36px; height: 36px"
             draggable="false"
-            class="rounded-full"
+            class="object-cover rounded-full"
           />
           <div v-else class="bg-gray-700 rounded-full w-9 h-9"></div>
           <!-- nickname -->
@@ -137,7 +137,7 @@
             alt="프로필사진"
             style="width: 36px; height: 36px"
             draggable="false"
-            class="rounded-full"
+            class="object-cover rounded-full"
           />
           <div v-else class="bg-gray-300 rounded-full w-9 h-9"></div>
           <!-- commentor nickname -->
