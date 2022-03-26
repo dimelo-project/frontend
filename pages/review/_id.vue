@@ -576,6 +576,11 @@ export default {
         this.$store.commit("loginModal/changeIsLoginModalOpened", true);
         return;
       }
+
+      if (!this.$store.getters["authentication/isAlreadyProfileSet"]) {
+        this.$store.commit("requireProfileSetModal/changeIsModalOpened", true);
+        return;
+      }
       this.$store.commit("multiStepModal/initAllData");
 
       this.$store.commit("multiStepModal/changeIsModalOpened", true);

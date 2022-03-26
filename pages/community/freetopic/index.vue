@@ -424,6 +424,11 @@ export default {
         return;
       }
 
+      if (!this.$store.getters["authentication/isAlreadyProfileSet"]) {
+        this.$store.commit("requireProfileSetModal/changeIsModalOpened", true);
+        return;
+      }
+
       this.$router.push("/community/freetopic/post");
     },
   },
