@@ -8,13 +8,11 @@
           :height="34"
           :borderRadius="`rounded-4px`"
           :chipText="articleData['study_ongoing']"
-                      :class="{
-                        'text-green3 bg-green2':
-                          articleData.study_ongoing === '모집중',
-                        'text-white bg-gray8':
-                          articleData.study_ongoing === '모집완료',
-                      }"
-          class=" py-5px px-2.5 txt-base-bold pointer-events-none flex-shrink-0"
+          :class="{
+            'text-green3 bg-green2': articleData.study_ongoing === '모집중',
+            'text-white bg-gray8': articleData.study_ongoing === '모집완료',
+          }"
+          class="py-5px px-2.5 txt-base-bold pointer-events-none flex-shrink-0"
         />
         <h3 class="ml-3 txt-heading3">
           {{ articleData["study_title"] }}
@@ -73,7 +71,9 @@
         <div style="width: 68px">
           <span class="txt-base-bold text-gray1">모집 인원</span>
         </div>
-        <span v-if="articleData['study_participant']" class="ml-5">{{ articleData["study_participant"] }}명</span>
+        <span v-if="articleData['study_participant']" class="ml-5"
+          >{{ articleData["study_participant"] }}명</span
+        >
         <span v-else class="ml-5">미정</span>
       </div>
       <!-- selected tech stacks -->
@@ -255,6 +255,11 @@ export default {
     async uploadComment() {
       if (!this.$store.getters["authentication/isUserLoggedIn"]) {
         this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
+      if (!this.$store.getters["authentication/isAlreadyProfileSet"]) {
+        this.$store.commit("requireProfileSetModal/changeIsModalOpened", true);
         return;
       }
 

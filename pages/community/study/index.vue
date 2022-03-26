@@ -113,8 +113,8 @@
                       :borderRadius="`rounded-8px`"
                       :chipText="
                         study.study_participant
-                        ? `${study.study_participant}명`
-                        : '인원 미정'
+                          ? `${study.study_participant}명`
+                          : '인원 미정'
                       "
                       class="bg-gray3 text-gray1 py-1.5 px-3 ml-2"
                     />
@@ -529,6 +529,11 @@ export default {
     goToWriteNewStudyArticle() {
       if (!this.$store.getters["authentication/isUserLoggedIn"]) {
         this.$store.commit("loginModal/changeIsLoginModalOpened", true);
+        return;
+      }
+
+      if (!this.$store.getters["authentication/isAlreadyProfileSet"]) {
+        this.$store.commit("requireProfileSetModal/changeIsModalOpened", true);
         return;
       }
 
