@@ -22,14 +22,10 @@
       <div class="flex items-center justify-between mt-5">
         <div class="flex items-center">
           <!-- profile image -->
-          <img
-            v-if="articleData['user_imageUrl']"
-            :src="articleData['user_imageUrl']"
-            alt="프로필사진"
-            style="width: 36px; height: 36px"
-            class="object-cover rounded-full"
+          <profileImageAvatar
+            :url="articleData['user_imageUrl']"
+            :imgSize="36"
           />
-          <div v-else class="bg-gray-700 rounded-full w-9 h-9"></div>
           <!-- nickname -->
           <span class="ml-2 txt-base-bold">{{
             articleData["user_nickname"]
@@ -114,14 +110,7 @@
         <!-- commentor info -->
         <div class="flex items-center">
           <!-- commentor profile image -->
-          <img
-            v-if="comment['user_imageUrl']"
-            :src="comment['user_imageUrl']"
-            alt="프로필사진"
-            style="width: 36px; height: 36px"
-            class="object-cover rounded-full"
-          />
-          <div v-else class="bg-gray-300 rounded-full w-9 h-9"></div>
+          <profileImageAvatar :url="comment['user_imageUrl']" :imgSize="36" />
           <!-- commentor nickname -->
           <span class="ml-2 txt-base-bold">{{ comment["user_nickname"] }}</span>
           <!-- commentor career duration -->

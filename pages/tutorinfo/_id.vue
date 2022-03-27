@@ -204,22 +204,10 @@
             <div class="flex-shrink-0">
               <div class="flex">
                 <!-- user profile image -->
-                <div
-                  v-if="review['user_imageUrl']"
-                  style="width: 48px; height: 48px"
-                >
-                  <img
-                    :src="review['user_imageUrl']"
-                    alt=""
-                    class="rounded-full"
-                    style="width: 48px; height: 48px"
-                  />
-                </div>
-                <div
-                  v-else
-                  class="rounded-full bg-gray1"
-                  style="width: 48px; height: 48px"
-                ></div>
+                <profileImageAvatar
+                  :url="review['user_imageUrl']"
+                  :imgSize="48"
+                />
 
                 <div class="ml-2.5 flex flex-col">
                   <span class="txt-sub-bold">
