@@ -19,18 +19,11 @@
       <!-- author info & created date -->
       <div class="flex items-center justify-between mt-5">
         <div class="flex items-center">
-          <!-- profile image -->
-          <div
-            v-if="!articleData['user_imageUrl']"
-            class="bg-gray-700 rounded-full w-9 h-9"
-          ></div>
-          <img
-            v-else
-            style="width: 36px; height: 36px"
-            :src="articleData['user_imageUrl']"
-            class="object-cover rounded-full"
-            alt="프로필이미지"
+          <profileImageAvatar
+            :url="articleData['user_imageUrl']"
+            :imgSize="36"
           />
+
           <!-- nickname -->
           <span class="ml-2 txt-base-bold">
             {{ articleData["user_nickname"] }}
@@ -87,17 +80,7 @@
       <div class="mt-7" v-for="(comment, idx) in allCommentData" :key="idx">
         <!-- commentor info -->
         <div class="flex items-center">
-          <!-- commentor profile image -->
-          <div
-            v-if="!comment['user_imageUrl']"
-            class="bg-gray-300 rounded-full w-9 h-9"
-          ></div>
-          <img
-            style="width: 36px; height: 36px"
-            class="object-cover rounded-full"
-            :src="comment['user_imageUrl']"
-            alt="프로필이미지"
-          />
+          <profileImageAvatar :url="comment['user_imageUrl']" :imgSize="36" />
           <!-- commentor nickname -->
           <span class="ml-2 txt-base-bold">{{ comment["user_nickname"] }}</span>
           <!-- commentor career duration -->
