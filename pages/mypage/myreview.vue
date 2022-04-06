@@ -33,7 +33,7 @@
         </div>
 
         <div class="txt-sub">
-          <span
+          <!-- <span
             class="underline cursor-pointer text-gray1"
             @click="
               openUpdateModal(
@@ -55,7 +55,7 @@
               )
             "
             >삭제</span
-          >
+          > -->
         </div>
       </div>
 
