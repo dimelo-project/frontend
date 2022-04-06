@@ -309,12 +309,6 @@
                         project.project_ongoing === '모집 완료',
                     }"
                   />
-                  <!-- number of people chip -->
-                  <ChipGeneral
-                    :borderRadius="`rounded-8px`"
-                    :chipText="`${project.project_participant}명`"
-                    class="px-3 ml-2 bg-gray3 text-gray1"
-                  />
                 </div>
                 <!-- card title -->
                 <div class="flex items-center flex-grow mt-5">
@@ -351,7 +345,7 @@
                 <!-- tech logos -->
                 <div class="flex mt-12">
                   <img
-                    v-for="skill in project.project_skill"
+                    v-for="skill in project.project_skill.slice(0, 5)"
                     :key="skill"
                     :src="require(`~/assets/imgs/logo/tech/${skill}.png`)"
                     alt="스택"
@@ -367,7 +361,7 @@
                     <span>{{ project.project_createdAt }}</span>
                   </div>
                   <div class="text-gray1">
-                    <span>댓글 {{ project.project_participant }}</span>
+                    <span>댓글 {{ project.num_comment }}</span>
                   </div>
                 </div>
               </div>
@@ -441,54 +435,79 @@ export default {
       ProjectBannerHover: false,
       studyData: [
         {
-          study_id: 5,
-          study_title: "프론트 Study 같이 하실 동료 분 구합니다 :)",
-          study_content: "Just study with me",
+          study_id: 2,
+          study_title:
+            "HTTP/HTTPS 같이 공부할 팀원분 구합니다 ~! 소수정예 멤버 구해요 :)",
+          study_content:
+            "안녕하세요\n" +
+            "\n" +
+            "HTTP/HTTPS 같이 공부할 팀원을 구하고자 합니다!\n" +
+            "\n" +
+            '선배분들께 물어봤는데 "HTTP/HTTPS 완벽 가이드" 책 추천을 많이 받아서\n' +
+            "\n" +
+            "이 책으로 한챕터씩 공부해가면서 번갈아 발표하고 서로 지식 정리, 교환 하면 좋을 거 같습니다!\n" +
+            "\n" +
+            "너무 잘하실 필요는 없지만 웹 프로젝트 만들어보고 배포경험 정도있으신 분이면 적당할듯합니다.\n" +
+            "\n" +
+            "(저도 못합니다 ㅎㅎ)\n" +
+            "\n" +
+            "구체적으로 진행 방식이 아직 정해진건 아니구요 ~\n" +
+            "\n" +
+            "같이 정하면 될 거 같습니다 :)\n" +
+            "\n" +
+            "관심있으신 분 연락주세요",
           study_ongoing: "모집중",
           study_participant: 3,
-          user_nickname: "펭수연",
-          study_createdAt: "2022.02.09",
-          num_comment: "0",
-          study_skill: ["javascript", "react", "vuejs"],
+          user_nickname: "코딩하는고양이",
+          study_createdAt: "2022.03.19 ",
+          num_comment: "2",
+          study_skill: ["javascript", "etc"],
         },
         {
-          study_id: 4,
-          study_title:
-            "자바스크립트 공부 해요! 같이 인강들으면서 스터디 하실분 연락주세용",
-          study_content: "Just study with me",
+          study_id: 10,
+          study_title: "C++ 알고리즘 스터디원 모집. 백준 골드이상",
+          study_content: "C++ 알고리즘 스터디원 모집. 백준 골드이상",
           study_ongoing: "모집중",
           study_participant: 3,
-          user_nickname: "펭수연",
-          study_createdAt: "2022.02.07",
-          num_comment: "0",
-          study_skill: ["javascript"],
+          user_nickname: "한입남은도너츠",
+          study_createdAt: "2022.03.28",
+          num_comment: "1",
+          study_skill: ["c++"],
         },
       ],
       projectData: [
         {
-          project_id: 10,
-          project_title: "Frontend 구해요",
-          project_content: "프로젝트 하실분!!",
+          project_id: 5,
+          project_title: "같이 데이팅 앱 만들사람!",
+          project_content: "4분 모셔요 ~!",
           project_ongoing: "모집중",
-          project_participant: 3,
-          user_nickname: "펭수연",
-          project_createdAt: "2022.02.07",
+          user_nickname: "코딩하는고양이",
+          project_createdAt: "2022.03.25 ",
           num_comment: "0",
-          project_skill: ["react"],
-          project_position: ["프론트엔드"],
+          project_skill: ["react", "vuejs", "django", "zeplin"],
+          project_position: ["기획자", "디자이너", "백엔드", "프론트엔드"],
         },
         {
-          project_id: 9,
-          project_title:
-            "Nuxt.js + Nest.js 조합으로 서비스 만들고 배포하실 분 구합니다!",
-          project_content: "프로젝트 하실분!!",
+          project_id: 1,
+          project_title: "디멜로 프로젝트 하실 프론트, 디자이너 구합니다!",
+          project_content:
+            "디멜로 프로젝트 하실 프론트1분 디자이너 2분 모십니다 ~~~\n" +
+            "\n" +
+            "현재 백엔드 저 하나 있는 상황입니다.\n" +
+            "\n" +
+            "프론트는 vue나 react사용하시면 되고 백엔드는 nest.js 사용예정 입니다!\n" +
+            "\n" +
+            "프론트 분은 next나 nuxt도 사용하실 줄 알면 더 좋을 것 같습니다 !!\n" +
+            "\n" +
+            "디자이너 분은 피그마도 괜찮고 xd도 괜찮습니다 ~~\n" +
+            "\n" +
+            "관심 있는 분들 댓글 남겨 주세요 ㅎㅎ",
           project_ongoing: "모집중",
-          project_participant: 3,
-          user_nickname: "핑구",
-          project_createdAt: "2022.02.01",
-          num_comment: "0",
-          project_skill: ["nuxtjs", "nestjs", "figma"],
-          project_position: ["디자이너", "백엔드", "프론트엔드"],
+          user_nickname: "Avery",
+          project_createdAt: "2022.03.19 ",
+          num_comment: "4",
+          project_skill: ["react", "vuejs", "nextjs", "nuxtjs", "xd", "figma"],
+          project_position: ["디자이너", "프론트엔드"],
         },
       ],
     };
