@@ -27,79 +27,82 @@
         <span>작성한 게시글이 없습니다.</span>
       </div>
 
-      <div v-for="(article, idx) in articleData" :key="idx" class="mt-6 ">
-        
+      <div v-for="(article, idx) in articleData" :key="idx" class="mt-6">
         <nuxtLink :to="`/community/study/${article.talk_id}`">
-        <!-- tag & title -->
-        <div class="flex items-center">
-          <div
-            class="txt-sub-bold text-green1 bg-green2 rounded-8px py-8px px-10px"
-          >
-            <span>
-              {{ article["talk_category"] }}
-            </span>
+          <!-- tag & title -->
+          <div class="flex items-center">
+            <div
+              class="txt-sub-bold text-green1 bg-green2 rounded-8px py-8px px-10px"
+            >
+              <span>
+                {{ article["talk_category"] }}
+              </span>
+            </div>
+
+            <div class="ml-1.5 txt-mid-bold">
+              <span>{{ article["talk_title"] }}</span>
+            </div>
           </div>
 
-          <div class="ml-1.5 txt-mid-bold">
-            <span>{{ article["talk_title"] }}</span>
+          <!-- article body -->
+          <div class="mt-3">
+            <p>
+              {{ article["talk_content"] }}
+            </p>
           </div>
-        </div>
 
-        <!-- article body -->
-        <div class="mt-3">
-          <p>
-            {{ article["talk_content"] }}
-          </p>
-        </div>
+          <!-- created date & number of comments -->
+          <div class="flex flex-col mt-3">
+            <span class="text-gray6">{{ article["talk_createdAt"] }}</span>
+            <span class="mt-2 text-gray1"
+              >댓글 {{ article["num_comment"] }}</span
+            >
+          </div>
 
-        <!-- created date & number of comments -->
-        <div class="flex flex-col mt-3">
-          <span class="text-gray6">{{ article["talk_createdAt"] }}</span>
-          <span class="mt-2 text-gray1">댓글 {{ article["num_comment"] }}</span>
-        </div>
-
-        <!-- divider -->
-        <div class="mt-6 border-t border-gray2"></div>
+          <!-- divider -->
+          <div class="mt-6 border-t border-gray2"></div>
         </nuxtLink>
       </div>
     </div>
     <div v-else-if="$route.query.category === 'study'">
-      <div v-if="articleData.length === 0" class="mt-10 text-center txt-base ">
+      <div v-if="articleData.length === 0" class="mt-10 text-center txt-base">
         <span>작성한 게시글이 없습니다.</span>
       </div>
-      
-      <div v-for="(article, idx) in articleData" :key="idx" class="mt-6 ">
+
+      <div v-for="(article, idx) in articleData" :key="idx" class="mt-6">
         <nuxtLink :to="`/community/study/${article.study_id}`">
-        <!-- tag & title -->
-        <div class="flex items-center">
-          <div
-            class="txt-sub-bold text-green1 bg-green2 rounded-8px py-8px px-10px"
-          >
-            <span>
-              {{ article["study_ongoing"] }}
-            </span>
+          <!-- tag & title -->
+          <div class="flex items-center">
+            <div
+              class="txt-sub-bold text-green1 bg-green2 rounded-8px py-8px px-10px"
+            >
+              <span>
+                {{ article["study_ongoing"] }}
+              </span>
+            </div>
+
+            <div class="ml-1.5 txt-mid-bold">
+              <span>{{ article["study_title"] }}</span>
+            </div>
           </div>
 
-          <div class="ml-1.5 txt-mid-bold">
-            <span>{{ article["study_title"] }}</span>
+          <!-- article body -->
+          <div class="mt-3">
+            <p>
+              {{ article["study_content"] }}
+            </p>
           </div>
-        </div>
 
-        <!-- article body -->
-        <div class="mt-3">
-          <p>
-            {{ article["study_content"] }}
-          </p>
-        </div>
+          <!-- created date & number of comments -->
+          <div class="flex flex-col mt-3">
+            <span class="text-gray6">{{ article["study_createdAt"] }}</span>
+            <span class="mt-2 text-gray1"
+              >댓글 {{ article["num_comment"] }}</span
+            >
+          </div>
 
-        <!-- created date & number of comments -->
-        <div class="flex flex-col mt-3">
-          <span class="text-gray6">{{ article["study_createdAt"] }}</span>
-          <span class="mt-2 text-gray1">댓글 {{ article["num_comment"] }}</span>
-        </div>
-
-        <!-- divider -->
-        <div class="mt-6 border-t border-gray2"></div>
+          <!-- divider -->
+          <div class="mt-6 border-t border-gray2"></div>
         </nuxtLink>
       </div>
     </div>
@@ -109,38 +112,39 @@
       </div>
 
       <div v-for="(article, idx) in articleData" :key="idx" class="mt-6">
-        
         <nuxtLink :to="`/community/study/${article.project_id}`">
-        <!-- tag & title -->
-        <div class="flex items-center">
-          <div
-            class="txt-sub-bold text-green1 bg-green2 rounded-8px py-8px px-10px"
-          >
-            <span>
-              {{ article["project_ongoing"] }}
-            </span>
+          <!-- tag & title -->
+          <div class="flex items-center">
+            <div
+              class="txt-sub-bold text-green1 bg-green2 rounded-8px py-8px px-10px"
+            >
+              <span>
+                {{ article["project_ongoing"] }}
+              </span>
+            </div>
+
+            <div class="ml-1.5 txt-mid-bold">
+              <span>{{ article["project_title"] }}</span>
+            </div>
           </div>
 
-          <div class="ml-1.5 txt-mid-bold">
-            <span>{{ article["project_title"] }}</span>
+          <!-- article body -->
+          <div class="mt-3">
+            <p>
+              {{ article["project_content"] }}
+            </p>
           </div>
-        </div>
 
-        <!-- article body -->
-        <div class="mt-3">
-          <p>
-            {{ article["project_content"] }}
-          </p>
-        </div>
+          <!-- created date & number of comments -->
+          <div class="flex flex-col mt-3">
+            <span class="text-gray6">{{ article["project_createdAt"] }}</span>
+            <span class="mt-2 text-gray1"
+              >댓글 {{ article["num_comment"] }}</span
+            >
+          </div>
 
-        <!-- created date & number of comments -->
-        <div class="flex flex-col mt-3">
-          <span class="text-gray6">{{ article["project_createdAt"] }}</span>
-          <span class="mt-2 text-gray1">댓글 {{ article["num_comment"] }}</span>
-        </div>
-
-        <!-- divider -->
-        <div class="mt-6 border-t border-gray2"></div>
+          <!-- divider -->
+          <div class="mt-6 border-t border-gray2"></div>
         </nuxtLink>
       </div>
     </div>
@@ -158,7 +162,7 @@ export default {
     }
   },
   async asyncData({ $axios, query }) {
-    console.log("query", query);
+    // console.log("query", query);
 
     const categoryData = [
       {
@@ -191,7 +195,7 @@ export default {
     });
 
     const articleData = await $axios.$get(`/api/${apiUrl}/me`);
-    console.log("articleData", articleData);
+    // console.log("articleData", articleData);
 
     return { articleData, currentCategoryIdx };
   },
@@ -227,7 +231,6 @@ export default {
   methods: {
     async changeCategory(categroyIdx) {
       this.currentCategoryIdx = categroyIdx;
-      console.log("sdf");
       this.$router.push({
         path: "/mypage/myarticle",
         query: {
@@ -238,7 +241,7 @@ export default {
       const response = await this.$axios.$get(
         `/api/${this.categoryData[categroyIdx].pName}/me`
       );
-      console.log(response);
+      // console.log(response);
 
       this.articleData = response;
     },

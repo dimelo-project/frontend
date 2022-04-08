@@ -77,7 +77,7 @@ export default {
     try {
       const response = await $axios.$get("/api/users/password");
 
-      console.log(response);
+      // console.log(response);
       if (response) {
         userHasPassword = true;
         btnActive = false;
@@ -132,11 +132,11 @@ export default {
           const response = await this.$axios.$post("/api/users/delete/me", {
             password: this.userPassword,
           });
-          console.log(response);
+          // console.log(response);
         } else {
           const response = await this.$axios.$post("/api/users/deactivate/me");
 
-          console.log(response);
+          // console.log(response);
         }
 
         this.$router.push("/");

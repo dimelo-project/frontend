@@ -282,7 +282,7 @@ export default {
         elem.project_skill = elem.project_skill.split(",");
       }
     });
-    console.log("projectData", projectData);
+    // console.log("projectData", projectData);
 
     // data값들 반환
 
@@ -569,7 +569,7 @@ export default {
       });
       this.projectData = response;
 
-      console.log("projectData", this.projectData);
+      // console.log("projectData", this.projectData);
 
       //data처리
       if (ongoing) {

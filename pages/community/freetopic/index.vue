@@ -125,7 +125,7 @@ export default {
     }
   },
   async asyncData({ $axios, query }) {
-    console.log(query);
+    // console.log(query);
     const { category, perPage, page } = query;
 
     const categoryMenu = [
@@ -173,7 +173,7 @@ export default {
         `api/talks?perPage=${perPage}&page=${page}`
       );
     }
-    console.log("freeTopicData", freeTopicData);
+    // console.log("freeTopicData", freeTopicData);
 
     // get total num of page
     let pageCountResponse, totalPageNum;
@@ -236,7 +236,7 @@ export default {
       this.freetopicSearchInput = value;
     },
     searchByUserInput() {
-      console.log("search!");
+      // console.log("search!");
       if (this.freetopicSearchInput === "") {
         return;
       }
@@ -401,7 +401,7 @@ export default {
       }
 
       this.totalPageNum = Math.ceil(Number(response["num_talk"]) / 16);
-      console.log("totalPageNum", this.totalPageNum);
+      // console.log("totalPageNum", this.totalPageNum);
     },
     ScrollToTop() {
       window.scroll({

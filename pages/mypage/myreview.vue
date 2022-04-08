@@ -128,7 +128,7 @@ export default {
   layout: "mypage",
   async asyncData({ $axios }) {
     const myAllReviewData = await $axios.$get("/api/reviews/me");
-    console.log("myAllReviewData", myAllReviewData);
+    // console.log("myAllReviewData", myAllReviewData);
 
     return { myAllReviewData };
   },

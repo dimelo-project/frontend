@@ -367,13 +367,13 @@ export default {
       if (courseDataResponse) {
         courseData = courseDataResponse;
       }
-      console.log("courseData", courseData);
+      // console.log("courseData", courseData);
 
       const totalNumOfReviewResponse = await $axios.$get(
         `/api/reviews/courses/${params.id}/count`
       );
       totalNumOfReview = Number(totalNumOfReviewResponse["num_review"]);
-      console.log("totalNumOfReview", totalNumOfReview);
+      // console.log("totalNumOfReview", totalNumOfReview);
 
       // 해당 강의의 평점 가져오기
       const scoreDataResponse = await $axios.$get(
@@ -382,7 +382,7 @@ export default {
       if (scoreDataResponse) {
         scoreData = scoreDataResponse;
       }
-      console.log("scoreData", scoreData);
+      // console.log("scoreData", scoreData);
 
       // 해당 강의의 리뷰들 가져오기
       const reviewDataResponse = await $axios.$get(
@@ -391,7 +391,7 @@ export default {
       if (reviewDataResponse) {
         reviewData = reviewDataResponse;
       }
-      console.log("reviewData", reviewData);
+      // console.log("reviewData", reviewData);
     } catch (err) {
       console.error(err.response);
     }
@@ -414,7 +414,7 @@ export default {
     questionList.forEach((elem, idx) => {
       elem["score"] = scoreData[`q${idx + 1}`];
     });
-    console.log("questionList", questionList);
+    // console.log("questionList", questionList);
 
     return {
       courseData,
@@ -601,7 +601,6 @@ export default {
     async uploadReview() {
       if (this.$store.state.multiStepModal.reviewMode === "create") {
         try {
-          console.log("create!!!");
           const response = await this.$axios.$post(
             `/api/reviews/courses/${this.$route.params.id}`,
             {
@@ -623,8 +622,6 @@ export default {
         }
       } else if (this.$store.state.multiStepModal.reviewMode === "update") {
         try {
-          console.log("update!");
-
           const updateReviewResponse = await this.$axios.$patch(
             `/api/reviews/courses/${this.$route.params.id}/${this.updateReviewIdx}`,
             {
@@ -691,7 +688,7 @@ export default {
         const response = await this.$axios.delete(
           `/api/reviews/courses/${course_id}/${review_id}`
         );
-        console.log(response);
+        // console.log(response);
 
         this.reviewData.splice(myReviewIdx, 1);
         this.totalNumOfReview -= 1;

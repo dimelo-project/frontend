@@ -460,7 +460,7 @@ export default {
       if (skill) {
         countResponseParam["skill"] = skill;
       }
-      console.log("countResponseParam", countResponseParam);
+      // console.log("countResponseParam", countResponseParam);
       countResponse = await $axios.$get("/api/courses/count", {
         params: countResponseParam,
       });
@@ -468,7 +468,7 @@ export default {
 
     currentPageNum = Math.ceil(Number(countResponse["num_course"]) / 17);
 
-    console.log(lectureData);
+    // console.log(lectureData);
 
     return {
       lectureData,
@@ -556,7 +556,7 @@ export default {
   },
   watch: {
     async $route(to, from) {
-      console.log("route change!", to);
+      // console.log("route change!", to);
       const {
         categoryBig,
         category,

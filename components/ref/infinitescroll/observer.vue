@@ -15,8 +15,8 @@ export default {
     const options = this.options || {};
 
     this.observer = new IntersectionObserver(([entry]) => {
-      console.log(this.detectCnt, entry);
-      console.log(entry.boundingClientRect.bottom, window.innerHeight);
+      // console.log(this.detectCnt, entry);
+      // console.log(entry.boundingClientRect.bottom, window.innerHeight);
 
       if (
         entry &&
