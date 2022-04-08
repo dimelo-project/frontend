@@ -216,7 +216,7 @@ export default {
         userHasPassword = false;
       }
 
-      console.log("userHasPassword", response);
+      // console.log("userHasPassword", response);
     } catch (err) {
       console.error(err.response);
     }

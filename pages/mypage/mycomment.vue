@@ -28,7 +28,7 @@ export default {
   layout: "mypage",
   async asyncData({ $axios }) {
     const myCommentData = await $axios.$get("/api/users/me/comments");
-    console.log("myCommentData", myCommentData);
+    // console.log("myCommentData", myCommentData);
 
     return { myCommentData };
   },

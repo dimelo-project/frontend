@@ -633,7 +633,7 @@ export default {
     async saveArticle() {
       const htmlData = this.editor.getHTML();
       const textData = this.editor.getText();
-      console.log("htmlData: ", htmlData, "textData: ", textData);
+      // console.log("htmlData: ", htmlData, "textData: ", textData);
 
       try {
         let paramNewArticleData = {};
@@ -657,7 +657,7 @@ export default {
           })
           .join(",");
 
-        console.log("paramNewArticleData", paramNewArticleData);
+        // console.log("paramNewArticleData", paramNewArticleData);
 
         const response = await this.$axios.$patch(
           `/api/projects/${this.prevArticleContent.project_id}`,
@@ -690,7 +690,7 @@ export default {
           this.$emit("updateArticle", newArticleData);
         }
 
-        console.log("response", response);
+        // console.log("response", response);
       } catch (err) {
         console.error(err);
       }

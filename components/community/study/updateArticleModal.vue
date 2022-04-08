@@ -131,8 +131,9 @@
           style="width: 70px; height: 36px"
           class="flex items-center justify-center border cursor-pointer border-gray2 rounded-4px"
         >
-          
-          <span v-if="selectedParticpantNum" class="ml-1 txt-sub"> {{ selectedParticpantNum }} 명 </span>
+          <span v-if="selectedParticpantNum" class="ml-1 txt-sub">
+            {{ selectedParticpantNum }} 명
+          </span>
           <span v-else class="ml-1 txt-sub">미정</span>
           <div class="ml-1">
             <SvgChevronDownOutline
@@ -593,7 +594,7 @@ export default {
     async saveArticle() {
       const htmlData = this.editor.getHTML();
       const textData = this.editor.getText();
-      console.log("htmlData: ", htmlData, "textData: ", textData);
+      // console.log("htmlData: ", htmlData, "textData: ", textData);
 
       try {
         let paramNewArticleData = {};
@@ -610,7 +611,7 @@ export default {
           })
           .join(",");
 
-        console.log("paramNewArticleData", paramNewArticleData);
+        // console.log("paramNewArticleData", paramNewArticleData);
 
         const response = await this.$axios.$patch(
           `/api/studies/${this.prevArticleContent.study_id}`,
@@ -622,7 +623,7 @@ export default {
           this.$emit("updateArticle");
         }
 
-        console.log("response", response);
+        // console.log("response", response);
       } catch (err) {
         console.error(err);
       }

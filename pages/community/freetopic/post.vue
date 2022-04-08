@@ -284,7 +284,7 @@ export default {
           this.$router.push("/community/freetopic");
         }
 
-        console.log(response);
+        // console.log(response);
       } catch (err) {
         console.error(err);
       }

@@ -223,10 +223,10 @@ export default {
 
     try {
       articleData = await $axios.$get(`/api/projects/${params.id}`);
-      console.log("articleData", articleData);
+      // console.log("articleData", articleData);
 
       allCommentData = await $axios.$get(`/api/projects/${params.id}/comments`);
-      console.log("allCommentData", allCommentData);
+      // console.log("allCommentData", allCommentData);
     } catch (err) {
       console.error(err.response);
     }
@@ -285,7 +285,7 @@ export default {
           this.userComment = "";
           this.getAllCommentData();
         }
-        console.log(response);
+        // console.log(response);
       } catch (err) {
         console.error(err.response);
       }
@@ -317,7 +317,7 @@ export default {
         project_skill: newArticleData.skills,
       });
 
-      console.log("myNewData", this.articleData);
+      // console.log("myNewData", this.articleData);
     },
     async updateComment() {
       try {
@@ -328,7 +328,7 @@ export default {
           }
         );
 
-        console.log(response);
+        // console.log(response);
         if (response) {
           this.commentEditMode = false;
           this.allCommentData.splice(

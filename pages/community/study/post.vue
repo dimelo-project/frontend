@@ -101,9 +101,11 @@
         style="width: 70px; height: 36px"
         class="flex items-center justify-center border cursor-pointer border-gray2 rounded-4px"
       >
-        <span v-if="selectedParticpantNum" class="ml-1 txt-sub"> {{ selectedParticpantNum }} 명 </span>
-        
-          <span v-else class="ml-1 txt-sub">미정</span>
+        <span v-if="selectedParticpantNum" class="ml-1 txt-sub">
+          {{ selectedParticpantNum }} 명
+        </span>
+
+        <span v-else class="ml-1 txt-sub">미정</span>
         <div class="ml-1">
           <SvgChevronDownOutline
             :class="{ 'rotate-180': this.participantDropDown }"
@@ -116,13 +118,13 @@
         style="width: 70px; height: 216px"
         class="overflow-y-scroll border border-gray2 rounded-4px"
       >
-          <div
-            @click="selectParticpantNum('미정')"
-            style="height: 36px"
-            class="flex items-center cursor-pointer hover:bg-gray3"
-          >
-            <span class="ml-2 txt-sub"> 미정</span>
-          </div>
+        <div
+          @click="selectParticpantNum('미정')"
+          style="height: 36px"
+          class="flex items-center cursor-pointer hover:bg-gray3"
+        >
+          <span class="ml-2 txt-sub"> 미정</span>
+        </div>
         <div
           v-for="i in 15"
           @click="selectParticpantNum(i)"
@@ -468,13 +470,13 @@ export default {
     async uploadArticle() {
       const htmlData = this.editor.getHTML();
       const textData = this.editor.getText();
-      console.log(htmlData, textData);
+      // console.log(htmlData, textData);
 
       const data = {
         title: this.titleInput,
         content: textData,
         markup: htmlData,
-        ongoing: '모집중',
+        ongoing: "모집중",
         participant: this.selectedParticpantNum,
         skills: this.selecetedTechStacks
           .map((elem) => {
@@ -489,7 +491,7 @@ export default {
         if (response) {
           this.$router.push("/community/study");
         }
-        console.log(response);
+        // console.log(response);
       } catch (err) {
         alert("폼의 모든 부분을 채워주세요!");
 

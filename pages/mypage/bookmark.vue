@@ -109,7 +109,7 @@ export default {
   layout: "mypage",
   async asyncData({ $axios }) {
     const myLectureData = await $axios.$get("/api/courses/likes/me");
-    console.log("myLectureData", myLectureData);
+    // console.log("myLectureData", myLectureData);
 
     return { myLectureData };
   },
@@ -118,13 +118,12 @@ export default {
   },
   methods: {
     async clickHeartIcon(dataIdx, course_id) {
-      console.log("hi");
       try {
         const response = await this.$axios.$delete(
           `/api/courses/likes/${course_id}`
         );
 
-        console.log(response);
+        // console.log(response);
         if (response) {
           this.myLectureData.splice(dataIdx, 1);
         }

@@ -497,7 +497,7 @@ export default {
     async uploadArticle() {
       const htmlData = this.editor.getHTML();
       const textData = this.editor.getText();
-      console.log(htmlData, textData);
+      // console.log(htmlData, textData);
 
       const data = {
         title: this.titleInput,
@@ -524,7 +524,7 @@ export default {
         if (response) {
           this.$router.push("/community/sideproject");
         }
-        console.log(response);
+        // console.log(response);
       } catch (err) {
         alert("폼의 모든 부분을 채워주세요!");
 

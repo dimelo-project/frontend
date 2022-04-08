@@ -434,7 +434,7 @@ export default {
         },
       }
     );
-    console.log("tutorReviewData", tutorReviewData);
+    // console.log("tutorReviewData", tutorReviewData);
 
     return {
       tutorInfoData,
@@ -720,7 +720,7 @@ export default {
         const response = await this.$axios.delete(
           `/api/reviews/courses/${course_id}/${review_id}`
         );
-        console.log(response);
+        // console.log(response);
 
         this.tutorReviewData.splice(reviewDataIdx, 1);
         if (this.totalNumOfTutorReview["num_review"] > 0) {

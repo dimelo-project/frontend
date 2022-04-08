@@ -175,12 +175,12 @@ export default {
   async asyncData({ $axios, params }) {
     // console.log(params.id);
     const articleData = await $axios.$get(`/api/talks/${params.id}`);
-    console.log("articleData", articleData);
+    // console.log("articleData", articleData);
 
     const allCommentData = await $axios.$get(
       `/api/talks/${params.id}/comments`
     );
-    console.log("allCommentData", allCommentData);
+    // console.log("allCommentData", allCommentData);
 
     return { articleData, allCommentData };
   },
@@ -232,7 +232,7 @@ export default {
         this.userComment = "";
         this.getAllCommentData();
       }
-      console.log(response);
+      // console.log(response);
     },
     async deleteComment(commentDataIdx, comment_id) {
       try {
@@ -240,7 +240,7 @@ export default {
           `/api/talks/${this.$route.params.id}/comments/${comment_id}`
         );
 
-        console.log(response);
+        // console.log(response);
         if (response) {
           this.allCommentData.splice(commentDataIdx, 1);
         }
@@ -269,7 +269,7 @@ export default {
           }
         );
 
-        console.log(response);
+        // console.log(response);
         if (response) {
           this.commentEditMode = false;
           this.allCommentData.splice(

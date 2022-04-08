@@ -266,7 +266,7 @@ export default {
     async saveArticle() {
       const htmlData = this.editor.getHTML();
       const textData = this.editor.getText();
-      console.log("htmlData: ", htmlData, "textData: ", textData);
+      // console.log("htmlData: ", htmlData, "textData: ", textData);
 
       try {
         const response = await this.$axios.$patch(
@@ -288,7 +288,7 @@ export default {
           this.$emit("updateArticle", newArticleData);
         }
 
-        console.log(response);
+        // console.log(response);
       } catch (err) {
         console.error(err.response.data);
       }
